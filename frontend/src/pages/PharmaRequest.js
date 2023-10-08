@@ -2,21 +2,17 @@ import React,{ useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const PatientRegistration = () => {
+const PharmaRegistration = () => {
     const navigate = useNavigate();
 
     const[username,setUsername]=useState('')
 const[name,setName]=useState('')
 const[email,setEmail]=useState('')
 const[password,setPassword]=useState('')
-const[date_of_birth,setDateOfBirth]=useState('')
-const[gender,setGender]=useState('')
-const[mobile_number,setMobileNumber]=useState('')
-const [emergency_contact, setEmergencyContact] = useState({
-    full_name: '',
-    mobile_number: '',
-    relation_to_patient:''
-  });
+const[date_of_birth,setDate_of_birth]=useState('')
+const[hourly_rate,setHourly_rate]=useState('')
+const[affiliation,setAffiliation]=useState('')
+const [educational_background, setEducational_background] = useState('');
 
   const [error, setError] = useState(null);
   const [isPatientRegistered, setIsPatientRegistered] = useState(false);
@@ -26,10 +22,10 @@ const [emergency_contact, setEmergencyContact] = useState({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const p={username,name,email,password,date_of_birth,gender,mobile_number,emergency_contact}
+        const p={username,name,email,password,date_of_birth,hourly_rate,affiliation,educational_background}
         try {
           // Make a POST request to your backend API endpoint
-          const response = await axios.post('http://localhost:4000/register/patient', p);
+          const response = await axios.post('http://localhost:4000/createRequest', p);
       
           if (response.status === 201) {
             console.log('Registration successful:', response.data);
@@ -37,14 +33,14 @@ const [emergency_contact, setEmergencyContact] = useState({
             setName('');
             setEmail('');
             setPassword('');
-            setDateOfBirth('');
-            setGender('Male');
-            setMobileNumber('');
-            setEmergencyContact({ fullName: '', mobileNumber: '' });
+            setDate_of_birth('');
+            setHourly_rate('');
+            setAffiliation('');
+            setEducational_background('');
             setError(null);
             setIsPatientRegistered(true);
-            navigate(`/dashboard/patient/${username}`);
-           
+           // navigate(`/dashboard/patient/${username}`);
+            console.log('Registration successful', response.data);
           }
         } catch (error) {
           // Handle errors, e.g., display an error message to the user
@@ -117,102 +113,53 @@ const [emergency_contact, setEmergencyContact] = useState({
                     value={date_of_birth}
             onChange={(e) => {
               
-              setDateOfBirth(e.target.value);
+              setDate_of_birth(e.target.value);
             }}
                     id="dob"
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>Gender</label>
-                  <div className="form-check">
-                    <input
-                      type="radio"
-                      className="form-check-input"
-                      id="male"
-                      name="gender"
-                      value={gender}
-            onChange={(e) => setGender("male")}
-                    />
-                    <label className="form-check-label" htmlFor="male">
-                      Male
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      type="radio"
-                      className="form-check-input"
-                      id="female"
-                      value={gender}
-            onChange={(e) => setGender("female")}
-                      name="gender"
-                    />
-                    <label className="form-check-label" htmlFor="female">
-                      Female
-                    </label>
-                  </div>
-                </div>
+                
 
                 <div className="form-group">
-                  <label htmlFor="mobile">Mobile Number</label>
+                  <label htmlFor="hourlyRate">Hourly Rate</label>
                   <input
-                    type="tel"
+                    type="number"
                     className="form-control"
-                    id="mobile"
-                    value={mobile_number}
-            onChange={(e) => setMobileNumber(e.target.value)}
-                    placeholder="Enter your mobile number"
+                    id="hourlyRate"
+                    value={hourly_rate}
+            onChange={(e) => setHourly_rate(e.target.value)}
+                    placeholder="Enter your hourly rate"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="emergencyContactName">Emergency Contact Name</label>
+                  <label htmlFor="aff">Affiliation</label>
                   <input
                     type="text"
                     className="form-control"
                     id="emergencyContactName"
-                    value={emergency_contact.full_name}
+                    value={affiliation}
             onChange={(e) =>
-              setEmergencyContact({
-                ...emergency_contact,
-                full_name: e.target.value,
-              })
+             setAffiliation(e.target.value)
             }
-                    placeholder="Enter emergency contact's name"
+                    placeholder="Enter you Affiliation"
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="emergencyContactMobile">Emergency Contact Mobile</label>
-                  <input
-                    type="tel"
-                    className="form-control"
-                    id="emergencyContactMobile"
-                    value={emergency_contact.mobile_number}
-            onChange={(e) =>
-              setEmergencyContact({
-                ...emergency_contact,
-                mobile_number: e.target.value,
-              })
-            }
-                    placeholder="Enter emergency contact's mobile number"
-                  />
-                </div>
+                
 
                 <div className="form-group">
-                  <label htmlFor="relationToPatient">Relation to Patient</label>
+                  <label htmlFor="relationToPatient">Educational Background</label>
                   <input
                     type="text"
                     className="form-control"
                     id="relationToPatient"
-                    value={emergency_contact.relation_to_patient}
+                    value={educational_background}
             onChange={(e) =>
-              setEmergencyContact({
-                ...emergency_contact,
-                relation_to_patient: e.target.value,
-              })
+              setEducational_background(e.target.value)
             }
-                    placeholder="Enter relation to the patient"
+                    placeholder="Enter your Educational Background"
                   />
                 </div>
 
@@ -234,4 +181,4 @@ const [emergency_contact, setEmergencyContact] = useState({
   );
 };
 
-export default PatientRegistration;
+export default PharmaRegistration;

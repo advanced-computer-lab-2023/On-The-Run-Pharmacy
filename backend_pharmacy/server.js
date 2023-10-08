@@ -2,6 +2,7 @@ const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
 const {createPatientP,getPatientsP}= require("./controllers/PatientPController")
+const {createRequest}=require("./controllers/requestsController")
 
 const app = express()
 const corsOptions = {
@@ -28,3 +29,4 @@ app.listen(4000,()=>{
 })
 app.get("/getPatients",getPatientsP)
 app.post('/register/patient',createPatientP)
+app.post("/createRequest",createRequest)
