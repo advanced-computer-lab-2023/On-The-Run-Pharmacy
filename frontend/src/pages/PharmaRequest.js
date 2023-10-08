@@ -9,20 +9,19 @@ const PharmaRegistration = () => {
 const[name,setName]=useState('')
 const[email,setEmail]=useState('')
 const[password,setPassword]=useState('')
-const[date_of_birth,setDate_of_birth]=useState('')
 const[hourly_rate,setHourly_rate]=useState('')
 const[affiliation,setAffiliation]=useState('')
 const [educational_background, setEducational_background] = useState('');
 
   const [error, setError] = useState(null);
-  const [isPatientRegistered, setIsPatientRegistered] = useState(false);
+  const [isPharmacistRegistered, setIsPharmacistRegistered] = useState(false);
 
   
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const p={username,name,email,password,date_of_birth,hourly_rate,affiliation,educational_background}
+        const p={username,name,email,password,hourly_rate,affiliation,educational_background}
         try {
           // Make a POST request to your backend API endpoint
           const response = await axios.post('http://localhost:4000/createRequest', p);
@@ -33,18 +32,17 @@ const [educational_background, setEducational_background] = useState('');
             setName('');
             setEmail('');
             setPassword('');
-            setDate_of_birth('');
             setHourly_rate('');
             setAffiliation('');
             setEducational_background('');
             setError(null);
-            setIsPatientRegistered(true);
+            setIsPharmacistRegistered(true);
            // navigate(`/dashboard/patient/${username}`);
             console.log('Registration successful', response.data);
           }
         } catch (error) {
           // Handle errors, e.g., display an error message to the user
-          console.error('Error registering patient:', error);
+          console.error('Error registering pharmacist:', error);
         }
       };
 
@@ -55,7 +53,7 @@ const [educational_background, setEducational_background] = useState('');
         <div className="col-lg-6">
           <div className="card">
             <div className="card-body">
-              <h1 className="card-title">Patient Registration</h1>
+              <h1 className="card-title">Pharmacist Registration</h1>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="username">Username</label>
@@ -106,22 +104,6 @@ const [educational_background, setEducational_background] = useState('');
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="dob">Date of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={date_of_birth}
-            onChange={(e) => {
-              
-              setDate_of_birth(e.target.value);
-            }}
-                    id="dob"
-                  />
-                </div>
-
-                
-
-                <div className="form-group">
                   <label htmlFor="hourlyRate">Hourly Rate</label>
                   <input
                     type="number"
@@ -150,11 +132,11 @@ const [educational_background, setEducational_background] = useState('');
                 
 
                 <div className="form-group">
-                  <label htmlFor="relationToPatient">Educational Background</label>
+                  <label htmlFor="educational_background">Educational Background</label>
                   <input
                     type="text"
                     className="form-control"
-                    id="relationToPatient"
+                    id="educational_background"
                     value={educational_background}
             onChange={(e) =>
               setEducational_background(e.target.value)
