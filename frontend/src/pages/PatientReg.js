@@ -43,7 +43,7 @@ const [emergency_contact, setEmergencyContact] = useState({
             setEmergencyContact({ fullName: '', mobileNumber: '' });
             setError(null);
             setIsPatientRegistered(true);
-            navigate(`/dashboard/patient/${username}`);
+            navigate(`/getMedicines`);
            
           }
         } catch (error) {

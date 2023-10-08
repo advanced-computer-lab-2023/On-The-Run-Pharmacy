@@ -5,14 +5,16 @@ const Medicine = require('../models/MedicineModel');
 
 const addMedicine = async (req, res) => {
   try {
-    const { name, picture, description, available_quantity, sales } = req.body;
-    const medicine = await Medicine.create({
+    const { name, picture, description, available_quantity, sales,medicalUse } = req.body;
+    const medicine = new Medicine({
       name,
       picture,
       description,
       available_quantity,
       sales,
+      medicalUse
     });
+    await medicine.save()
     res.status(201).json(medicine);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -40,6 +42,14 @@ const deleteMedicine = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while deleting the medicine' });
   }
 };
+const getMedicines=async(req,res) =>{
+  const patients =await Medicine.find({}).sort({createdAt:-1});
+      for(let index=0;index<patients.length;index++){
+         const element = [patients][index];
+         //console.log(element.id);
+      }
+      res.status(200).json(patients)
+};
 
 const updateMedicine = async (req, res) => {
   try {
@@ -59,4 +69,4 @@ const updateMedicine = async (req, res) => {
   }
 };
 
-module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine };
+module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines};

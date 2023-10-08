@@ -3,6 +3,7 @@ const mongoose=require('mongoose')
 const cors = require('cors');
 const {createPatientP,getPatientsP}= require("./controllers/PatientPController")
 const {createRequest}=require("./controllers/requestsController")
+const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 
 const app = express()
 const corsOptions = {
@@ -30,4 +31,5 @@ app.listen(4000,()=>{
 app.get("/getPatients",getPatientsP)
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
+app.get("/getMedicines",getMedicines)
 

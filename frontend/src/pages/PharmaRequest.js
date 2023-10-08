@@ -22,7 +22,7 @@ const [educational_background, setEducational_background] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const p={username,name,email,password,date_of_birth,hourly_rate,affiliation,educational_background}
+        const p={username,name,email,password,hourly_rate,affiliation,educational_background}
         try {
           // Make a POST request to your backend API endpoint
           const response = await axios.post('http://localhost:4000/createRequest', p);
@@ -105,19 +105,7 @@ const [educational_background, setEducational_background] = useState('');
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="dob">Date of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={date_of_birth}
-            onChange={(e) => {
-              
-              setDate_of_birth(e.target.value);
-            }}
-                    id="dob"
-                  />
-                </div>
+               
 
                 
 

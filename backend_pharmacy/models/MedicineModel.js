@@ -6,32 +6,40 @@ const MedicineSchema = new mongoose.Schema({
  
   name: {
     type: String,
-    
+    required:true,
     
     
   },
   picture: {
     data: Buffer,
     contentType: String,
+
     
     
     
   },
   description: {
     type: String,
+    required:true,
     
     
   },
   available_quantity: {
     type: Number,
+    required:true,
     
     
   },
   sales:{
-    type:Number,    
+    type:Number,   
+    required:true, 
     
     
   },
+  medicalUse:{
+    type: String,
+    required:true, 
+  }
  
 });
 

@@ -8,13 +8,9 @@ const createPatientP = async(req,res) => {
         name,
         email,
         password,
-      
-        
         date_of_birth,
         gender,
         mobile_number,
-         
-      
         emergency_contact,
         
       } = req.body;
@@ -26,7 +22,6 @@ const createPatientP = async(req,res) => {
         date_of_birth,
         gender,
         mobile_number,
-  
         emergency_contact
 
       });
