@@ -33,4 +33,6 @@ app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
 app.get("/getMedicines",getMedicines)
 app.post("/addMedicine",addMedicine)
+app.get("/getMed/:id",getMedicine)
+app.put("/updateMed/:id",updateMedicine)
 

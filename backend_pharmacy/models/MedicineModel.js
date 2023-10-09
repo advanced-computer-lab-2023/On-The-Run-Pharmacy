@@ -40,6 +40,10 @@ const MedicineSchema = new mongoose.Schema({
   medicalUse:{
     type: String,
     required:true, 
+  },
+  price:{
+    type:Number,
+    required:true
   }
  
 });

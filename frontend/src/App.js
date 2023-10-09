@@ -7,6 +7,7 @@ import PharmaRegistration from './pages/PharmaRequest';
 import MedicineListPage from './pages/MedicineListPage';
 import MedicineListPagep from './pages/MedicineListPharma'
 import AddMedicineForm from './components/AddMedForm';
+import EditMedicinePage from './pages/editMed';
 
 function App() {
   return (
@@ -15,8 +16,10 @@ function App() {
       <Routes>
       <Route path="/" element={<UserSelection/>}/>
       <Route path="/addMed" element={<AddMedicineForm/>}/>
-      <Route path="/getMedicines" element={<MedicineListPagep/>}/>
-      <Route path="/getMedicines/pharmasist" element={<MedicineListPage/>}/>
+      <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
+
+      <Route path="/getMedicines" element={<MedicineListPage/>}/>
+      <Route path="/getMedicines/pharmasist" element={<MedicineListPagep/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
       <Route path="/register/pharmacist" element={<PharmaRegistration/>}/>
       </Routes>

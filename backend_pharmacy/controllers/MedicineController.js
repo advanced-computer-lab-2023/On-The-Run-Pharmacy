@@ -5,14 +5,13 @@ const Medicine = require('../models/MedicineModel');
 
 const addMedicine = async (req, res) => {
   try {
-    const { name, picture, description, available_quantity, sales,medicalUse } = req.body;
+    const { name, picture, description, available_quantity,medicalUse,price } = req.body;
     const medicine = new Medicine({
       name,
       picture,
       description,
       available_quantity,
-      sales,
-      medicalUse
+      medicalUse,price
     });
     await medicine.save()
     res.status(201).json(medicine);
@@ -23,10 +22,17 @@ const addMedicine = async (req, res) => {
 
 const getMedicine = async (req, res) => {
   try {
-    const medicines = await Medicine.find();
-    res.status(200).json(medicines);
+    const { id } = req.params;
+    const medicine = await Medicine.findById(id);
+
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    res.status(200).json(medicine);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Error fetching medicine by ID:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -54,10 +60,10 @@ const getMedicines=async(req,res) =>{
 const updateMedicine = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, picture, description, available_quantity, sales } = req.body;
+    const {  description, price } = req.body;
     const updatedMedicine = await Medicine.findByIdAndUpdate(
       id,
-      { name, picture, description, available_quantity, sales },
+      { description, price },
       { new: true }
     );
     if (!updatedMedicine) {

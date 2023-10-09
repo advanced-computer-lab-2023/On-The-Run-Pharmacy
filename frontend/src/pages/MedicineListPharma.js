@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
-import AddMedicineForm from "../components/AddMedForm"
+
 
 const MedicineListPagep = () => {
   const [medicines, setMedicines] = useState([]);
@@ -97,6 +97,7 @@ const MedicineListPagep = () => {
                 <strong>Medical Use:</strong> {m.medicalUse}<br />
                 <strong>Quantity:</strong> {m.available_quantity}<br />
                 <strong>Sales:</strong> {m.sales}<br />
+                <Link to={`/edit/${m._id}`}>Edit</Link>
               </div>
               <div className="medicine-image">
                 <img src={m.picture} alt={m.name} />
