@@ -48,7 +48,7 @@ const getPatientP = async (req, res) => {
     const {username} = req.body;
 
     try {
-        const patient = await userModel.findOne({username : username });
+        const patient = await PatientP.findOne({username : username });
   
       res.status(200).json(patient);
     } catch (error) {
@@ -60,11 +60,11 @@ const getPatientP = async (req, res) => {
   };
 
   const deletePatientP = async (req, res) => {
-    const { username } =  req.body;
+    const { id } = req.params;
  
     try {
        // Delete the pharmacist with the specified username
-       const deletedUser = await userModel.findOneAndDelete({ username });
+       const deletedUser = await PatientP.findByIdAndDelete({ _id:id });
  
        if (!deletedUser) {
           return res.status(404).json({ message: 'Patient not found' });

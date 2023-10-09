@@ -11,7 +11,8 @@ const addMedicine = async (req, res) => {
       picture,
       description,
       available_quantity,
-      medicalUse,price
+      medicalUse,
+      price
     });
     await medicine.save()
     res.status(201).json(medicine);

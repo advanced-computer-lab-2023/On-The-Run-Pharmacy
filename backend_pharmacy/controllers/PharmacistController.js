@@ -78,11 +78,11 @@ const getPharmacists = async (req, res) => {
 
 
   const deletepharmacist = async (req, res) => {
-    const { username } =  req.body;
+    const { id } =  req.params;
  
     try {
        // Delete the pharmacist with the specified username
-       const deletedUser = await userModel.findOneAndDelete({ username });
+       const deletedUser = await Pharmacist.findByIdAndDelete({ _id:id });
  
        if (!deletedUser) {
           return res.status(404).json({ message: 'Pharmacist not found' });

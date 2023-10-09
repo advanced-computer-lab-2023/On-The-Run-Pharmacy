@@ -43,8 +43,18 @@ const createRequest = async (req, res) => {
       
 
 };
+const getRequests = async (req, res) => {
+  try {
+    const pharmacists = await Request.find({}).sort({ createdAt: -1 });
 
-module.exports = { createRequest };
+    res.status(200).json(pharmacists);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while retrieving the Pharmacists' });
+  }
+};
+
+module.exports = { createRequest ,getRequests};
 
 
 

@@ -1,9 +1,11 @@
 const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
-const {createPatientP,getPatientsP}= require("./controllers/PatientPController")
-const {createRequest}=require("./controllers/requestsController")
+const {createPatientP,getPatientsP, deletePatientP}= require("./controllers/PatientPController")
+const {createRequest,getRequests}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
+const{createAdmin,getAdmin}=require("./controllers/adminController")
+const{ createPharmacist, getPharmacists, deletepharmacist }=require("./controllers/PharmacistController")
 
 const app = express()
 const corsOptions = {
@@ -35,4 +37,12 @@ app.get("/getMedicines",getMedicines)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id",updateMedicine)
+app.post("/addAdmin",createAdmin)
+app.get("/getPatients",getPatientsP)
+app.delete("/deletePatient/:id",deletePatientP)
+
+app.get("/getPharmacist",getPharmacists)
+app.delete("/deletePharmacist/:id",deletepharmacist)
+
+app.get("/getRequests",getRequests)
 
