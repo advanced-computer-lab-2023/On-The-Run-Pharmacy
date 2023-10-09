@@ -2,10 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
+
 
 const EditMedicinePage = () => {
-  const { medicineId } = useParams(); // Get the medicine ID from the URL parameter
+  const { medicineId } = useParams();
+  const navigate=useNavigate();
+  // Get the medicine ID from the URL parameter
   const [medicine, setMedicine] = useState({});
   const [formData, setFormData] = useState({
     description: '',
@@ -52,6 +55,7 @@ const EditMedicinePage = () => {
       if (response.status === 200) {
         // Handle success (e.g., show a success message)
         console.log('Medicine updated successfully');
+        navigate('/getMedicines/pharmasist')
       }
     } catch (error) {
       console.error('Error updating medicine:', error);

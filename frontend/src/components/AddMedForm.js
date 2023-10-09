@@ -24,9 +24,10 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
 
       // Check if the request was successful
       if (response.status === 201) {
+        console.log("hi")
         // Call the callback function to notify the parent component
         // that a medicine has been added
-        onMedicineAdded(response.data);
+       // onMedicineAdded(response.data);
 
         // Clear the form data or reset the state as needed
        setName('')
@@ -34,7 +35,7 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
        setAvailable_quantity('')
        setPrice('')
        setMedicalUse('')
-       navigate('/getMedicines')
+       navigate('/getMedicines/pharmasist')
       }
     } catch (error) {
       console.error('Error adding medicine:', error);
