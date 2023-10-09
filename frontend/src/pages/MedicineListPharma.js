@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
+import AddMedicineForm from "../components/AddMedForm"
 
-const MedicineListPage = () => {
+const MedicineListPagep = () => {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchName, setSearchName] = useState('');
@@ -65,6 +67,7 @@ const MedicineListPage = () => {
   return (
     <div className="medicine-list-container">
       <h1>All Medicines</h1>
+     
       <div className="filter-container">
         <input
           type="text"
@@ -92,6 +95,8 @@ const MedicineListPage = () => {
                 <strong>Price:</strong> {m.price}<br />
                 <strong>Description:</strong> {m.description}<br />
                 <strong>Medical Use:</strong> {m.medicalUse}<br />
+                <strong>Quantity:</strong> {m.available_quantity}<br />
+                <strong>Sales:</strong> {m.sales}<br />
               </div>
               <div className="medicine-image">
                 <img src={m.picture} alt={m.name} />
@@ -102,8 +107,10 @@ const MedicineListPage = () => {
       ) : (
         <p>No Medicines found.</p>
       )}
+      <Link to="/addMed">Add a new Medicine</Link>
+      
     </div>
   );
 };
 
-export default MedicineListPage;
+export default MedicineListPagep;

@@ -5,6 +5,8 @@ import UserSelection from './components/UserSelection';
 import PatientRegistration from './pages/PatientReg';
 import PharmaRegistration from './pages/PharmaRequest';
 import MedicineListPage from './pages/MedicineListPage';
+import MedicineListPagep from './pages/MedicineListPharma'
+import AddMedicineForm from './components/AddMedForm';
 
 function App() {
   return (
@@ -12,7 +14,9 @@ function App() {
       <div className="App">
       <Routes>
       <Route path="/" element={<UserSelection/>}/>
-      <Route path="/getMedicines" element={<MedicineListPage/>}/>
+      <Route path="/addMed" element={<AddMedicineForm/>}/>
+      <Route path="/getMedicines" element={<MedicineListPagep/>}/>
+      <Route path="/getMedicines/pharmasist" element={<MedicineListPage/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
       <Route path="/register/pharmacist" element={<PharmaRegistration/>}/>
       </Routes>

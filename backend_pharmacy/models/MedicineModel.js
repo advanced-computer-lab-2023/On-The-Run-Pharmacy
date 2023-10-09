@@ -32,7 +32,8 @@ const MedicineSchema = new mongoose.Schema({
   },
   sales:{
     type:Number,   
-    required:true, 
+    default:0
+
     
     
   },
