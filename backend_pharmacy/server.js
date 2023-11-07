@@ -2,10 +2,10 @@ const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
 const {createPatientP,getPatientsP, deletePatientP}= require("./controllers/PatientPController")
-const {createRequest,getRequests}=require("./controllers/requestsController")
+const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin}=require("./controllers/adminController")
-const{ createPharmacist, getPharmacists, deletepharmacist }=require("./controllers/PharmacistController")
+const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1 }=require("./controllers/PharmacistController")
 
 const app = express()
 const corsOptions = {
@@ -45,4 +45,6 @@ app.get("/getPharmacist",getPharmacists)
 app.delete("/deletePharmacist/:id",deletepharmacist)
 
 app.get("/getRequests",getRequests)
-
+app.put("/acceptPRequest/:id",acceptrequest);
+app.put("/rejectPRequest/:id",rejectrequest);
+app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",createPharmacist1)

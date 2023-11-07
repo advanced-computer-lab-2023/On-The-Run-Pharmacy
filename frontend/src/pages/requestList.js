@@ -27,7 +27,36 @@ const RequestsListPage = () => {
   useEffect(() => {
     fetchRequests();
   }, []);
- 
+  const handleAccept = async (reqid,username,password,name,email,hourly_rate,affiliation,educational_background,Working_license,Pharmacy_degree) => {
+    try {
+      const response = await axios.post(`http://localhost:4000/acceptPRequest/${username}/${password}/${name}/${email}/${hourly_rate}/${affiliation}/${educational_background}/${Working_license}/${Pharmacy_degree}`);
+      await axios.put(`http://localhost:4000/acceptPRequest/${reqid}`);
+      if (response.status === 200) {
+        setRequests(requests.filter((r) => r._id !== reqid));
+      }
+      fetchRequests();
+    } catch (error) {
+      console.error('Error accepting request:', error);
+    }
+  };
+
+  
+  
+  const handleReject = async (reqid) => {
+    try {
+      // Make a DELETE request to the backend to delete the patient
+      await axios.put(`http://localhost:4000/rejectPRequest/${reqid}`);
+
+      // After successful deletion, refresh the patient list by re-fetching
+      fetchRequests();
+    } catch (error) {
+      console.error('Error rejecting doctor request:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
 
   return (
     <div className="medicine-list-container">
@@ -47,9 +76,13 @@ const RequestsListPage = () => {
                 <strong>Educational Background:</strong> {m.educational_background}<br />
                 <strong>Afilliation:</strong> {m.affiliation}<br />
                 
-                
-                
-              </div>
+                {(m.statuss !== 'rejected' && m.statuss !== 'accepted') && (
+              <>
+                <button onClick={() => handleAccept(m._id,m.username,m.name,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}>Accept</button>
+                <button onClick={() => handleReject(m._id)}>Reject</button>
+              </>
+            )}
+          </div>
               
             </li>
           ))}
