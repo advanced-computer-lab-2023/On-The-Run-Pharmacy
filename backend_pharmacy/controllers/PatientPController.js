@@ -113,6 +113,73 @@ const getPatientP = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while adding the medicine to the cart' });
   }
 };
+const getPatientCart = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const patient = await PatientP.findOne({ username });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    res.status(200).json(patient.cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while retrieving the patient\'s cart' });
+  }
+};
+const deleteFromCart = async (req, res) => {
+  const { username,medicineId } = req.params;
+
+  try {
+    const patient = await PatientP.findOneAndUpdate(
+      { username },
+      { $pull: { cart: { medicine_id: medicineId } } },
+      { new: true }
+    );
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+    
+
+    res.status(200).json(patient.cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while deleting the item from the cart' });
+  }
+};
+const updateCart = async (req, res) => {
+  const { username, medicineId, newAmount } = req.params;
+
+  try {
+    const patient = await PatientP.findOne({ username });
+    
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+    const item = patient.cart.find(item => item.medicine_id.toString() === medicineId);
+    if (!item) {
+      return res.status(404).json({ message: 'Medicine not found in cart' });
+    }
 
 
-module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP,addToCart}
+    if (newAmount == 0) {
+      const index = patient.cart.indexOf(item);
+      patient.cart.splice(index, 1);
+    } else {
+      item.quantity = newAmount;
+    }
+
+    await patient.save();
+
+    res.status(200).json(patient.cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating the cart' });
+  }
+};
+
+
+module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP,addToCart,getPatientCart,deleteFromCart,updateCart}

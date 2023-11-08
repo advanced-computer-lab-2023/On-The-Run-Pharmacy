@@ -16,6 +16,7 @@ import RequestsListPage from './pages/requestList';
 import AdminDashboard from './pages/AdminDashboard';
 import Login from './pages/login';
 import Cookies from 'js-cookie';
+import CartPage from './pages/cart';
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Navbar/>
       <Routes>
       <Route path="/" element={<UserSelection/>}/>
+      <Route path="/cart/:username" element={<CartPage/>}/>
       <Route path="/addAdmin" element={<AdminRegistrationForm/>}/>
       <Route path="/viewPatients" element={<PatientListPage/>}/>
       <Route path="/viewPharmacists" element={<PharmacistListPage/>}/>
