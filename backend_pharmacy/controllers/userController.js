@@ -41,7 +41,7 @@ const login = async (req, res) => {
             if (auth) {
                 const token = createToken(user.username,role);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-                res.status(200).json({ user: user.username });
+                res.status(200).json({ user: user.username, role: role });
             } else {
                 res.status(401).json({ error: 'Incorrect password' });
             }
