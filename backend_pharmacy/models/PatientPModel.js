@@ -47,6 +47,25 @@ const PatientPSchema = new mongoose.Schema({
       required: true,
     },
   },
+  cart:[{
+    medicine_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Medicine',
+    },
+    quantity: {
+      type: Number,
+      required: false,
+    },
+    medicineName: {
+      type: String,
+      required: false,
+    },
+    price: {
+      type: Number,
+      required: false,
+    }
+    
+  }],
 });
 
 // Hash the password before saving to the database

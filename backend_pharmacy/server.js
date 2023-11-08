@@ -1,7 +1,8 @@
 const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
-const {createPatientP,getPatientsP, deletePatientP}= require("./controllers/PatientPController")
+const cookieParser = require('cookie-parser');
+const {createPatientP,getPatientsP, deletePatientP,addToCart}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin}=require("./controllers/adminController")
@@ -13,7 +14,8 @@ const corsOptions = {
     origin: 'http://localhost:3000', // Replace with your frontend's URL
   };
   app.use(cors(corsOptions));
-  app.use(express.json())
+  app.use(express.json());
+  app.use(cookieParser());
   app.use((req,res,next)=>{
     console.log(req.path,req.method)
     next()
@@ -44,6 +46,7 @@ app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
 
 app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
 app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
+app.post("/addToCart",addToCart)
 
 app.get("/getRequests",requireAuthAdmin,getRequests)
 app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
