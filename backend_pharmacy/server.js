@@ -1,7 +1,7 @@
 const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
-const {createPatientP,getPatientsP, deletePatientP}= require("./controllers/PatientPController")
+const {createPatientP,getPatientsP, deletePatientP, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin}=require("./controllers/adminController")
@@ -49,5 +49,7 @@ app.get("/getRequests",requireAuthAdmin,getRequests)
 app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
 app.put("/rejectPRequest/:id",requireAuthAdmin,rejectrequest);
 app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",createPharmacist1)
-app.post('/login', login)
+app.post('/login', login);
 app.get('/logout', logout);
+app.put("/addAddress/:username/:address",addAddress);
+app.get("/getAddresses/:username",getAddresses);

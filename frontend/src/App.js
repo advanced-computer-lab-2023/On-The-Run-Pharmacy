@@ -29,7 +29,6 @@ function App() {
       <Route path="/viewRequests" element={<RequestsListPage/>}/>
       <Route path="/admin" element={<AdminDashboard/>}/>
       <Route path="/login" element={<Login/>}/>
-
       <Route path="/addMed" element={<AddMedicineForm/>}/>
       <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
 

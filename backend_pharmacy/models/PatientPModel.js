@@ -45,8 +45,12 @@ const PatientPSchema = new mongoose.Schema({
     relation_to_patient: {
       type: String,
       required: true,
-    },
+    } 
   },
+  address: {
+    type: [String],
+    required: false,
+  }
 });
 
 // Hash the password before saving to the database
