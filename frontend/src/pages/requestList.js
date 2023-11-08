@@ -78,7 +78,7 @@ const RequestsListPage = () => {
                 
                 {(m.statuss !== 'rejected' && m.statuss !== 'accepted') && (
               <>
-                <button onClick={() => handleAccept(m._id,m.username,m.name,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}>Accept</button>
+                <button onClick={() => handleAccept(m._id,m.username,m.password,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}>Accept</button>
                 <button onClick={() => handleReject(m._id)}>Reject</button>
               </>
             )}
