@@ -6,7 +6,8 @@ const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./control
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin}=require("./controllers/adminController")
 const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1 }=require("./controllers/PharmacistController")
-
+const{login,logout}=require("./controllers/userController")
+const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000', // Replace with your frontend's URL
@@ -30,21 +31,23 @@ app.listen(4000,()=>{
 .catch((error)=>{
     console.log(error)
 })
-app.get("/getPatients",getPatientsP)
+
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
 app.get("/getMedicines",getMedicines)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id",updateMedicine)
-app.post("/addAdmin",createAdmin)
-app.get("/getPatients",getPatientsP)
-app.delete("/deletePatient/:id",deletePatientP)
+app.post("/addAdmin",requireAuthAdmin,createAdmin)
+app.get("/getPatients",requireAuthAdmin,getPatientsP)
+app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
 
-app.get("/getPharmacist",getPharmacists)
-app.delete("/deletePharmacist/:id",deletepharmacist)
+app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
+app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
 
-app.get("/getRequests",getRequests)
-app.put("/acceptPRequest/:id",acceptrequest);
-app.put("/rejectPRequest/:id",rejectrequest);
+app.get("/getRequests",requireAuthAdmin,getRequests)
+app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
+app.put("/rejectPRequest/:id",requireAuthAdmin,rejectrequest);
 app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",createPharmacist1)
+app.post('/login', login)
+app.get('/logout', logout);

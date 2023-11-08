@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import UserSelection from './components/UserSelection';
 import PatientRegistration from './pages/PatientReg';
@@ -13,11 +14,13 @@ import PatientListPage from './pages/PatientList';
 import PharmacistListPage from './pages/PharmacistList';
 import RequestsListPage from './pages/requestList';
 import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/login';
 
 function App() {
   return (
     <Router>
       <div className="App">
+        <Navbar/>
       <Routes>
       <Route path="/" element={<UserSelection/>}/>
       <Route path="/addAdmin" element={<AdminRegistrationForm/>}/>
@@ -25,6 +28,7 @@ function App() {
       <Route path="/viewPharmacists" element={<PharmacistListPage/>}/>
       <Route path="/viewRequests" element={<RequestsListPage/>}/>
       <Route path="/admin" element={<AdminDashboard/>}/>
+      <Route path="/login" element={<Login/>}/>
 
       <Route path="/addMed" element={<AddMedicineForm/>}/>
       <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
