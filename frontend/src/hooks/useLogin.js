@@ -31,7 +31,7 @@ export const useLogin = () => {
       // update the auth context
       dispatch({type: 'LOGIN', payload: json})
       if (json.role === 'patient') {
-        navigate(`/dashboard/patient/${username}`);
+        navigate(`/getMedicines/${username}`);
       }else if(json.role === 'doctor'){
         navigate(`/dashboard/doctor/${username}`);
       }

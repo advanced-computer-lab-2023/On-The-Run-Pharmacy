@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
 
@@ -8,6 +9,7 @@ const MedicineListPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchName, setSearchName] = useState('');
   const [medicalUseFilter, setMedicalUseFilter] = useState('');
+  const { username } = useParams();
 
   const fetchMedicines = async () => {
     try {
@@ -61,6 +63,22 @@ const MedicineListPage = () => {
     setMedicalUseFilter('');
     fetchMedicines();
   };
+  const addToCart = async (medicineId, amount) => {
+    try {
+      amount = parseInt(amount, 10);
+      const response = await axios.post(`http://localhost:4000/addToCart`, {
+        username,
+        medicineId,
+        amount,
+      });
+  
+      if (response.status === 200) {
+        console.log('Medicine added to cart successfully');
+      }
+    } catch (error) {
+      console.error('Error adding medicine to cart:', error);
+    }
+  };
 
   return (
     <div className="medicine-list-container">
@@ -96,6 +114,12 @@ const MedicineListPage = () => {
               <div className="medicine-image">
                 <img src={m.picture} alt={m.name} />
               </div>
+              <div className="medicine-add-to-cart">
+              <input type="number" min="1" defaultValue="1" id={`amount-${m._id}`} />
+              <button onClick={() => addToCart(m._id, document.getElementById(`amount-${m._id}`).value)}>
+                Add to cart
+              </button>
+            </div>
             </li>
           ))}
         </ul>

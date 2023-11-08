@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,Navigate} from 'react-router-dom';
 import UserSelection from './components/UserSelection';
 import PatientRegistration from './pages/PatientReg';
 import PharmaRegistration from './pages/PharmaRequest';
@@ -15,8 +15,12 @@ import PharmacistListPage from './pages/PharmacistList';
 import RequestsListPage from './pages/requestList';
 import AdminDashboard from './pages/AdminDashboard';
 import Login from './pages/login';
+import Cookies from 'js-cookie';
+
+
 
 function App() {
+
   return (
     <Router>
       <div className="App">
@@ -32,8 +36,8 @@ function App() {
 
       <Route path="/addMed" element={<AddMedicineForm/>}/>
       <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
-
-      <Route path="/getMedicines" element={<MedicineListPage/>}/>
+     
+      <Route path="/getMedicines/:username" element={<MedicineListPage/>}/>
       <Route path="/getMedicines/pharmacist" element={<MedicineListPagep/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
       <Route path="/register/pharmacist" element={<PharmaRegistration/>}/>
