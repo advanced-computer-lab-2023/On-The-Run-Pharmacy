@@ -22,6 +22,7 @@ import CartPage from './pages/cart';
 import ChangeAdminPass from './pages/changeAdminPass';
 import ChangePatientPass from './pages/changePatientPass';
 import ChangePharmacistPass from './pages/changePharmacistPass';
+import Checkout from './pages/Checkout';
 
 
 
@@ -53,6 +54,7 @@ function App() {
       <Route path="/changeAdminPassword/:username" element={<ChangeAdminPass/>}/>
       <Route path="/changePatientPassword/:username" element={<ChangePatientPass/>}/>
       <Route path="/changePharmacistPassword/:username" element={<ChangePharmacistPass/>}/>
+      <Route path="/Checkout/:username" element={<Checkout/>}/>
 
 
       </Routes>
