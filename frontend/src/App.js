@@ -15,8 +15,14 @@ import PharmacistListPage from './pages/PharmacistList';
 import RequestsListPage from './pages/requestList';
 import AdminDashboard from './pages/AdminDashboard';
 import Login from './pages/login';
+import AddAddress from './pages/AddAddress';
+import ChooseAddress from './pages/ChooseAddress';
 import Cookies from 'js-cookie';
 import CartPage from './pages/cart';
+import ChangeAdminPass from './pages/changeAdminPass';
+import ChangePatientPass from './pages/changePatientPass';
+import ChangePharmacistPass from './pages/changePharmacistPass';
+import Checkout from './pages/Checkout';
 
 
 
@@ -35,14 +41,22 @@ function App() {
       <Route path="/viewRequests" element={<RequestsListPage/>}/>
       <Route path="/admin" element={<AdminDashboard/>}/>
       <Route path="/login" element={<Login/>}/>
-
       <Route path="/addMed" element={<AddMedicineForm/>}/>
       <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
+      <Route path="/addAddress/:username" element={<AddAddress/>}/>
+      <Route path="/chooseAddress/:username" element={<ChooseAddress/>}/>
+      <Route path="/getMedicines" element={<MedicineListPage/>}/>
      
       <Route path="/getMedicines/:username" element={<MedicineListPage/>}/>
       <Route path="/getMedicines/pharmacist" element={<MedicineListPagep/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
       <Route path="/register/pharmacist" element={<PharmaRegistration/>}/>
+      <Route path="/changeAdminPassword/:username" element={<ChangeAdminPass/>}/>
+      <Route path="/changePatientPassword/:username" element={<ChangePatientPass/>}/>
+      <Route path="/changePharmacistPassword/:username" element={<ChangePharmacistPass/>}/>
+      <Route path="/Checkout/:username" element={<Checkout/>}/>
+
+
       </Routes>
       </div>
       </Router>

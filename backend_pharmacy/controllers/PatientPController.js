@@ -3,6 +3,7 @@ const Medicine = require('../models/MedicineModel');
 
 
 const { default: mongoose } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const createPatientP = async(req,res) => {
    try{ const {
@@ -14,6 +15,7 @@ const createPatientP = async(req,res) => {
         gender,
         mobile_number,
         emergency_contact,
+        address
         
       } = req.body;
       const newPatientP = new PatientP({
@@ -24,7 +26,8 @@ const createPatientP = async(req,res) => {
         date_of_birth,
         gender,
         mobile_number,
-        emergency_contact
+        emergency_contact,
+        address
 
       });
       await newPatientP.save();
@@ -58,6 +61,27 @@ const getPatientP = async (req, res) => {
       res
         .status(500)
         .json({ error: 'An error occurred while retrieving the Patient' });
+    }
+  };
+
+  const addAddress = async (req, res) => {
+    const { username, address } = req.params;
+  
+    try {
+      const updatedPatient = await PatientP.findOneAndUpdate(
+        { username: username },
+        { $push: { address: address } },
+        { new: true, useFindAndModify: false }
+      );
+  
+      if (!updatedPatient) {
+        return res.status(404).json({ message: 'Patient not found' });
+      }
+  
+      return res.status(200).json(updatedPatient);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'An error occurred while adding the address' });
     }
   };
 
@@ -113,6 +137,9 @@ const getPatientP = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while adding the medicine to the cart' });
   }
 };
+  
+
+  
 const getPatientCart = async (req, res) => {
   const { username } = req.params;
 
@@ -129,6 +156,26 @@ const getPatientCart = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while retrieving the patient\'s cart' });
   }
 };
+
+
+const getAddresses = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const patient = await PatientP.findOne({ username });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    return res.status(200).json(patient.address);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while getting the addresses' });
+  }
+};
+
+
 const deleteFromCart = async (req, res) => {
   const { username,medicineId } = req.params;
 
@@ -164,7 +211,7 @@ const updateCart = async (req, res) => {
       return res.status(404).json({ message: 'Medicine not found in cart' });
     }
 
-
+    
     if (newAmount == 0) {
       const index = patient.cart.indexOf(item);
       patient.cart.splice(index, 1);
@@ -180,6 +227,58 @@ const updateCart = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while updating the cart' });
   }
 };
+ const getPatientByUsername = async (req, res) => {
+  const { username } = req.params; // Get the username from the URL parameter
+  try {
+    // Find the admin by username
+    const patient = await PatientP.findOne({ username:username });
 
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found.' });
+    }
 
-module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP,addToCart,getPatientCart,deleteFromCart,updateCart}
+    res.status(200).json(patient);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updatePasswordPatient = async (req, res) => {
+  try {
+    const { username, currentPassword, newPassword } = req.body;
+    const patient = await PatientP.findOne({ username });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, patient.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid current password' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await PatientP.updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      }
+    );
+    await patient.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ message: 'Error updating password' });
+
+  }
+};
+
+module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP,addToCart,getPatientCart,deleteFromCart,updateCart,getPatientByUsername,updatePasswordPatient,addAddress,getAddresses};
