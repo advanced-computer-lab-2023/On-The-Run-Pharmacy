@@ -13,6 +13,9 @@ import PatientListPage from './pages/PatientList';
 import PharmacistListPage from './pages/PharmacistList';
 import RequestsListPage from './pages/requestList';
 import AdminDashboard from './pages/AdminDashboard';
+import ChangeAdminPass from './pages/changeAdminPass';
+import ChangePatientPass from './pages/changePatientPass';
+import ChangePharmacistPass from './pages/changePharmacistPass';
 
 function App() {
   return (
@@ -33,6 +36,11 @@ function App() {
       <Route path="/getMedicines/pharmacist" element={<MedicineListPagep/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
       <Route path="/register/pharmacist" element={<PharmaRegistration/>}/>
+      <Route path="/changeAdminPassword/:username" element={<ChangeAdminPass/>}/>
+      <Route path="/changePatientPassword/:username" element={<ChangePatientPass/>}/>
+      <Route path="/changePharmacistPassword/:username" element={<ChangePharmacistPass/>}/>
+
+
       </Routes>
       </div>
       </Router>

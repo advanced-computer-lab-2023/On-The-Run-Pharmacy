@@ -1,11 +1,11 @@
 const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
-const {createPatientP,getPatientsP, deletePatientP}= require("./controllers/PatientPController")
+const {createPatientP,getPatientsP, deletePatientP, getPatientByUsername,updatePasswordPatient}= require("./controllers/PatientPController")
 const {createRequest,getRequests}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
-const{createAdmin,getAdmin}=require("./controllers/adminController")
-const{ createPharmacist, getPharmacists, deletepharmacist }=require("./controllers/PharmacistController")
+const{createAdmin,getAdmin, getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
+const{ createPharmacist, getPharmacists, deletepharmacist, getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
 
 const app = express()
 const corsOptions = {
@@ -46,3 +46,9 @@ app.delete("/deletePharmacist/:id",deletepharmacist)
 
 app.get("/getRequests",getRequests)
 
+app.get("/getPatientByUsername/:username",getPatientByUsername);
+app.put("/updatePassPatient",updatePasswordPatient);
+app.get("/getPharamcistByUsername/:username",getPharmacistByUsername);
+app.put("/updatePassPharmacist",updatePasswordPharmacist);
+app.get("/getAdminByUsername/:username",getAdminByUsername);
+app.put("/updatePassAdmin",updatePasswordAdmin);

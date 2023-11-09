@@ -1,6 +1,7 @@
 const PatientP = require('../models/PatientPModel');
 
 const { default: mongoose } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const createPatientP = async(req,res) => {
    try{ const {
@@ -77,5 +78,59 @@ const getPatientP = async (req, res) => {
     }
  };
 
+ const getPatientByUsername = async (req, res) => {
+  const { username } = req.params; // Get the username from the URL parameter
 
-module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP}
+  try {
+    // Find the admin by username
+    const patient = await PatientP.findOne({ username:username });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found.' });
+    }
+
+    res.status(200).json(patient);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+ const updatePasswordPatient = async (req, res) => {
+  try {
+    const { username, currentPassword, newPassword } = req.body;
+    const patient = await PatientP.findOne({ username });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, patient.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid current password' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await PatientP.updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      }
+    );
+    await patient.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ message: 'Error updating password' });
+  }
+};
+
+
+module.exports={createPatientP, getPatientsP, deletePatientP, getPatientByUsername, getPatientP, updatePasswordPatient}

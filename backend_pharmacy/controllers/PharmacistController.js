@@ -2,7 +2,7 @@
 
 //create a new user
 const { default: mongoose } = require('mongoose');
-
+const bcrypt = require('bcrypt');
 
 const Pharmacist = require('../models/PharmacistModel');
 
@@ -95,4 +95,57 @@ const getPharmacists = async (req, res) => {
     }
  };
 
-module.exports = { createPharmacist, getPharmacists, deletepharmacist };
+ const getPharmacistByUsername = async (req, res) => {
+  const {username} = req.params;
+
+  try {
+      const pharmacist = await Pharmacist.findOne({username : username });
+
+    res.status(200).json(pharmacist);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: 'An error occurred while retrieving the Pharmacist' });
+  }
+};
+
+
+const updatePasswordPharmacist = async (req, res) => {
+try {
+  const { username, currentPassword, newPassword } = req.body;
+  const pharmacist = await Pharmacist.findOne({ username });
+
+  if (!pharmacist) {
+    return res.status(404).json({ message: 'Pharmacist not found' });
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, pharmacist.password);
+
+  if (!isMatch) {
+    return res.status(400).json({ message: 'Invalid current password' });
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  await Pharmacist.updateOne(
+    {
+      username: username,
+    },
+    {
+      $set: {
+        password: hashedPassword,
+      },
+    }
+  );
+  await pharmacist.save();
+
+  res.status(200).json({ message: 'Password updated successfully' });
+} catch (error) {
+  console.error('Error updating password:', error);
+  res.status(500).json({ message: 'Error updating password' });
+}
+};
+
+module.exports = { createPharmacist, getPharmacists, deletepharmacist, getPharmacistByUsername, updatePasswordPharmacist };
