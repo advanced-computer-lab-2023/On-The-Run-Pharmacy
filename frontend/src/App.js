@@ -15,6 +15,8 @@ import PharmacistListPage from './pages/PharmacistList';
 import RequestsListPage from './pages/requestList';
 import AdminDashboard from './pages/AdminDashboard';
 import Login from './pages/login';
+import AddAddress from './pages/AddAddress';
+import ChooseAddress from './pages/ChooseAddress';
 
 function App() {
   return (
@@ -31,7 +33,8 @@ function App() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/addMed" element={<AddMedicineForm/>}/>
       <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
-
+      <Route path="/addAddress/:username" element={<AddAddress/>}/>
+      <Route path="/chooseAddress/:username" element={<ChooseAddress/>}/>
       <Route path="/getMedicines" element={<MedicineListPage/>}/>
       <Route path="/getMedicines/pharmacist" element={<MedicineListPagep/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
