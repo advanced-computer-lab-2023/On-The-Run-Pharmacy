@@ -54,7 +54,51 @@ const getRequests = async (req, res) => {
   }
 };
 
-module.exports = { createRequest ,getRequests};
+const rejectrequest = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Finds the request by ID and updates the status to "rejected"
+    const updatedRequest = await Request.findByIdAndUpdate(
+      { _id: id },
+      { statuss: 'rejected' },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({ message: 'Request not found' });
+    }
+
+    res.status(200).json({ message: 'Request rejected successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while rejecting the request.' });
+  }
+};
+
+const acceptrequest = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Finds the request by ID and updates the status to "rejected"
+    const updatedRequest = await Request.findByIdAndUpdate(
+      { _id: id },
+      { statuss: 'accepted' },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({ message: 'Request not found' });
+    }
+
+    res.status(200).json({ message: 'Request rejected successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while rejecting the request.' });
+  }
+};
+
+module.exports = { createRequest ,getRequests,rejectrequest,acceptrequest};
 
 
 

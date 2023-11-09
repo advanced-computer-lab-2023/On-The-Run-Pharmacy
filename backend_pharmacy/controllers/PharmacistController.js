@@ -43,6 +43,44 @@ const createPharmacist = async (req, res) => {
   }
 };
 
+const createPharmacist1 = async(req,res) => {
+  try {
+    // Extract data from the request body
+    const {
+      username,
+      password,
+      name,
+      email,
+      hourly_rate,
+      affiliation,
+      educational_background,
+      Working_license,
+      Pharmacy_degree
+    } = req.params;
+
+    // Create a new doctor record
+    const newPharmacist = new Pharmacist({
+      username,
+      password,
+      name,
+      email,
+      hourly_rate,
+      affiliation,
+      educational_background,
+      Working_license,
+      Pharmacy_degree
+    });
+
+    // Save the new doctor to the database
+    await newPharmacist.save();
+
+    res.status(201).json({ message: 'Pharmacist registered successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while registering the pharmacist.' });
+  }
+};
+
 
 
 const getPharmacists = async (req, res) => {
@@ -94,7 +132,6 @@ const getPharmacists = async (req, res) => {
        return res.status(500).json({ error: 'An error occurred while deleting the pharmacist' });
     }
  };
-
  const getPharmacistByUsername = async (req, res) => {
   const {username} = req.params;
 
@@ -148,4 +185,4 @@ try {
 }
 };
 
-module.exports = { createPharmacist, getPharmacists, deletepharmacist, getPharmacistByUsername, updatePasswordPharmacist };
+module.exports = { createPharmacist, getPharmacists, deletepharmacist, createPharmacist1,getPharmacistByUsername,updatePasswordPharmacist };

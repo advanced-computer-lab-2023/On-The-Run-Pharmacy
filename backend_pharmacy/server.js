@@ -1,18 +1,21 @@
 const express=require('express')
 const mongoose=require('mongoose')
 const cors = require('cors');
-const {createPatientP,getPatientsP, deletePatientP, getPatientByUsername,updatePasswordPatient}= require("./controllers/PatientPController")
-const {createRequest,getRequests}=require("./controllers/requestsController")
+const cookieParser = require('cookie-parser');
+const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,getPatientByUsername,updatePasswordPatient}= require("./controllers/PatientPController")
+const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
-const{createAdmin,getAdmin, getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
-const{ createPharmacist, getPharmacists, deletepharmacist, getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
-
+const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
+const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
+const{login,logout}=require("./controllers/userController")
+const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000', // Replace with your frontend's URL
   };
   app.use(cors(corsOptions));
-  app.use(express.json())
+  app.use(express.json());
+  app.use(cookieParser());
   app.use((req,res,next)=>{
     console.log(req.path,req.method)
     next()
@@ -30,22 +33,30 @@ app.listen(4000,()=>{
 .catch((error)=>{
     console.log(error)
 })
-app.get("/getPatients",getPatientsP)
+
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
 app.get("/getMedicines",getMedicines)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id",updateMedicine)
-app.post("/addAdmin",createAdmin)
-app.get("/getPatients",getPatientsP)
-app.delete("/deletePatient/:id",deletePatientP)
+app.post("/addAdmin",requireAuthAdmin,createAdmin)
+app.get("/getPatients",requireAuthAdmin,getPatientsP)
+app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
 
-app.get("/getPharmacist",getPharmacists)
-app.delete("/deletePharmacist/:id",deletepharmacist)
+app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
+app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
+app.post("/addToCart",addToCart)
 
-app.get("/getRequests",getRequests)
-
+app.get("/getRequests",requireAuthAdmin,getRequests)
+app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
+app.put("/rejectPRequest/:id",requireAuthAdmin,rejectrequest);
+app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",createPharmacist1)
+app.post('/login', login)
+app.get('/logout', logout);
+app.get("/getPatientCart/:username",getPatientCart)
+app.delete("/deleteFromCart/:username/:medicineId",deleteFromCart)
+app.put("/updateCart/:username/:medicineId/:newAmount",updateCart)
 app.get("/getPatientByUsername/:username",getPatientByUsername);
 app.put("/updatePassPatient",updatePasswordPatient);
 app.get("/getPharamcistByUsername/:username",getPharmacistByUsername);
