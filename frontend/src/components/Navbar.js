@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
+import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = () => {
   const { logout } = useLogout()
   const { user } = useAuthContext()
+
 
   const handleClick = () => {
     logout()
@@ -20,9 +22,14 @@ const Navbar = () => {
         <nav>
           {user && (
             <div>
-              <span>{user.email}</span>
-              <button onClick={handleClick}>Log out</button>
-            </div>
+            <span>{user.user}</span>
+            {user.role === 'patient' && (
+                <Link to={`/cart/${user.user}`}>
+                  <FaShoppingCart />
+                </Link>
+              )}
+            <button onClick={handleClick}>Log out</button>
+          </div>
           )}
           {!user && (
             <div>

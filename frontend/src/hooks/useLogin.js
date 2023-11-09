@@ -26,7 +26,7 @@ export const useLogin = () => {
     }
     if (response.ok) {
       // save the user to a cookie
-      Cookies.set('user', JSON.stringify(json))
+      Cookies.set('token', json.token)
 
       // update the auth context
       dispatch({type: 'LOGIN', payload: json})
