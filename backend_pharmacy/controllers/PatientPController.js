@@ -165,7 +165,7 @@ const updateCart = async (req, res) => {
       return res.status(404).json({ message: 'Medicine not found in cart' });
     }
 
-    
+
     if (newAmount == 0) {
       const index = patient.cart.indexOf(item);
       patient.cart.splice(index, 1);
@@ -215,16 +215,7 @@ const updatePasswordPatient = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    await PatientP.updateOne(
-      {
-        username: username,
-      },
-      {
-        $set: {
-          password: hashedPassword,
-        },
-      }
-    );
+    patient.password = hashedPassword;
     await patient.save();
 
     res.status(200).json({ message: 'Password updated successfully' });
