@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
 
 const RequestsListPage = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   
  
 
@@ -17,6 +20,7 @@ const RequestsListPage = () => {
       if (response.status === 200) {
         setRequests(response.data);
       }
+      
     } catch (error) {
       console.error('Error fetching requests:', error);
     } finally {
