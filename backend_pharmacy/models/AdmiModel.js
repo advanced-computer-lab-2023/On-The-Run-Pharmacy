@@ -10,6 +10,9 @@ const adminSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+      },
+      passwordReset: {
+        type: String,
       }
     });
     // Hash the password before saving to the database

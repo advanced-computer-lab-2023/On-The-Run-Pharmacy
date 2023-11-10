@@ -56,10 +56,10 @@ const logout = async (req, res) => {
 }
 
 const transporter = nodemailer.createTransport({
-    service: 'hotmail', // Example: 'Gmail'
+    service: 'gmail', // Example: 'Gmail'
     auth: {
-      user: 'ontherunclinic@hotmail.com',
-      pass: '0ntherunClinc',
+      user: 'ontherunclinic@gmail.com',
+      pass: 'wkdy hbkz loda mebe',
     },
   });
   
@@ -85,7 +85,8 @@ const transporter = nodemailer.createTransport({
   
   // Route to initiate password reset
   const forgetPassword= async (req, res) => {
-    const { username, email } = req.body;
+    const { username } = req.body;
+    const email=""
     try {
       let user = await Patient.findOne({ username });
       if (!user) {
@@ -97,6 +98,7 @@ const transporter = nodemailer.createTransport({
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
+      email=user.email;
   
       // Generate and store OTP
       const otp = generateOTP();
@@ -119,7 +121,7 @@ const transporter = nodemailer.createTransport({
   // Route to reset the password
   const resetPassword= async (req, res) => {
     const { username } = req.params;
-    const { email, otp, newPassword } = req.body;
+    const {otp, newPassword } = req.body;
     try {
       let user = await Patient.findOne({ username });
       if (!user) {
@@ -131,6 +133,7 @@ const transporter = nodemailer.createTransport({
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
+  
   
       
   
@@ -155,6 +158,7 @@ const transporter = nodemailer.createTransport({
             },
           }
         );
+        await user.save();
       }
       if(user = await Pharmacist.findOne({ username })){
         await Pharmacist.updateOne(
@@ -168,6 +172,7 @@ const transporter = nodemailer.createTransport({
             },
           }
         );
+        await user.save();
       }
       if(user = await Admin.findOne({ username })){
         await Admin.updateOne(
@@ -181,12 +186,13 @@ const transporter = nodemailer.createTransport({
             },
           }
         );
+        await user.save();
       }
   
       
   
       // Save the updated user
-      await user.save();
+     
   
       return res.status(200).json({ message: 'Password reset successfully.' });
     } catch (error) {

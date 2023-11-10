@@ -7,7 +7,7 @@ import axios from 'axios'
 
 function ForgetPassword() {
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+  
     const navigate = useNavigate();
     
     
@@ -15,8 +15,7 @@ function ForgetPassword() {
         e.preventDefault();
         try{
             const response = await axios.post('http://localhost:4000/forgetPassword', {
-                username,
-                email
+                username
             });
             console.log(response.data);
             navigate(`/resetPassword/${username}`);
@@ -35,14 +34,7 @@ function ForgetPassword() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <br/>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <br/>
+         
           <button type="submit">Send OTP</button>
         </form>
       );

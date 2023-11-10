@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useLogin } from "../hooks/useLogin"
 import { useAuthContext } from '../hooks/useAuthContext'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
   const { user } = useAuthContext()
@@ -35,6 +36,7 @@ const Login = () => {
        {error && <p>Wrong username or password</p>}
 
       <button>Log in</button>
+      <Link to={`/forgetPassword`}>Forgot Password?</Link>
     </form>
   )
 }

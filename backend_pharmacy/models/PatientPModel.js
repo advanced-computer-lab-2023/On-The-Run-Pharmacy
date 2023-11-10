@@ -74,6 +74,9 @@ const PatientPSchema = new mongoose.Schema({
     }
     
   }],
+  passwordReset: {
+    type: String,
+  }
 });
 
 // Hash the password before saving to the database

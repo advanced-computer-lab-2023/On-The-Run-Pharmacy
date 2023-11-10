@@ -42,6 +42,9 @@ const PharmacistSchema = new mongoose.Schema({
     type:String,
     required:true,
   },
+  passwordReset: {
+    type: String,
+  },
  
 });
 
