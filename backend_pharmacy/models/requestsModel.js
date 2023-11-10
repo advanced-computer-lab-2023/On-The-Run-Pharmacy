@@ -42,6 +42,18 @@ const requestSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  workingLicense: {
+    data: Buffer,
+    contentType: String,
+  },
+  pharmacistDegree: {
+    data: Buffer,
+    contentType: String,
+  },
+  pharmacistId: {
+    data: Buffer,
+    contentType: String,
+  },
 });
 
 const Request = mongoose.model('Request', requestSchema);

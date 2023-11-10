@@ -1,50 +1,81 @@
-import React,{ useState } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const PharmaRegistration = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const[username,setUsername]=useState('')
-const[name,setName]=useState('')
-const[email,setEmail]=useState('')
-const[password,setPassword]=useState('')
-const[hourly_rate,setHourly_rate]=useState('')
-const[affiliation,setAffiliation]=useState('')
-const [educational_background, setEducational_background] = useState('');
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [hourly_rate, setHourly_rate] = useState('');
+  const [affiliation, setAffiliation] = useState('');
+  const [educational_background, setEducational_background] = useState('');
+  const [date_of_birth, setDateOfBirth] = useState('');
+  const [workingLicense, setWorkingLicense] = useState(null);
+  const [pharmacistDegree, setPharmacistDegree] = useState(null);
+  const [pharmacistId, setPharmacistId] = useState(null);
 
   const [error, setError] = useState(null);
-  const [isPharmacistRegistered, setIsPharmacistRegistered] = useState(false);
+  const [isPharmacistRegistered] = useState(false);
 
-  
+  const handleWorkingLicenseChange = (e) => {
+    setWorkingLicense(e.target.files[0]);
+  };
 
+  const handlePharmacistDegreeChange = (e) => {
+    setPharmacistDegree(e.target.files[0]);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const p={username,name,email,password,hourly_rate,affiliation,educational_background}
-        try {
-          // Make a POST request to your backend API endpoint
-          const response = await axios.post('http://localhost:4000/createRequest', p);
-      
-          if (response.status === 201) {
-            console.log('Registration successful:', response.data);
-            setUsername('');
-            setName('');
-            setEmail('');
-            setPassword('');
-            setHourly_rate('');
-            setAffiliation('');
-            setEducational_background('');
-            setError(null);
-            setIsPharmacistRegistered(true);
-           // navigate(`/dashboard/patient/${username}`);
-            console.log('Registration successful', response.data);
-          }
-        } catch (error) {
-          // Handle errors, e.g., display an error message to the user
-          console.error('Error registering pharmacist:', error);
-        }
-      };
+  const handlePharmacistIdChange = (e) => {
+    setPharmacistId(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password); // Added password as a regular form field
+    formData.append('hourly_rate', hourly_rate);
+    formData.append('affiliation', affiliation);
+    formData.append('educational_background', educational_background);
+    formData.append('date_of_birth', date_of_birth);
+    formData.append('workingLicense', workingLicense);
+    formData.append('pharmacistDegree', pharmacistDegree);
+    formData.append('pharmacistId', pharmacistId);
+
+    try {
+      const response = await axios.post('http://localhost:4000/createRequest', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 201) {
+        console.log('Registration successful:', response.data);
+        setUsername('');
+        setName('');
+        setEmail('');
+        setPassword('');
+        setDateOfBirth('');
+        setHourly_rate('');
+        setAffiliation('');
+        setEducational_background('');
+        setWorkingLicense(null);
+        setPharmacistDegree(null);
+        setPharmacistId(null);
+        setError(null);
+        navigate('/'); // Redirect to the appropriate page
+      }
+    } catch (error) {
+      console.error('Error registering pharmacist:', error);
+    }
+  };
+
 
 
   return (
@@ -146,6 +177,55 @@ const [educational_background, setEducational_background] = useState('');
               setEducational_background(e.target.value)
             }
                     placeholder="Enter your Educational Background"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="dob">Date of Birth</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={date_of_birth}
+            onChange={(e) => {
+              
+              setDateOfBirth(e.target.value);
+            }}
+                    id="dob"
+                  />
+                </div>
+
+
+                {/* Working License PDF */}
+                <div className="form-group">
+                  <label htmlFor="workingLicense">Working License PDF</label>
+                  <input
+                    type="file"
+                    id="workingLicense"
+                    accept=".pdf"
+                    onChange={handleWorkingLicenseChange}
+                  />
+                </div>
+
+                
+                  
+                 {/* Pharmacist Degree PDF */}
+                 <div className="form-group">
+                  <label htmlFor="pharmacistDegree">Pharmacist Degree PDF</label>
+                  <input
+                    type="file"
+                    id="pharmacistDegree"
+                    accept=".pdf"
+                    onChange={handlePharmacistDegreeChange}
+                  />
+                </div>
+               {/* Pharmacist ID PDF */}
+               <div className="form-group">
+                  <label htmlFor="pharmacistId">Pharmacist ID PDF</label>
+                  <input
+                    type="file"
+                    id="pharmacistId"
+                    accept=".pdf"
+                    onChange={handlePharmacistIdChange}
                   />
                 </div>
 

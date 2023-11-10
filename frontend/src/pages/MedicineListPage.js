@@ -115,8 +115,9 @@ const MedicineListPage = () => {
                 <strong>Description:</strong> {m.description}<br />
                 <strong>Medical Use:</strong> {m.medicalUse}<br />
               </div>
-              <div className="medicine-image">
-                <img src={m.picture} alt={m.name} />
+              <div>
+                <strong>Image: </strong>
+                <img src={m.pictureUrl} alt={m.name} />
               </div>
               <div className="medicine-add-to-cart">
               <input type="number" min="1" defaultValue="1" id={`amount-${m._id}`} />
