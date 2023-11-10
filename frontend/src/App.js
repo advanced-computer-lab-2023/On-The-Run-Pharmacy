@@ -22,6 +22,8 @@ import CartPage from './pages/cart';
 import ChangeAdminPass from './pages/changeAdminPass';
 import ChangePatientPass from './pages/changePatientPass';
 import ChangePharmacistPass from './pages/changePharmacistPass';
+import ForgetPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
 import Checkout from './pages/Checkout';
 import PatientOrders from './pages/PatientOrders';
 
@@ -55,6 +57,8 @@ function App() {
       <Route path="/changeAdminPassword/:username" element={<ChangeAdminPass/>}/>
       <Route path="/changePatientPassword/:username" element={<ChangePatientPass/>}/>
       <Route path="/changePharmacistPassword/:username" element={<ChangePharmacistPass/>}/>
+      <Route path="/forgetPassword" element={<ForgetPassword/>}/>
+      <Route path="/resetPassword/:username" element={<ResetPassword/>}/>
       <Route path="/Checkout/:username" element={<Checkout/>}/>
       <Route path="/patientOrders/:username" element={<PatientOrders/>}/>
 

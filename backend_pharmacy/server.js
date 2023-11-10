@@ -8,7 +8,7 @@ const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./control
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
 const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
-const{login,logout}=require("./controllers/userController")
+const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const{createOrder,cancelOrder,getPatientOrders}=require("./controllers/orderController")
 const app = express()
@@ -72,3 +72,5 @@ app.put("/cancelOrder/:orderId",cancelOrder);
 app.put ("/updateWallet/:username/:amount",updateWallet);
 app.get ("/getWallet/:username",getWallet);
 app.get("/getPatientOrders/:username",getPatientOrders);
+app.post("/forgetPassword",forgetPassword);
+app.post("/resetPassword/:username",resetPassword);

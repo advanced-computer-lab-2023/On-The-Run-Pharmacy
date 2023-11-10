@@ -256,7 +256,7 @@ const updateCart = async (req, res) => {
       return res.status(404).json({ message: 'Medicine not found in cart' });
     }
 
-    
+
     if (newAmount == 0) {
       const index = patient.cart.indexOf(item);
       patient.cart.splice(index, 1);
