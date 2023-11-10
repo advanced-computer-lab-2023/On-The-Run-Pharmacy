@@ -11,6 +11,7 @@ const createPatientP = async(req,res) => {
         name,
         email,
         password,
+        wallet,
         date_of_birth,
         gender,
         mobile_number,
@@ -23,6 +24,7 @@ const createPatientP = async(req,res) => {
         password,
         name,
         email,
+        wallet,
         date_of_birth,
         gender,
         mobile_number,
@@ -174,7 +176,50 @@ const getAddresses = async (req, res) => {
     return res.status(500).json({ error: 'An error occurred while getting the addresses' });
   }
 };
+const getWallet = async (req, res) => {
+  const { username } = req.params;
 
+  try {
+    const patient = await PatientP.findOne({ username });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    return res.status(200).json(patient.wallet);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while getting the wallet' });
+  }
+};
+
+
+
+const updateWallet = async (req, res) => {
+  const { username, amount } = req.params;
+
+  try {
+    // Fetch the user from the database
+    const user = await PatientP.findOne({ username });
+
+    // Check if the user's wallet has enough funds
+    if (user.wallet < amount) {
+      return res.status(400).json({ error: 'Insufficient funds in wallet' });
+    }
+
+    // Subtract the amount from the user's wallet
+    user.wallet -= amount;
+
+    // Save the updated user to the database
+    await user.save();
+
+    // Send a success response
+    res.json({ message: 'Wallet updated successfully', wallet: user.wallet });
+  } catch (error) {
+    // Send an error response
+    res.status(500).json({ error: 'An error occurred while updating the wallet' });
+  }
+};
 
 const deleteFromCart = async (req, res) => {
   const { username,medicineId } = req.params;
@@ -281,4 +326,4 @@ const updatePasswordPatient = async (req, res) => {
   }
 };
 
-module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP,addToCart,getPatientCart,deleteFromCart,updateCart,getPatientByUsername,updatePasswordPatient,addAddress,getAddresses};
+module.exports={createPatientP, getPatientsP, deletePatientP, getPatientP,addToCart,getPatientCart,deleteFromCart,updateCart,getPatientByUsername,updatePasswordPatient,addAddress,getAddresses,updateWallet,getWallet};

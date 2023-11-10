@@ -7,7 +7,7 @@ const CartPage = () => {
   const navigate=useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  let totalprice=0;
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -64,6 +64,7 @@ const CartPage = () => {
       ) : items.length > 0 ? (
         <ul>
           {items.map((item) => (
+            
             <li key={item.medicine_id}>
             <p>Name: {item.medicineName}</p>
               <p>Amount: {item.quantity}</p>
@@ -77,7 +78,7 @@ const CartPage = () => {
       ) : (
         <p>No Items.</p>
       )}
-     <button onClick={() => navigate('/checkout')}>Checkout</button>
+     <button onClick={() => navigate(`/checkout/${username}`)}>Checkout</button>
     <button onClick={() => navigate(-1)}>Back</button>
     </div>
   );

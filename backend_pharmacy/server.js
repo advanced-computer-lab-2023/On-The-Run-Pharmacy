@@ -3,13 +3,14 @@ const mongoose=require('mongoose')
 const cors = require('cors');
 //const {createPatientP,getPatientsP, deletePatientP, addAddress, getAddresses}= require("./controllers/PatientPController")
 const cookieParser = require('cookie-parser');
-const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
+const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
 const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
 const{login,logout}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
+const{createOrder,cancelOrder,getPatientOrders}=require("./controllers/orderController")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000', // Replace with your frontend's URL
@@ -66,3 +67,8 @@ app.get("/getPharamcistByUsername/:username",getPharmacistByUsername);
 app.put("/updatePassPharmacist",updatePasswordPharmacist);
 app.get("/getAdminByUsername/:username",getAdminByUsername);
 app.put("/updatePassAdmin",updatePasswordAdmin);
+app.post("/createOrder/:username/:statuss/:shippingAddress/:paymentMethod",createOrder);
+app.put("/cancelOrder/:orderId",cancelOrder);
+app.put ("/updateWallet/:username/:amount",updateWallet);
+app.get ("/getWallet/:username",getWallet);
+app.get("/getPatientOrders/:username",getPatientOrders);

@@ -21,6 +21,10 @@ const PatientPSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  wallet:{
+    default:0,
+    type:Number
+  },
   date_of_birth: {
     type: Date,
     required: true,
