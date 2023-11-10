@@ -13,7 +13,7 @@ const nodemailer = require('nodemailer'); // For sending emails
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (username,role) => {
-    return jwt.sign({ username,role }, 'supersecret', {
+    return jwt.sign({ user:username,role }, 'supersecret', {
         expiresIn: maxAge
     });
 };
@@ -42,7 +42,7 @@ const login = async (req, res) => {
             const auth = await bcrypt.compare(password, user.password);
             if (auth) {
                 const token = createToken(user.username,role);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000, secure: false });
                 res.status(200).json({ user: user.username, role: role });
             } else {
                 res.status(401).json({ error: 'Incorrect password' });
