@@ -2,29 +2,57 @@
 const { default: mongoose } = require('mongoose');
 
 const Medicine = require('../models/MedicineModel');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const addMedicine = async (req, res) => {
   try {
-    const { name, picture, description, available_quantity,medicalUse,price } = req.body;
-    const medicine = new Medicine({
-      name,
-      picture,
-      description,
-      available_quantity,
-      medicalUse,
-      price
+    upload.single('picture')(req, res, async function (err) {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+
+      console.log('Request Body:', req.body);
+
+      const { name, description, available_quantity, medicalUse, price } = req.body;
+
+      // Check if req.file.buffer exists and assign it to pictureUrl, otherwise handle it accordingly
+      const pictureUrl = req.file
+        ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
+        : null;
+
+      const medicine = new Medicine({
+        name,
+        description,
+        available_quantity,
+        medicalUse,
+        price,
+        pictureUrl,
+      });
+
+      await medicine.save();
+      res.status(201).json(medicine);
     });
-    await medicine.save()
-    res.status(201).json(medicine);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+
+
+
+
+
+
 
 const getMedicine = async (req, res) => {
   try {
     const { id } = req.params;
-    const medicine = await Medicine.findById(id);
+    const medicine = await Medicine.findById(id).exec();
 
     if (!medicine) {
       return res.status(404).json({ message: 'Medicine not found' });

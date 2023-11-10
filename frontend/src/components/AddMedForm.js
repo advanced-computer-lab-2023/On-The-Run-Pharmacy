@@ -8,40 +8,58 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
     const[available_quantity,setAvailable_quantity]=useState('')
     const[price,setPrice]=useState('')
     const[medicalUse,setMedicalUse]=useState('')
+    const [picture, setPicture] = useState(null); // Store the selected image file
     const navigate = useNavigate();
 
 
   
 
-  const handleSubmit = async (e) => {
-    
-    const m={name,description,available_quantity,price,medicalUse}
-    e.preventDefault();
-
-    try {
-      // Make a POST request to add the medicine
-      const response = await axios.post('http://localhost:4000/addMedicine', m);
-
-      // Check if the request was successful
-      if (response.status === 201) {
-        console.log("hi")
-        // Call the callback function to notify the parent component
-        // that a medicine has been added
-       // onMedicineAdded(response.data);
-
-        // Clear the form data or reset the state as needed
-       setName('')
-       setDescription('')
-       setAvailable_quantity('')
-       setPrice('')
-       setMedicalUse('')
-       navigate('/getMedicines/pharmasist')
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('description', description);
+      formData.append('available_quantity', available_quantity);
+      formData.append('price', price);
+      formData.append('medicalUse', medicalUse);
+      formData.append('picture', picture); // Append the selected image file
+  
+      try {
+        // Make a POST request to add the medicine
+        const response = await axios.post('http://localhost:4000/addMedicine', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Set the content type for file upload
+          },
+        });
+  
+        // Check if the request was successful
+        if (response.status === 201) {
+          // Clear the form data or reset the state as needed
+          setName('');
+          setDescription('');
+          setAvailable_quantity('');
+          setPrice('');
+          setMedicalUse('');
+          setPicture(null); // Reset the selected image file
+          navigate('/getMedicines/pharmasist');
+        }
+      } catch (error) {
+        console.error('Error adding medicine:', error);
       }
-    } catch (error) {
-      console.error('Error adding medicine:', error);
-    }
-  };
-
+    };
+  
+    // Handle file input change
+    const handleFileChange = (e) => {
+      const selectedFile = e.target.files[0];
+    
+      if (selectedFile) {
+        setPicture(selectedFile); // Store the selected image file as a Blob
+      } else {
+        // Handle the case where the user canceled the file selection
+        console.log('File selection canceled');
+      }
+    };
   return (
     <div>
       <h2>Add Medicine</h2>
@@ -101,6 +119,16 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
             name="medicalUse"
             value={medicalUse}
             onChange={(e)=>setMedicalUse(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="picture">Medicine Image:</label>
+          <input
+            type="file"
+            id="picture"
+            name="picture"
+            onChange={handleFileChange}
             required
           />
         </div>

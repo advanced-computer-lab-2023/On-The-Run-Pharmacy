@@ -81,6 +81,25 @@ const RequestsListPage = () => {
                 <strong>Afilliation:</strong> {m.affiliation}<br />
                 <strong>Status:</strong> {m.statuss}<br />
                 
+                <div className="request-files">
+                <strong>Working License:</strong>
+                <a href={`http://localhost:4000/uploads/${m.workingLicense}`} target="_blank" rel="noopener noreferrer">
+                  View Working License
+                </a>
+                <br />
+
+                <strong>Pharmacist Degree:</strong>
+                <a href={`http://localhost:4000/uploads/${m.pharmacistDegree}`} target="_blank" rel="noopener noreferrer">
+                  View Pharmacist Degree
+                </a>
+                <br />
+
+                <strong>Pharmacist ID:</strong>
+                <a href={`http://localhost:4000/uploads/${m.pharmacistId}`} target="_blank" rel="noopener noreferrer">
+                  View Pharmacist ID
+                </a>
+                <br />
+              </div>
                 {(m.statuss !== 'rejected' && m.statuss !== 'accepted') && (
               <>
                 <button onClick={() => handleAccept(m._id,m.username,m.password,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}>Accept</button>

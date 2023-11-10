@@ -97,6 +97,10 @@ const MedicineListPagep = () => {
                 <strong>Medical Use:</strong> {m.medicalUse}<br />
                 <strong>Quantity:</strong> {m.available_quantity}<br />
                 <strong>Sales:</strong> {m.sales}<br />
+                <div>
+                <strong>Image: </strong>
+                <img src={m.pictureUrl} alt={m.name} />
+              </div>
                 <Link to={`/edit/${m._id}`}>Edit</Link>
               </div>
               <div className="medicine-image">

@@ -1,48 +1,91 @@
-const Request = require('../models/requestsModel'); 
+const multer = require('multer');
+const path = require('path');
+const Request = require('../models/requestsModel');
 
+// Define storage for the uploaded files
+const storage = multer.memoryStorage();
 
+// Create an instance of Multer
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 }, // Limit file size to 5MB
+  fileFilter: (req, file, cb) => {
+    const filetypes = /pdf/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    if (extname) {
+      return cb(null, true);
+    }
+    cb('Error: Only PDF files are allowed.');
+  },
+}).fields([
+  { name: 'workingLicense', maxCount: 1 },
+  { name: 'pharmacistDegree', maxCount: 1 },
+  { name: 'pharmacistId', maxCount: 1 },
+]);
 
 const createRequest = async (req, res) => {
-    try {
-        // Extract request data from the request body
-        const {
-          username,
-          name,
-          email,
-          password,
-          date_of_birth,
-          hourly_rate,
-          affiliation,
-          educational_background,
-        } = req.body;
-    
-        // Create a new request object
-        const request = new Request({
-          username,
-          name,
-          email,
-          password,
-          date_of_birth,
-          hourly_rate,
-          affiliation,
-          educational_background,
-          
-        });
-    
-        // Save the request to the database
-        await request.save();
-    
-        // Respond with a success message
-        res.status(201).json({ message: 'Doctor registration request submitted successfully.' });
-      } catch (error) {
-        console.error('Error submitting doctor registration request:', error);
-        res.status(500).json({ message: 'Internal server error' });
+  try {
+    // Call the Multer middleware to handle file uploads
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: err });
       }
 
+      // Extract request data from the request body
+      const {
+        username,
+        name,
+        email,
+        password,
+        hourly_rate,
+        affiliation,
+        educational_background,
+        date_of_birth,
+      } = req.body;
 
-      
+      // Access the uploaded files from req.files
+      const workingLicenseFile = req.files.workingLicense[0];
+      const pharmacistDegreeFile = req.files.pharmacistDegree[0];
+      const pharmacistIdFile = req.files.pharmacistId[0];
 
+      // Create a new request object
+      const request = new Request({
+        username,
+        name,
+        email,
+        password,
+        hourly_rate,
+        affiliation,
+        educational_background,
+        date_of_birth,
+        workingLicense: {
+          data: workingLicenseFile.buffer,
+          contentType: workingLicenseFile.mimetype,
+        },
+        pharmacistDegree: {
+          data: pharmacistDegreeFile.buffer,
+          contentType: pharmacistDegreeFile.mimetype,
+        },
+        pharmacistId: {
+          data: pharmacistIdFile.buffer,
+          contentType: pharmacistIdFile.mimetype,
+        },
+      });
+
+      // Save the request to the database
+      await request.save();
+
+      // Respond with a success message
+      res.status(201).json({ message: 'Pharmacist registration request submitted successfully.' });
+    });
+  } catch (error) {
+    console.error('Error submitting pharmacist registration request:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
+
+module.exports = { createRequest };
+
 const getRequests = async (req, res) => {
   try {
     const pharmacists = await Request.find({}).sort({ createdAt: -1 });
@@ -99,6 +142,7 @@ const acceptrequest = async (req, res) => {
 };
 
 module.exports = { createRequest ,getRequests,rejectrequest,acceptrequest};
+
 
 
 
