@@ -79,6 +79,7 @@ const RequestsListPage = () => {
                 <strong>email:</strong> {m.email}<br />
                 <strong>Educational Background:</strong> {m.educational_background}<br />
                 <strong>Afilliation:</strong> {m.affiliation}<br />
+                <strong>Status:</strong> {m.statuss}<br />
                 
                 {(m.statuss !== 'rejected' && m.statuss !== 'accepted') && (
               <>
