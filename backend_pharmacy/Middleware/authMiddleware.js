@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const requireAuthPharmacist = (req, res, next) => {
   const token = req.cookies.jwt;
+
     
   // check json web token exists & is verified
   if (token) {
@@ -42,6 +43,7 @@ const requireAuthPatient = (req, res, next) => {
 };
 const requireAuthAdmin = (req, res, next) => {
   const token = req.cookies.jwt;
+  console.log(token)
     
   // check json web token exists & is verified
   if (token) {

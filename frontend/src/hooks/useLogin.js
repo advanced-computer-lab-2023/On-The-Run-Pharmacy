@@ -25,6 +25,7 @@ export const useLogin = () => {
       setError(json.error)
     }
     if (response.ok) {
+      console.log("token",json.token)
       // save the user to a cookie
       Cookies.set('token', json.token)
 
@@ -32,11 +33,11 @@ export const useLogin = () => {
       dispatch({type: 'LOGIN', payload: json})
       if (json.role === 'patient') {
         navigate(`/getMedicines/${username}`);
-      }else if(json.role === 'doctor'){
-        navigate(`/dashboard/doctor/${username}`);
+      }else if(json.role === 'pharmacist'){
+        navigate(`/getMedicines/pharmacist/${username}`);
       }
        else {
-        navigate(`/dashboard/admin/${username}`);
+        navigate(`/admin/${username}`);
       }
 
       // update loading state

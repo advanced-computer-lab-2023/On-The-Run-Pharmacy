@@ -1,5 +1,6 @@
 const Order= require('../models/OrderModel');
 const PatientP = require('../models/PatientPModel');
+const mongoose = require('mongoose');
 
 const createOrder = async (req, res) => {
     try {
@@ -39,17 +40,18 @@ const createOrder = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
     const { orderId } = req.params;
-  
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+      return res.status(400).json({ message: 'Invalid order ID' });
+    }
     try {
-      const order = await order.findOneAndUpdate(
-        { orderId: orderId },
-        { statuss: 'Cancelled' },
-        { new: true }
-      );
+      const order = await Order.findById(orderId);
+      
   
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });
       }
+      order.statuss = 'Cancelled';
+      await order.save();
   
       return res.status(200).json({ message: 'Order cancelled successfully' });
     } catch (error) {
@@ -62,7 +64,7 @@ const cancelOrder = async (req, res) => {
     const { username } = req.params;
   
     try {
-      const orders = await order.find({ username: username });
+      const orders = await Order.find({ username: username });
   
       if (!orders) {
         return res.status(404).json({ message: 'No orders found for this user' });

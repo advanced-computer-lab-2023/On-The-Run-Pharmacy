@@ -38,7 +38,7 @@ app.listen(4000,()=>{
 
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
-app.get("/getMedicines",getMedicines)
+app.get("/getMedicines",requireAuthPatient,getMedicines)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id",updateMedicine)
@@ -50,8 +50,8 @@ app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
 app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
 app.post("/addToCart",addToCart)
 
-app.get("/getRequests",requireAuthAdmin,getRequests)
-app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
+app.get("/getRequests" ,getRequests)
+app.put("/acceptPRequest/:id",acceptrequest);
 app.put("/rejectPRequest/:id",requireAuthAdmin,rejectrequest);
 app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",createPharmacist1)
 app.put("/addAddress/:username/:address",addAddress);

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const PharmaRegistration = () => {
   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
@@ -56,7 +57,7 @@ const PharmaRegistration = () => {
       });
 
       if (response.status === 201) {
-        console.log('Registration successful:', response.data);
+        setSuccessMessage('Registration successful');
         setUsername('');
         setName('');
         setEmail('');
@@ -73,6 +74,7 @@ const PharmaRegistration = () => {
       }
     } catch (error) {
       console.error('Error registering pharmacist:', error);
+      setSuccessMessage(null);
     }
   };
 
@@ -80,6 +82,7 @@ const PharmaRegistration = () => {
 
   return (
     <div className="container">
+       {successMessage && <p>{successMessage}</p>}
       <div className="row justify-content-center mt-5">
         <div className="col-lg-6">
           <div className="card">

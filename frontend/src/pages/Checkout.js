@@ -78,7 +78,7 @@ const Checkout = () => {
   const handlePayment = () => {
     if (paymentmethod1 === 'Wallet') {
       handleWalletPayment(username, totalprice1);
-      handleCreateOrder('Pending', items, selectedAddress, paymentmethod1);
+      
       
 
     } else {
@@ -129,19 +129,25 @@ const Checkout = () => {
   };
   const handleWalletPayment = async (username,totalprice) => {
     try {
-      const response = await axios.put(`http://localhost:4000/updatewallet/${username}/${totalprice1}`);
+     
+      const response = await axios.put(`http://localhost:4000/updatewallet/${username}/${totalprice}`);
+     
       const response1 = await axios.get(`http://localhost:4000/getWallet/${username}`);
       setWallet(response1.data);
       
   
-      if (response.data.error) {
-        setWalletError(response.data.error);
+      if (response.status === 400) {
+        setWalletError('An error occurred while updating the wallet');
+        console.log('An error occurred while updating the wallet')
+        
       } else {
         console.log(response.data.message);
+        handleCreateOrder('Pending', items, selectedAddress, paymentmethod1);
         setWalletError(null);
       }
     } catch (error) {
       console.error('An error occurred while making the payment:', error);
+      setWalletError('An error occurred while updating the wallet');
     }
   };
 const handleCreditCardPayment = async () => {
@@ -159,6 +165,8 @@ const handleCreditCardPayment = async () => {
     <div style={{ position: 'absolute', top: 0, right: 0 }}>
       <h2>Wallet: ${wallet}</h2>
     </div>
+
+{walletError && <p>{walletError}</p>}
       <h1 style={{ textAlign: 'center' }}>Your Cart</h1>
       {items.map((item, index) => (
         <p key={index}>{item.medicineName} - ${item.price} - Quantity: {item.quantity}</p>

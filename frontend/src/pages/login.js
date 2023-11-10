@@ -16,6 +16,8 @@ const Login = () => {
 
   return (
     <form className="login" onSubmit={handleSubmit}>
+  
+
       <h3>Log In</h3>
       
       <label>Username:</label>
@@ -30,6 +32,7 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)} 
         value={password} 
       />
+       {error && <p>Wrong username or password</p>}
 
       <button>Log in</button>
     </form>

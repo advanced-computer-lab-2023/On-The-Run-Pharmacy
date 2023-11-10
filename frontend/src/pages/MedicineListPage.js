@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams,Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 
+
 import './MedicineList.css'; // Import your CSS file for styling
 
 const MedicineListPage = () => {
@@ -83,9 +84,12 @@ const MedicineListPage = () => {
 
   return (
     <div className="medicine-list-container">
+      <Link to={`/changePatientPassword/${username}`}>Change Password</Link>
       <Link to={`/cart/${username}`}>
+
       <FaShoppingCart />
     </Link>
+    
       <h1>All Medicines</h1>
       <div className="filter-container">
         <input

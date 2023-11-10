@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ChangePharmacistPass = () => {
   const navigate = useNavigate();
   const { username } = useParams();
-  const [pharmacist, stePharmacist] = useState(null);
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,12 +13,7 @@ const ChangePharmacistPass = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    const fetchPharmacist = async () => {
-      const response = await axios.get(`http://localhost:4000/getPharmacistByUsername/${username}`);
-      stePharmacist(response.data);
-    };
-
-    fetchPharmacist();
+   
   }, [username]);
 
   const handleSubmit = async (event) => {

@@ -21,38 +21,33 @@ const createToken = (username,role) => {
 
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
-    try {
-        let user = await Patient.findOne({ username });
-        let role="patient"
-        if(!user){
-            const user = await Pharmacist.findOne({ username });
-            role="pharmacist"
-        }
-        if(!user){
-            const user = await Admin.findOne({ username });
-            role="admin"
-        }
-        if(!user){
-            res.status(404).json({ error: 'User not found' });
-        }
-        if (user) {
+  const { username, password } = req.body;
+  try {
+      let user = await Patient.findOne({ username });
+      let role="patient"
+      if(!user){
+          user = await Pharmacist.findOne({ username });
+          role="pharmacist"
+      }
+      if(!user){
+          user = await Admin.findOne({ username });
+          role="admin"
+      }
+      if(!user){
+          return res.status(404).json({ error: 'User not found' });
+      }
 
-
-            const auth = await bcrypt.compare(password, user.password);
-            if (auth) {
-                const token = createToken(user.username,role);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000, secure: false });
-                res.status(200).json({ user: user.username, role: role });
-            } else {
-                res.status(401).json({ error: 'Incorrect password' });
-            }
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+      const auth = await bcrypt.compare(password, user.password);
+      if (auth) {
+          const token = createToken(user.username,role);
+          res.cookie('jwt', token, { httpOnly: false, maxAge: maxAge * 1000, secure: false });
+          res.status(200).json({ user: user.username, role: role });
+      } else {
+          res.status(401).json({ error: 'Incorrect password' });
+      }
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
 }
 
 const logout = async (req, res) => {
@@ -61,9 +56,9 @@ const logout = async (req, res) => {
 }
 
 const transporter = nodemailer.createTransport({
-    service: 'Gmail', // Example: 'Gmail'
+    service: 'hotmail', // Example: 'Gmail'
     auth: {
-      user: 'ontherunclinic@gmail.com',
+      user: 'ontherunclinic@hotmail.com',
       pass: '0ntherunClinc',
     },
   });
@@ -77,7 +72,7 @@ const transporter = nodemailer.createTransport({
   const sendOTPByEmail = async (email, otp) => {
     try {
       const mailOptions = {
-        from: 'Layla.thabet@gmail.com',
+        from: 'ontherunclinic@hotmail.com',
         to: email,
         subject: 'Password Reset OTP',
         text: `Your OTP for password reset is: ${otp}`,

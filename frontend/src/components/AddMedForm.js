@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link,useParams } from 'react-router-dom';
 
 const AddMedicineForm = ({ onMedicineAdded }) => {
     const[name,setName]=useState('')
     const[description,setDescription]=useState('')
     const[available_quantity,setAvailable_quantity]=useState('')
     const[price,setPrice]=useState('')
+    const {username}=useParams();
     const[medicalUse,setMedicalUse]=useState('')
     const [picture, setPicture] = useState(null); // Store the selected image file
     const navigate = useNavigate();
@@ -63,6 +64,7 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
   return (
     <div>
       <h2>Add Medicine</h2>
+     
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Medicine Name:</label>

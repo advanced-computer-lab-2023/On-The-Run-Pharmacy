@@ -42,7 +42,7 @@ function App() {
       <Route path="/viewPatients" element={<PatientListPage/>}/>
       <Route path="/viewPharmacists" element={<PharmacistListPage/>}/>
       <Route path="/viewRequests" element={<RequestsListPage/>}/>
-      <Route path="/admin" element={<AdminDashboard/>}/>
+      <Route path="/admin/:username" element={<AdminDashboard/>}/>
       <Route path="/login" element={<Login/>}/>
       <Route path="/addMed" element={<AddMedicineForm/>}/>
       <Route path="/edit/:medicineId" element={<EditMedicinePage/>}/>
@@ -51,7 +51,7 @@ function App() {
       <Route path="/getMedicines" element={<MedicineListPage/>}/>
      
       <Route path="/getMedicines/:username" element={<MedicineListPage/>}/>
-      <Route path="/getMedicines/pharmacist" element={<MedicineListPagep/>}/>
+      <Route path="/getMedicines/pharmacist/:username" element={<MedicineListPagep/>}/>
       <Route path="/register/patient" element={<PatientRegistration/>}/>
       <Route path="/register/pharmacist" element={<PharmaRegistration/>}/>
       <Route path="/changeAdminPassword/:username" element={<ChangeAdminPass/>}/>

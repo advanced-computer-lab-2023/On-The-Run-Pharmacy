@@ -56,7 +56,7 @@ const requestSchema = new mongoose.Schema({
   },
 });
 
-const Request = mongoose.model('Request', requestSchema);
+const Request = mongoose.model('RequestP', requestSchema);
 
 module.exports = Request;
 

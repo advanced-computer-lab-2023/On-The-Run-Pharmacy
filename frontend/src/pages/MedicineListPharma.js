@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link,useParams } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
 
@@ -10,6 +10,7 @@ const MedicineListPagep = () => {
   const [loading, setLoading] = useState(true);
   const [searchName, setSearchName] = useState('');
   const [medicalUseFilter, setMedicalUseFilter] = useState('');
+  const { username } = useParams();
 
   const fetchMedicines = async () => {
     try {
@@ -66,7 +67,9 @@ const MedicineListPagep = () => {
 
   return (
     <div className="medicine-list-container">
+       <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
       <h1>All Medicines</h1>
+
      
       <div className="filter-container">
         <input
