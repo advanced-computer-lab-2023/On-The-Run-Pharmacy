@@ -29,28 +29,28 @@ const AdminDashboard = () => {
       <h1>Admin Dashboard</h1>
       <ul className="admin-menu">
         <li>
-          <a href="/addAdmin" className="menu-link">
+        <Link href="/addAdmin" className="menu-link">
             <i className="fas fa-user-plus"></i>
             Add Another Admin
-          </a>
+            </Link>
         </li>
         <li>
-          <a href="/viewPatients" className="menu-link">
+        <Link href="/viewPatients" className="menu-link">
             <i className="fas fa-users"></i>
             Manage Patients
-          </a>
+            </Link>
         </li>
         <li>
-          <a href="/viewPharmacists" className="menu-link">
-            <i className="fas fa-user-md"></i>
-            Manage Pharmacists
-          </a>
+        <Link to={`/viewPharmacists`} className="menu-link">
+            <i className="fas fa-edit"></i>
+           view Pharmacists
+          </Link>
         </li>
         <li>
-          <a href="/viewRequests" className="menu-link">
+        <Link href="/viewRequests" className="menu-link">
             <i className="fas fa-clipboard-list"></i>
             View Requests
-          </a>
+            </Link>
         </li>
         <li>
           <Link to={`/changeAdminPassword/${username}`} className="menu-link">

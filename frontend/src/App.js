@@ -32,6 +32,10 @@ import PatientOrders from './pages/PatientOrders';
 
 function App() {
   const { user } = useAuthContext()
+  if(user){
+    console.log(user.role)
+  }
+
 
   return (
     <Router>
@@ -84,6 +88,10 @@ function App() {
           />
            <Route
             path="/changePharmacistPassword/:username"
+            element={user && user.role === 'admin' ? <ChangePharmacistPass /> : <Navigate to="/login" />}
+          />
+           <Route
+            path="/changeAdminPassword/:username"
             element={user && user.role === 'admin' ? <ChangeAdminPass /> : <Navigate to="/login" />}
           />
           <Route
