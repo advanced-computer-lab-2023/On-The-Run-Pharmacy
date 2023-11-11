@@ -29,13 +29,13 @@ const AdminDashboard = () => {
       <h1>Admin Dashboard</h1>
       <ul className="admin-menu">
         <li>
-        <Link href="/addAdmin" className="menu-link">
+        <Link to="/addAdmin" className="menu-link">
             <i className="fas fa-user-plus"></i>
             Add Another Admin
             </Link>
         </li>
         <li>
-        <Link href="/viewPatients" className="menu-link">
+        <Link to="/viewPatients" className="menu-link">
             <i className="fas fa-users"></i>
             Manage Patients
             </Link>
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
           </Link>
         </li>
         <li>
-        <Link href="/viewRequests" className="menu-link">
+        <Link to="/viewRequests" className="menu-link">
             <i className="fas fa-clipboard-list"></i>
             View Requests
             </Link>
