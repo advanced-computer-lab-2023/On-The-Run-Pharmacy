@@ -11,7 +11,9 @@ const AdminDashboard = () => {
     // Fetch available health packages from the backend when the component mounts
     async function fetchWallet() {
       try {
-        const response = await axios.get(`http://localhost:4000/getAdminByUsername/${username}`);
+        const response = await axios.get(`http://localhost:4000/getAdminByUsername/${username}`,{
+          withCredentials: true
+        });
         if (response.status === 200) {
           setAdmin(response.data);
           

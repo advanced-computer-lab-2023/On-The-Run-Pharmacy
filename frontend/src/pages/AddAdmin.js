@@ -6,7 +6,9 @@ const AdminRegistrationForm = ({ onRegistrationSuccess }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       // Send a POST request to register the doctor
-      const response = await axios.post('http://localhost:4000/addAdmin', values);
+      const response = await axios.post('http://localhost:4000/addAdmin', values,{
+        withCredentials: true
+      });
 
       // Assuming the response contains the doctor's ID upon successful registration
       const adminusername = response.data.username;

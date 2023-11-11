@@ -6,7 +6,9 @@ const PatientOrders = () => {
   const [orders, setOrders] = useState([]);
   const { username } = useParams();
   const fetchOrders = async () => {
-    const response = await axios.get(`http://localhost:4000/getPatientOrders/${username}`);
+    const response = await axios.get(`http://localhost:4000/getPatientOrders/${username}`,{
+      withCredentials: true
+    });
     setOrders(response.data);
   };
 
@@ -19,7 +21,9 @@ const PatientOrders = () => {
   const cancelOrder = async (orderId) => {
     try {
       console.log(orderId )
-      const response = await axios.put(`http://localhost:4000/cancelOrder/${orderId}`);
+      const response = await axios.put(`http://localhost:4000/cancelOrder/${orderId}`,{},{
+        withCredentials: true
+      });
       if (response.status === 200) {
         setOrders(orders.filter(order => order._id !== orderId));
         fetchOrders();

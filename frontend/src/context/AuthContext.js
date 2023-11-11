@@ -22,8 +22,10 @@ export const AuthContextProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    const token = Cookies.get('jwt');
+    const token = Cookies.get('token');
+
     if (token) {
+      
         const user = jwtDecode(token);
       dispatch({ type: 'LOGIN', payload: user }) 
     }

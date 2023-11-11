@@ -15,7 +15,7 @@ const MedicineListPage = () => {
 
   const fetchMedicines = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/getMedicines`);
+      const response = await axios.get(`http://localhost:4000/getMedicines`,{withCredentials: true});
 
       if (response.status === 200) {
         setMedicines(response.data);
@@ -72,6 +72,8 @@ const MedicineListPage = () => {
         username,
         medicineId,
         amount,
+      },{
+        withCredentials: true
       });
   
       if (response.status === 200) {

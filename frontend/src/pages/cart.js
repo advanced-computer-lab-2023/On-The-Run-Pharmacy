@@ -12,7 +12,9 @@ const CartPage = () => {
     const fetchCart = async () => {
       try {
        
-        const response = await axios.get(`http://localhost:4000/getPatientCart/${username}`);
+        const response = await axios.get(`http://localhost:4000/getPatientCart/${username}`,{
+          withCredentials: true
+        });
         console.log(response.data);
 
         if (response.status === 200) {
@@ -30,7 +32,9 @@ const CartPage = () => {
   const deleteFromCart = async (medicineId) => {
     try {
         console.log(medicineId);
-      const response = await axios.delete(`http://localhost:4000/deleteFromCart/${username}/${medicineId}`);
+      const response = await axios.delete(`http://localhost:4000/deleteFromCart/${username}/${medicineId}`,{
+        withCredentials: true
+      });
   
       if (response.status === 200) {
         console.log('Item deleted from cart successfully');
@@ -43,7 +47,9 @@ const CartPage = () => {
   };
   const updateAmount = async (medicineId, newAmount) => {
     try {
-      const response = await axios.put(`http://localhost:4000/updateCart/${username}/${medicineId}/${newAmount}`);
+      const response = await axios.put(`http://localhost:4000/updateCart/${username}/${medicineId}/${newAmount}`,{},{
+        withCredentials: true
+      });
   
       if (response.status === 200) {
         console.log('Item amount updated successfully');

@@ -12,7 +12,9 @@ const PharmacistListPage = () => {
 
   const fetchPharmacists = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/getPharmacist`);
+      const response = await axios.get(`http://localhost:4000/getPharmacist`,{
+        withCredentials: true
+      });
 
       if (response.status === 200) {
         setPharmacist(response.data);
@@ -30,7 +32,9 @@ const PharmacistListPage = () => {
   const handleDelete = async (patientId) => {
     try {
       // Make a DELETE request to the backend to delete the patient
-      await axios.delete(`http://localhost:4000/deletePharmacist/${patientId}`);
+      await axios.delete(`http://localhost:4000/deletePharmacist/${patientId}`,{
+        withCredentials: true
+      });
 
       // After successful deletion, refresh the patient list by re-fetching
       fetchPharmacists();

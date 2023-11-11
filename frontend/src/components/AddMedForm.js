@@ -32,6 +32,8 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
           headers: {
             'Content-Type': 'multipart/form-data', // Set the content type for file upload
           },
+        },{
+          withCredentials: true
         });
   
         // Check if the request was successful

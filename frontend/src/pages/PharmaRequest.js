@@ -54,6 +54,8 @@ const PharmaRegistration = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+      },{
+        withCredentials: true
       });
 
       if (response.status === 201) {

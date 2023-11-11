@@ -26,7 +26,9 @@ const Checkout = () => {
 
   const fetchAddresses = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/getAddresses/${username}`);
+      const response = await axios.get(`http://localhost:4000/getAddresses/${username}`,{
+        withCredentials: true
+      });
       setAddresses(response.data);
     } catch (error) {
       console.error('Error fetching addresses:', error);
@@ -38,7 +40,9 @@ const Checkout = () => {
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/getAddresses/${username}`);
+        const response = await axios.get(`http://localhost:4000/getAddresses/${username}`,{
+          withCredentials: true
+        });
         setAddresses(response.data);
       } catch (error) {
         console.error('Error fetching addresses:', error);
@@ -46,7 +50,9 @@ const Checkout = () => {
     };
     const fetchWallet = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/getWallet/${username}`);
+        const response = await axios.get(`http://localhost:4000/getWallet/${username}`,{
+          withCredentials: true
+        });
         setWallet(response.data);
       } catch (error) {
         console.error('Error fetching wallet:', error);
@@ -54,7 +60,9 @@ const Checkout = () => {
     };
     const fetchCart = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/getPatientCart/${username}`);
+        const response = await axios.get(`http://localhost:4000/getPatientCart/${username}`,{
+          withCredentials: true
+        });
         if (response.status === 200) {
           let p = 0;
           const itemsFromResponse = response.data;
@@ -97,7 +105,9 @@ const Checkout = () => {
     }
 
     try {
-      const response = await axios.put(`http://localhost:4000/addAddress/${username}/${address}`);
+      const response = await axios.put(`http://localhost:4000/addAddress/${username}/${address}`,{},{
+        withCredentials: true
+      });
       setSuccess('Address added successfully');
       console.log(response.data);
       fetchAddresses();
@@ -109,7 +119,9 @@ const Checkout = () => {
   const handleCancelOrder = async (ordid) => {
     try {
       // Make a DELETE request to the backend to delete the patient
-      await axios.put(`http://localhost:4000/cancelOrder/${ordid}`);
+      await axios.put(`http://localhost:4000/cancelOrder/${ordid}`,{},{
+        withCredentials: true
+      });
 
       // After successful deletion, refresh the patient list by re-fetching
 
@@ -120,7 +132,9 @@ const Checkout = () => {
 
   const handleCreateOrder = async (statuss,cart,shippingAddress,paymentMethod) => {
     try {
-      const response = await axios.post(`http://localhost:4000/createOrder/${username}/${statuss}/${shippingAddress}/${paymentMethod}`);
+      const response = await axios.post(`http://localhost:4000/createOrder/${username}/${statuss}/${shippingAddress}/${paymentMethod}`,{},{
+        withCredentials: true
+      });
      // do something with the orderId
       console.log('Order created successfully:', response.data);
     } catch (error) {
@@ -130,9 +144,13 @@ const Checkout = () => {
   const handleWalletPayment = async (username,totalprice) => {
     try {
      
-      const response = await axios.put(`http://localhost:4000/updatewallet/${username}/${totalprice}`);
+      const response = await axios.put(`http://localhost:4000/updatewallet/${username}/${totalprice}`,{},{
+        withCredentials: true
+      });
      
-      const response1 = await axios.get(`http://localhost:4000/getWallet/${username}`);
+      const response1 = await axios.get(`http://localhost:4000/getWallet/${username}`,{
+        withCredentials: true
+      });
       setWallet(response1.data);
       
   

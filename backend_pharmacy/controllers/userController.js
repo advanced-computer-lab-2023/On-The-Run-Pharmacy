@@ -39,12 +39,12 @@ const login = async (req, res) => {
 
       const auth = await bcrypt.compare(password, user.password);
       if (auth) {
-          const token = createToken(user.username,role);
-          res.cookie('jwt', token, { httpOnly: false, maxAge: maxAge * 1000, secure: false });
-          res.status(200).json({ user: user.username, role: role });
-      } else {
-          res.status(401).json({ error: 'Incorrect password' });
-      }
+        const token = createToken(user.username,role);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000, secure: false });
+        res.status(200).json({ user: user.username, role: role, token: token });
+    } else {
+        res.status(401).json({ error: 'Incorrect password' });
+    }
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
@@ -200,9 +200,6 @@ const transporter = nodemailer.createTransport({
       res.status(500).json({ message: 'Server error' });
     }
   };
-
-
-
 
 
 module.exports = { logout, login, forgetPassword, resetPassword };

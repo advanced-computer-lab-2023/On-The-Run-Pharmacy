@@ -29,7 +29,9 @@ const [emergency_contact, setEmergencyContact] = useState({
         const p={username,name,email,password,date_of_birth,gender,mobile_number,emergency_contact}
         try {
           // Make a POST request to your backend API endpoint
-          const response = await axios.post('http://localhost:4000/register/patient', p);
+          const response = await axios.post('http://localhost:4000/register/patient', p,{
+            withCredentials: true
+          });
       
           if (response.status === 201) {
             console.log('Registration successful:', response.data);

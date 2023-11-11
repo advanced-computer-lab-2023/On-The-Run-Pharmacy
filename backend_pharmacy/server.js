@@ -13,7 +13,8 @@ const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Midd
 const{createOrder,cancelOrder,getPatientOrders}=require("./controllers/orderController")
 const app = express()
 const corsOptions = {
-    origin: 'http://localhost:3000', // Replace with your frontend's URL
+    origin: 'http://localhost:3000',
+    credentials: true // Replace with your frontend's URL
   };
   app.use(cors(corsOptions));
   app.use(express.json());
@@ -38,39 +39,39 @@ app.listen(4000,()=>{
 
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
-app.get("/getMedicines",requireAuthPatient,getMedicines)
-app.post("/addMedicine",addMedicine)
+app.get("/getMedicines",getMedicines)
+app.post("/addMedicine",requireAuthPharmacist,addMedicine)
 app.get("/getMed/:id",getMedicine)
-app.put("/updateMed/:id",updateMedicine)
+app.put("/updateMed/:id",requireAuthPharmacist,updateMedicine)
 app.post("/addAdmin",requireAuthAdmin,createAdmin)
 app.get("/getPatients",requireAuthAdmin,getPatientsP)
 app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
 
 app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
 app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
-app.post("/addToCart",addToCart)
+app.post("/addToCart",requireAuthPatient,addToCart)
 
-app.get("/getRequests" ,getRequests)
-app.put("/acceptPRequest/:id",acceptrequest);
+app.get("/getRequests",requireAuthAdmin ,getRequests)
+app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
 app.put("/rejectPRequest/:id",requireAuthAdmin,rejectrequest);
-app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",createPharmacist1)
-app.put("/addAddress/:username/:address",addAddress);
-app.get("/getAddresses/:username",getAddresses);
+app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",requireAuthAdmin,createPharmacist1)
+app.put("/addAddress/:username/:address",requireAuthPatient,addAddress);
+app.get("/getAddresses/:username",requireAuthPatient,getAddresses);
 app.post('/login', login)
 app.get('/logout', logout);
-app.get("/getPatientCart/:username",getPatientCart)
-app.delete("/deleteFromCart/:username/:medicineId",deleteFromCart)
-app.put("/updateCart/:username/:medicineId/:newAmount",updateCart)
+app.get("/getPatientCart/:username",requireAuthPatient,getPatientCart)
+app.delete("/deleteFromCart/:username/:medicineId",requireAuthPatient,deleteFromCart)
+app.put("/updateCart/:username/:medicineId/:newAmount",requireAuthPatient,updateCart)
 app.get("/getPatientByUsername/:username",getPatientByUsername);
 app.put("/updatePassPatient",updatePasswordPatient);
 app.get("/getPharamcistByUsername/:username",getPharmacistByUsername);
 app.put("/updatePassPharmacist",updatePasswordPharmacist);
 app.get("/getAdminByUsername/:username",getAdminByUsername);
 app.put("/updatePassAdmin",updatePasswordAdmin);
-app.post("/createOrder/:username/:statuss/:shippingAddress/:paymentMethod",createOrder);
-app.put("/cancelOrder/:orderId",cancelOrder);
+app.post("/createOrder/:username/:statuss/:shippingAddress/:paymentMethod",requireAuthPatient,createOrder);
+app.put("/cancelOrder/:orderId",requireAuthPatient,cancelOrder);
 app.put ("/updateWallet/:username/:amount",updateWallet);
 app.get ("/getWallet/:username",getWallet);
-app.get("/getPatientOrders/:username",getPatientOrders);
+app.get("/getPatientOrders/:username",requireAuthPatient,getPatientOrders);
 app.post("/forgetPassword",forgetPassword);
 app.post("/resetPassword/:username",resetPassword);

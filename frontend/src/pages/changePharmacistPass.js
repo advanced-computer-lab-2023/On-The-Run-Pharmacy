@@ -51,6 +51,8 @@ const ChangePharmacistPass = () => {
       username,  
        currentPassword,
         newPassword,
+      },{
+        withCredentials: true
       });
   
       setSuccess(true);
