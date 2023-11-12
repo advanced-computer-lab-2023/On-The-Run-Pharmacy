@@ -45,7 +45,7 @@ const AddMedicineForm = ({ onMedicineAdded }) => {
           setPrice('');
           setMedicalUse('');
           setPicture(null); // Reset the selected image file
-          navigate('/getMedicines/pharmasist');
+          navigate(`/getMedicines/pharmacist/${username}`);
         }
       } catch (error) {
         console.error('Error adding medicine:', error);

@@ -88,11 +88,16 @@ const getMedicines=async(req,res) =>{
 
 const updateMedicine = async (req, res) => {
   try {
-    const { id } = req.params;
-    const {  description, price } = req.body;
+    const { id, medicalUse, description, price, available_quantity } = req.params;
+    let update = {};
+    if (medicalUse) update.medicalUse = medicalUse;
+    if (description) update.description = description;
+    if (price) update.price = price;
+    if (available_quantity) update.available_quantity = available_quantity;
+
     const updatedMedicine = await Medicine.findByIdAndUpdate(
       id,
-      { description, price },
+      update,
       { new: true }
     );
     if (!updatedMedicine) {

@@ -86,11 +86,13 @@ const MedicineListPage = () => {
 
   return (
     <div className="medicine-list-container">
-      <Link to={`/changePatientPassword/${username}`}>Change Password</Link>
+      <Link to={`/changePatientPassword/${username}`}>Change Password </Link>
       <Link to={`/cart/${username}`}>
-
+      
       <FaShoppingCart />
+      
     </Link>
+    <Link to={`/PatientOrders/${username}`}> MyOrders</Link>
     
       <h1>All Medicines</h1>
       <div className="filter-container">

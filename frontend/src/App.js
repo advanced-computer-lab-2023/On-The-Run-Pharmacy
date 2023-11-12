@@ -10,7 +10,7 @@ import MedicineListPage from './pages/MedicineListPage';
 import MedicineListAdmin from './pages/MedicineListAdmin';
 import MedicineListPagep from './pages/MedicineListPharma'
 import AddMedicineForm from './components/AddMedForm';
-import EditMedicinePage from './pages/editMed';
+import EditMedicinePage from './pages/updateMedicine';
 import AdminRegistrationForm from './pages/AddAdmin';
 import PatientListPage from './pages/PatientList';
 import PharmacistListPage from './pages/PharmacistList';
