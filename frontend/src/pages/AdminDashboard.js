@@ -58,6 +58,12 @@ const AdminDashboard = () => {
             change my password
           </Link>
         </li>
+        <li>
+          <Link to={`/getMedicines/${username}`} className="menu-link">
+            <i className="fas fa-clipboard-list"></i>
+            View medicines
+          </Link>
+        </li>
       </ul>
     </div>
   );

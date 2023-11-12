@@ -7,6 +7,7 @@ import UserSelection from './components/UserSelection';
 import PatientRegistration from './pages/PatientReg';
 import PharmaRegistration from './pages/PharmaRequest';
 import MedicineListPage from './pages/MedicineListPage';
+import MedicineListAdmin from './pages/MedicineListAdmin';
 import MedicineListPagep from './pages/MedicineListPharma'
 import AddMedicineForm from './components/AddMedForm';
 import EditMedicinePage from './pages/editMed';
@@ -76,7 +77,11 @@ function App() {
           />
           <Route
             path="/getMedicines/:username"
-            element={user && user.role === 'patient' ? <MedicineListPage /> : <Navigate to="/login" />}
+            element={user && (user.role === 'patient') ? <MedicineListPage /> : user && (user.role === 'admin') ? <MedicineListAdmin /> : <Navigate to="/login" />} 
+          />
+          <Route
+            path="/getMedicines/:username"
+            element={user && (user.role === 'admin') ? <MedicineListAdmin /> : <Navigate to="/login" />}
           />
           <Route
             path="/getMedicines/pharmacist/:username"
@@ -88,7 +93,7 @@ function App() {
           />
            <Route
             path="/changePharmacistPassword/:username"
-            element={user && user.role === 'admin' ? <ChangePharmacistPass /> : <Navigate to="/login" />}
+            element={user && user.role === 'pharmacist' ? <ChangePharmacistPass /> : <Navigate to="/login" />}
           />
            <Route
             path="/changeAdminPassword/:username"
