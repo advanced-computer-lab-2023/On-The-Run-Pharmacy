@@ -86,7 +86,7 @@ const transporter = nodemailer.createTransport({
   // Route to initiate password reset
   const forgetPassword= async (req, res) => {
     const { username } = req.body;
-    const email=""
+    let email=""
     try {
       let user = await Patient.findOne({ username });
       if (!user) {
