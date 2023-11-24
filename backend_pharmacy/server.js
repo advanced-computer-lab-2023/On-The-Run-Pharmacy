@@ -5,12 +5,12 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
-const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines}=require("./controllers/MedicineController")
+const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
 const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
 const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
-const{createOrder,cancelOrder,getPatientOrders}=require("./controllers/orderController")
+const{createOrder,cancelOrder,getPatientOrders,getCurrentOrders,getPastOrders}=require("./controllers/orderController")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -40,9 +40,13 @@ app.listen(4000,()=>{
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
 app.get("/getMedicines",getMedicines)
+app.get("/getAlternativeMedicines",getAlternativeMedicines)
+app.get("/getMedicines2",getMedicines2)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id/:medicalUse/:description/:price/:available_quantity",updateMedicine)
+app.put("/archiveMedicine/:id",archiveMedicine)
+app.put("/unarchiveMedicine/:id",unarchiveMedicine)
 app.post("/addAdmin",requireAuthAdmin,createAdmin)
 app.get("/getPatients",requireAuthAdmin,getPatientsP)
 app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
@@ -73,5 +77,7 @@ app.put("/cancelOrder/:orderId",requireAuthPatient,cancelOrder);
 app.put ("/updateWallet/:username/:amount",updateWallet);
 app.get ("/getWallet/:username",getWallet);
 app.get("/getPatientOrders/:username",requireAuthPatient,getPatientOrders);
+app.get("/getPastOrders/:username",requireAuthPatient,getPastOrders);
+app.get("/getCurrentOrders/:username",requireAuthPatient,getCurrentOrders);
 app.post("/forgetPassword",forgetPassword);
 app.post("/resetPassword/:username",resetPassword);

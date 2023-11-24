@@ -28,7 +28,9 @@ import ForgetPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
 import Checkout from './pages/Checkout';
 import PatientOrders from './pages/PatientOrders';
-
+import PastOrders from './pages/PastOrders';
+import CurrentOrders from './pages/CurrentOrders';
+import AlternativeMedicinesPage from './pages/AlternativeMedicinesPage';
 
 
 function App() {
@@ -79,6 +81,10 @@ function App() {
             path="/getMedicines/:username"
             element={user && (user.role === 'patient') ? <MedicineListPage /> : user && (user.role === 'admin') ? <MedicineListAdmin /> : <Navigate to="/login" />} 
           />
+           <Route
+            path="/alternativeMedicines/:medicineId" 
+            element={user && (user.role === 'patient') ? <AlternativeMedicinesPage /> : user && (user.role === 'patient') ? <AlternativeMedicinesPage /> : <Navigate to="/login" />} 
+          />
           <Route
             path="/getMedicines/:username"
             element={user && (user.role === 'admin') ? <MedicineListAdmin /> : <Navigate to="/login" />}
@@ -110,6 +116,9 @@ function App() {
           path="/patientOrders/:username"
           element={user && user.role === 'patient' ? <PatientOrders /> : <Navigate to="/login" />}
         />
+        
+        <Route path="/pastOrders/:username" element={user && user.role === 'patient' ? <PastOrders /> : <Navigate to="/login" />  } />
+        <Route path="/currentOrders/:username" element={user && user.role === 'patient' ? <CurrentOrders /> : <Navigate to="/login" /> } />
 
 
 
