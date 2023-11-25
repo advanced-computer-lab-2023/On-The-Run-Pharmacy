@@ -12,7 +12,11 @@ body {
   font-family: "Poppins";
 }
 header {
-  background: #fff;
+  background: var(--primary);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 header .container {
   max-width: 1400px;
@@ -23,7 +27,7 @@ header .container {
   justify-content: space-between;
 }
 header a {
-  color: #333;
+  color: white;
   text-decoration: none;
 }
 .pages{
@@ -48,24 +52,25 @@ header nav div span {
 
 header nav div a {
   margin-right: 10px;
-  color: #343a40;
+  color: white;
   text-decoration: none;
 }
 
 header nav div button {
   padding: 5px 10px;
-  background-color: #343a40;
-  color: #fff;
+  background-color: white;
+  color: var(--primary);
   border: none;
   cursor: pointer;
 }
 header h1 {
   margin: 0;
-  color: #343a40;
+  color: white;
 }
 
 header nav div button:hover {
   background-color: #495057;
+  color: white;
 }
 /* auth forms */
 form.signup, form.login {

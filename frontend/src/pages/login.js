@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useLogin } from "../hooks/useLogin"
 import { useAuthContext } from '../hooks/useAuthContext'
 import { Link } from 'react-router-dom'
+import './login.css' // Import your CSS file
 
 const Login = () => {
   const { user } = useAuthContext()
@@ -11,6 +12,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if(usernamee === '' || password === '') {
+      alert('Please fill in all fields')
+      return
+    }
 
     await login(usernamee, password);
   }
@@ -33,9 +38,9 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)} 
         value={password} 
       />
-       {error && <p>Wrong username or password</p>}
+         {error && <p className="error">Wrong username or password</p>}
 
-      <button>Log in</button>
+         <button disabled={isLoading}>{isLoading ? 'Loading...' : 'Log in'}</button>
       <Link to={`/forgetPassword`}>Forgot Password?</Link>
     </form>
   )
