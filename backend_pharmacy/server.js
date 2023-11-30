@@ -5,7 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
-const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines}=require("./controllers/MedicineController")
+const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines,getOutOfStockMedicines}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
 const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist }=require("./controllers/PharmacistController")
 const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
@@ -63,6 +63,7 @@ app.put("/addAddress/:username/:address",requireAuthPatient,addAddress);
 app.get("/getAddresses/:username",requireAuthPatient,getAddresses);
 app.post('/login', login)
 app.get('/logout', logout);
+app.get('/getOutOfStockMedicines', requireAuthPharmacist, getOutOfStockMedicines);
 app.get("/getPatientCart/:username",requireAuthPatient,getPatientCart)
 app.delete("/deleteFromCart/:username/:medicineId",requireAuthPatient,deleteFromCart)
 app.put("/updateCart/:username/:medicineId/:newAmount",requireAuthPatient,updateCart)

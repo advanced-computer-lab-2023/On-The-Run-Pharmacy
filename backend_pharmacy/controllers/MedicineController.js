@@ -192,5 +192,13 @@ const getAlternativeMedicines = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching alternative medicines' });
   }
 };
-
-module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines };
+const getOutOfStockMedicines = async (req, res) => {
+  try {
+    const outOfStockMedicines = await Medicine.find({ available_quantity: 0 });
+    res.status(200).json(outOfStockMedicines);
+  } catch (error) {
+    console.error('Error fetching out-of-stock medicines:', error);
+    res.status(500).json({ error: 'An error occurred while fetching out-of-stock medicines' });
+  }
+};
+module.exports = { addMedicine, getOutOfStockMedicines, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines };
