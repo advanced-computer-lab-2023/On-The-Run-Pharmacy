@@ -11,6 +11,7 @@ const MedicineListPagep = () => {
   const [searchName, setSearchName] = useState('');
   const [medicalUseFilter, setMedicalUseFilter] = useState('');
   const { username } = useParams();
+  const [wallet, setWallet]= useState(null);
 
   const fetchMedicines = async () => {
     try {
@@ -27,9 +28,21 @@ const MedicineListPagep = () => {
       setLoading(false);
     }
   };
+  const fetchWallet = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/getPharmaWallet/${username}`,{
+        withCredentials: true
+      });
+      setWallet(response.data);
+      console.log("aabababab",response.data);
+    } catch (error) {
+      console.error('Error fetching wallet:', error);
+    }
+  };
 
   useEffect(() => {
     fetchMedicines();
+    fetchWallet();
   }, []);
 
   const handleSearch = () => {
@@ -69,7 +82,12 @@ const MedicineListPagep = () => {
 
   return (
     <div className="medicine-list-container">
+      <div style={{ padding: '20px', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        <h2>Wallet: {wallet}</h2>
+      </div>
        <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
+       <Link to={`/sales`}>View Sales Report</Link>
       <h1>All Medicines</h1>
 
      
@@ -118,7 +136,8 @@ const MedicineListPagep = () => {
         <p>No Medicines found.</p>
       )}
       <Link to="/addMed">Add a new Medicine</Link>
-      
+      </div>
+
     </div>
   );
 };

@@ -20,6 +20,7 @@ const Checkout = () => {
   const [patientcart, setPatientCart]= useState(null); 
   const [totalprice1, setTotalPrice1]= useState(0);
   const [walletError, setWalletError] = useState(null);
+  const [enoughAmount, setEnoughAmount] = useState(true);
   const navigate=useNavigate();
   
   
@@ -68,9 +69,10 @@ const Checkout = () => {
           const itemsFromResponse = response.data;
           itemsFromResponse.forEach(item => {
             p += item.price * item.quantity;
+           
           });
           setItems(itemsFromResponse);
-          setTotalPrice1(p);
+          setTotalPrice1(p);  
         }
       } catch (error) {
         console.error('Error fetching Cart:', error);
@@ -91,6 +93,7 @@ const Checkout = () => {
 
     } else {
       handleCreateOrder('Pending', items, selectedAddress, paymentmethod1);
+      handleamount();
     }
     // Add more else if statements for other payment methods if needed
   };
@@ -129,13 +132,27 @@ const Checkout = () => {
       console.error('Error cancelling order:', error);
     }
   };
-
-  const handleCreateOrder = async (statuss,cart,shippingAddress,paymentMethod) => {
+  const handleamount = async () => {
     try {
-      const response = await axios.post(`http://localhost:4000/createOrder/${username}/${statuss}/${shippingAddress}/${paymentMethod}`,{},{
+      for(let i=0;i<items.length;i++){
+      let id = items[i].medicine_id;
+      let amount = items[i].quantity;
+      console.log(`Updating quantity for medicine ${id} to ${amount}`);
+      const response1 = await axios.post(`http://localhost:4000/updateMedQuantity/${id}/${amount}`,{},{
         withCredentials: true
       });
-     // do something with the orderId
+      console.log('Order amount updated successfullyy:', response1.data);}
+    } catch (error) {
+      console.error(`Error updating quantity for medicine:`, error.message);
+    }
+  };
+  const handleCreateOrder = async (statuss,cart,shippingAddress,paymentMethod) => {
+    try {
+      
+      const response = await axios.post(`http://localhost:4000/createOrder/${username}/${statuss}/${shippingAddress}/${paymentMethod}/${totalprice1}`,{},{
+        withCredentials: true
+      });
+     
       console.log('Order created successfully:', response.data);
     } catch (error) {
       console.error('Error creating order:', error);

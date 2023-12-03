@@ -20,7 +20,12 @@ const orderSchema = new mongoose.Schema({
         type: String,
         enum: ['Wallet', 'Credit Card', 'Cash on Delivery'],
         default: 'Cash on Delivery',
-      }
+      },
+      totalprice: {
+        type: Number,
+        required: false,
+        default: 0.0,
+      },
     
   });
   const Order = mongoose.model('Order', orderSchema);

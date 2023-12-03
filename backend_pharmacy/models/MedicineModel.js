@@ -8,12 +8,10 @@ const MedicineSchema = new mongoose.Schema({
     type: String,
     required:true,
  
-    
-    
   },
   pictureUrl: {
     type: String,
-    required: true,
+    required: false,
   },
   description: {
     type: String,
@@ -29,10 +27,8 @@ const MedicineSchema = new mongoose.Schema({
   },
   sales:{
     type:Number,   
-    default:0
-
-    
-    
+    default:0,
+    required:false,    
   },
   medicalUse:{
     type: String,
@@ -41,7 +37,12 @@ const MedicineSchema = new mongoose.Schema({
   price:{
     type:Number,
     required:true
-  }
+  },
+  type:{
+    type: String,
+    enum: ['Over the counter', 'Prescription only'],
+    required: false,
+  },
  
 });
 

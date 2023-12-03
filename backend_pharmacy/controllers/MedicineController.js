@@ -3,7 +3,7 @@ const { default: mongoose } = require('mongoose');
 
 const Medicine = require('../models/MedicineModel');
 const multer = require('multer');
-
+const Sales = require('../models/SalesModel');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -42,9 +42,20 @@ const addMedicine = async (req, res) => {
 };
 
 
+const getMedicinesWithSales = async (req, res) => {
+  try {
+    const medicines = await Medicine.find({ sales: { $gt: 0 } }).exec();
 
+    if (!medicines.length) {
+      return res.status(404).json({ message: 'No medicines found with sales greater than 0' });
+    }
 
-
+    res.status(200).json(medicines);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 
@@ -109,4 +120,47 @@ const updateMedicine = async (req, res) => {
   }
 };
 
-module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines};
+const updateMedQuantity = async (req, res) => {
+  const { id, amount } = req.params;
+  const amountNumber = Number(amount);
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid medicine ID' });
+  }
+
+  try {
+    const medicine = await Medicine.findOne({ _id: id });
+
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    if (medicine.available_quantity >= amountNumber) {
+      medicine.available_quantity -= amountNumber;
+      medicine.sales += amountNumber;
+      try {
+        const newSales = new Sales({
+          medicineId: id,
+          amount,
+        });
+    
+        await newSales.save();
+        await medicine.save();
+    
+        res.status(200).json({ message: 'Sales registered and medicine quantity updated successfully' });
+      } catch (error) {
+        console.error(error);
+        res
+          .status(500)
+          .json({ error: 'An error occurred while registering the Sales' });
+      }
+    } else {
+      res.status(500).json({ error: 'Medicine not available in this quantity' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while getting the medicine quantity', details: error.message });
+    }
+};
+
+
+module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,updateMedQuantity,getMedicinesWithSales};

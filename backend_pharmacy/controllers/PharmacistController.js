@@ -185,4 +185,20 @@ try {
 }
 };
 
-module.exports = { createPharmacist, getPharmacists, deletepharmacist, createPharmacist1,getPharmacistByUsername,updatePasswordPharmacist };
+const getPharmaWallet = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const pharmacist = await Pharmacist.findOne({ username });
+
+    if (!pharmacist) {
+      return res.status(404).json({ message: 'Pharmacist not found' });
+    }
+
+    return res.status(200).json(pharmacist.wallet);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while getting the wallet' });
+  }
+};
+module.exports = { createPharmacist, getPharmacists, deletepharmacist, createPharmacist1,getPharmacistByUsername,updatePasswordPharmacist,getPharmaWallet };

@@ -45,6 +45,10 @@ const PharmacistSchema = new mongoose.Schema({
   passwordReset: {
     type: String,
   },
+  wallet:{
+    default:0,
+    type:Number
+  },
  
 });
 

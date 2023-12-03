@@ -64,6 +64,12 @@ const AdminDashboard = () => {
             View medicines
           </Link>
         </li>
+        <li>
+        <Link to="/sales" className="menu-link">
+            <i className="fas fa-users"></i>
+            View Sales Report
+            </Link>
+        </li>
       </ul>
     </div>
   );

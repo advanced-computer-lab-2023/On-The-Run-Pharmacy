@@ -10,7 +10,8 @@ const createOrder = async (req, res) => {
         username,
         statuss,
         shippingAddress,
-        paymentMethod
+        paymentMethod,
+        totalprice
           
         } = req.params;
     
@@ -20,7 +21,8 @@ const createOrder = async (req, res) => {
           username,
           statuss,
           shippingAddress,
-          paymentMethod
+          paymentMethod,
+          totalprice
           
         });
         const patient=await PatientP.findOne({username:username});
@@ -45,10 +47,15 @@ const cancelOrder = async (req, res) => {
     }
     try {
       const order = await Order.findById(orderId);
-      
+    
   
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });
+      }
+      if(order.paymentMethod !== 'Cash on Delivery'){
+        const patient = await PatientP.findOne({username: order.username});
+        patient.wallet = patient.wallet + order.totalprice;
+        await patient.save();
       }
       order.statuss = 'Cancelled';
       await order.save();

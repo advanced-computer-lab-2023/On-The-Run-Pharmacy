@@ -28,6 +28,7 @@ import ForgetPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
 import Checkout from './pages/Checkout';
 import PatientOrders from './pages/PatientOrders';
+import SalesReport from './pages/SalesReport';
 
 
 
@@ -118,6 +119,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register/patient" element={<PatientRegistration />} />
           <Route path="/register/pharmacist" element={<PharmaRegistration />} />
+          <Route path="/sales" element={<SalesReport />} />
+
          
           <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="/resetPassword/:username" element={<ResetPassword />} />
