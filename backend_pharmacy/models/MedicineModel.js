@@ -21,18 +21,21 @@ const MedicineSchema = new mongoose.Schema({
   },
   available_quantity: {
     type: Number,
-    required:true,
-    
-    
+    required:true, 
   },
   sales:{
     type:Number,   
     default:0,
     required:false,    
+    default:0
   },
   medicalUse:{
     type: String,
     required:true, 
+  },
+  activeIngredient:{
+    type: String,
+    required:false, 
   },
   price:{
     type:Number,
@@ -43,7 +46,11 @@ const MedicineSchema = new mongoose.Schema({
     enum: ['Over the counter', 'Prescription only'],
     required: false,
   },
- 
+  statuss:{
+    type:String,
+    enum: ['Unarchived', 'Archived'],
+    default: 'Unarchived'
+  }
 });
 
 

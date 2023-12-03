@@ -30,6 +30,7 @@ const addMedicine = async (req, res) => {
         medicalUse,
         price,
         pictureUrl,
+        statuss: 'Unarchived',
       });
 
       await medicine.save();
@@ -76,6 +77,7 @@ const getMedicine = async (req, res) => {
   }
 };
 
+
 const deleteMedicine = async (req, res) => {
   try {
     const { id } = req.params;
@@ -90,6 +92,14 @@ const deleteMedicine = async (req, res) => {
 };
 const getMedicines=async(req,res) =>{
   const patients =await Medicine.find({}).sort({createdAt:-1});
+      for(let index=0;index<patients.length;index++){
+         const element = [patients][index];
+         //console.log(element.id);
+      }
+      res.status(200).json(patients)
+};
+const getMedicines2=async(req,res) =>{
+  const patients = await Medicine.find({ statuss: 'Unarchived' }).sort({ createdAt: -1 });
       for(let index=0;index<patients.length;index++){
          const element = [patients][index];
          //console.log(element.id);
@@ -161,6 +171,96 @@ const updateMedQuantity = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while getting the medicine quantity', details: error.message });
     }
 };
+const archiveMedicine = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the medicine by ID
+    const medicine = await Medicine.findById(id);
+
+    // Check if the medicine exists
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    // Set the status to "archived"
+    medicine.statuss = 'archived';
+
+    // Save the updated medicine
+const updatedMedicine = await medicine.save();
 
 
-module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,updateMedQuantity,getMedicinesWithSales};
+
+    // Respond with the archived medicine
+    res.status(200).json({ message: 'Medicine archived successfully', medicine });
+  } catch (error) {
+    console.error('Error archiving medicine:', error);
+    res.status(500).json({ error: 'An error occurred while archiving the medicine' });
+  }
+};
+
+const unarchiveMedicine = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the medicine by ID
+    const medicine = await Medicine.findById(id);
+
+    // Check if the medicine exists
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    // Set the status to "unarchived"
+    medicine.statuss = 'Unarchived';
+
+    // Save the updated medicine
+    await medicine.save();
+
+    // Respond with the unarchived medicine
+    res.status(200).json({ message: 'Medicine unarchived successfully', medicine });
+  } catch (error) {
+    console.error('Error unarchiving medicine:', error);
+    res.status(500).json({ error: 'An error occurred while unarchiving the medicine' });
+  }
+};
+const getAlternativeMedicines = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the medicine by ID
+    const medicine = await Medicine.findById(id);
+
+    // Check if the medicine exists
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    // Get the active ingredient of the current medicine
+    const activeIngredient = medicine.activeIngredient;
+
+    // Find alternative medicines with the same active ingredient
+    const alternativeMedicines = await Medicine.find({
+      _id: { $ne: id }, // Exclude the current medicine from the results
+      activeIngredient,
+      statuss: 'Unarchived', // You may want to consider the status of medicines
+    });
+
+    res.status(200).json({ alternativeMedicines });
+  } catch (error) {
+    console.error('Error fetching alternative medicines:', error);
+    res.status(500).json({ error: 'An error occurred while fetching alternative medicines' });
+  }
+};
+const getOutOfStockMedicines = async (req, res) => {
+  try {
+    const outOfStockMedicines = await Medicine.find({ available_quantity: 0 });
+    res.status(200).json(outOfStockMedicines);
+  } catch (error) {
+    console.error('Error fetching out-of-stock medicines:', error);
+    res.status(500).json({ error: 'An error occurred while fetching out-of-stock medicines' });
+  }
+};
+
+
+module.exports = { addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,updateMedQuantity,getMedicinesWithSales,getOutOfStockMedicines,getAlternativeMedicines,unarchiveMedicine,archiveMedicine,getMedicines2};

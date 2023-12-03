@@ -16,7 +16,7 @@ const MedicineListPage = () => {
 
   const fetchMedicines = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/getMedicines`,{withCredentials: true});
+      const response = await axios.get(`http://localhost:4000/getMedicines2`,{withCredentials: true});
 
       if (response.status === 200) {
         setMedicines(response.data);
@@ -153,6 +153,10 @@ const MedicineListPage = () => {
               <button onClick={() => addToCart(m._id, document.getElementById(`amount-${m._id}`).value)}>
                 Add to cart
               </button>
+               {/* Alternative Medicines button */}
+               <Link to={`/alternativeMedicines/${m._id}`}>
+                  Alternative Medicines
+                </Link>
             </div>
             </li>
           ))}

@@ -83,6 +83,38 @@ const cancelOrder = async (req, res) => {
       return res.status(500).json({ error: 'An error occurred while getting the orders' });
     }
   };
+  const getPastOrders = async (req, res) => {
+    const { username } = req.params;
+  
+    try {
+      const pastOrders = await Order.find({ username: username, statuss: { $in: ['Shipped', 'Cancelled'] } });
+  
+      if (!pastOrders) {
+        return res.status(404).json({ message: 'No past orders found for this user' });
+      }
+  
+      return res.status(200).json(pastOrders);
+    } catch (error) {
+      console.error('Error getting past orders:', error);
+      return res.status(500).json({ error: 'An error occurred while getting past orders' });
+    }
+  };
+  
+  const getCurrentOrders = async (req, res) => {
+    const { username } = req.params;
+  
+    try {
+      const currentOrders = await Order.find({ username: username, statuss: 'Pending' });
+  
+      if (!currentOrders) {
+        return res.status(404).json({ message: 'No current orders found for this user' });
+      }
+  
+      return res.status(200).json(currentOrders);
+    } catch (error) {
+      console.error('Error getting current orders:', error);
+      return res.status(500).json({ error: 'An error occurred while getting current orders' });
+    }
+  };
 
-
-module.exports = {createOrder,cancelOrder,getPatientOrders};
+module.exports = {createOrder,cancelOrder,getPatientOrders,getPastOrders,getCurrentOrders};

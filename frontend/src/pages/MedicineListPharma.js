@@ -79,6 +79,36 @@ const MedicineListPagep = () => {
     setMedicalUseFilter('');
     fetchMedicines();
   };
+  const handleArchive = async (id) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/archiveMedicine/${id}`, {
+        // any additional data you want to send
+      });
+  
+      if (response.status === 200) {
+        // Update the local state or fetch the updated list of medicines
+        // based on your application logic
+        console.log('Medicine archived successfully:', response.data);
+      }
+    } catch (error) {
+      console.error('Error archiving medicine:', error);
+    }
+  };
+  const handleUnarchive = async (id) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/unarchiveMedicine/${id}`, {
+        // any additional data you want to send
+      });
+
+      if (response.status === 200) {
+        // Update the local state or fetch the updated list of medicines
+        // based on your application logic
+        console.log('Medicine unarchived successfully:', response.data);
+      }
+    } catch (error) {
+      console.error('Error unarchiving medicine:', error);
+    }
+  };
 
   return (
     <div className="medicine-list-container">
@@ -120,11 +150,14 @@ const MedicineListPagep = () => {
                 <strong>Medical Use:</strong> {m.medicalUse}<br />
                 <strong>Quantity:</strong> {m.available_quantity}<br />
                 <strong>Sales:</strong> {m.sales}<br />
+                <strong>Status:</strong> {m.statuss}<br />
                 <div>
                 <strong>Image: </strong>
                 <img src={m.pictureUrl} alt={m.name} />
               </div>
                 <Link to={`/edit/${m._id}`}>Edit</Link>
+                <button onClick={() => handleArchive(m._id)}>Archive</button>
+                <button onClick={() => handleUnarchive(m._id)}>Unarchive</button>
               </div>
               <div className="medicine-image">
                 <img src={m.picture} alt={m.name} />
