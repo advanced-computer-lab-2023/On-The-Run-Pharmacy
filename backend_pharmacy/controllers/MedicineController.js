@@ -99,7 +99,7 @@ const getMedicines=async(req,res) =>{
       res.status(200).json(patients)
 };
 const getMedicines2=async(req,res) =>{
-  const patients = await Medicine.find({ statuss: 'Unarchived' }).sort({ createdAt: -1 });
+  const patients = await Medicine.find({ statuss: {$ne: 'Archived'} }).sort({ createdAt: -1 });
       for(let index=0;index<patients.length;index++){
          const element = [patients][index];
          //console.log(element.id);
@@ -243,7 +243,7 @@ const getAlternativeMedicines = async (req, res) => {
     const alternativeMedicines = await Medicine.find({
       _id: { $ne: id }, // Exclude the current medicine from the results
       activeIngredient,
-      statuss: 'Unarchived', // You may want to consider the status of medicines
+      statuss: {$ne:'Archived'}, // You may want to consider the status of medicines
     });
 
     res.status(200).json({ alternativeMedicines });
