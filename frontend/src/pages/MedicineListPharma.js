@@ -12,7 +12,7 @@ const MedicineListPagep = () => {
   const [medicalUseFilter, setMedicalUseFilter] = useState('');
   const { username } = useParams();
   const [wallet, setWallet]= useState(null);
-
+  const [doctorUsername, setDoctorUsername] = useState('');
   const fetchMedicines = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/getMedicines`,{
@@ -116,6 +116,15 @@ const MedicineListPagep = () => {
       <div style={{ position: 'absolute', top: 0, right: 0 }}>
         <h2>Wallet: {wallet}</h2>
       </div>
+       {/* Include a textbox for the doctor's username */}
+       <label>
+          Patient's Username:
+          <input type="text" value={doctorUsername} onChange={(e) => setDoctorUsername(e.target.value)} />
+        </label>
+
+        {/* Update the Link to include patient and doctor usernames */}
+        <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
+
        <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
        <Link to={`/sales`}>View Sales Report</Link>
       <h1>All Medicines</h1>

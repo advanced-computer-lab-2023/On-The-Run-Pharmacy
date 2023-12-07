@@ -32,6 +32,8 @@ import SalesReport from './pages/SalesReport';
 import PastOrders from './pages/PastOrders';
 import CurrentOrders from './pages/CurrentOrders';
 import AlternativeMedicinesPage from './pages/AlternativeMedicinesPage';
+import PatientChatPage from './pages/PatientChatPage';
+import PharmacistChatPage from './pages/PharmacistChatPage';
 
 
 function App() {
@@ -53,6 +55,10 @@ function App() {
           <Route
             path="/cart/:username"
             element={user && user.role === 'patient' ? <CartPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            Route path="/chat/:username/:doctor"
+            element={user && user.role === 'patient' ? <PatientChatPage /> : (user && user.role === 'pharmacist' ? <PharmacistChatPage /> : <Navigate to="/login" />)}
           />
            <Route
             path="/addAdmin"
