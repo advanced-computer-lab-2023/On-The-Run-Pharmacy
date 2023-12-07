@@ -201,4 +201,5 @@ const getPharmaWallet = async (req, res) => {
     return res.status(500).json({ error: 'An error occurred while getting the wallet' });
   }
 };
+
 module.exports = { createPharmacist, getPharmacists, deletepharmacist, createPharmacist1,getPharmacistByUsername,updatePasswordPharmacist,getPharmaWallet };

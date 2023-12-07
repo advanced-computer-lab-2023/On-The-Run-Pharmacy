@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 
 
 const PharmacistSchema = new mongoose.Schema({
+  messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
   username: {
     type: String,
     required: true,

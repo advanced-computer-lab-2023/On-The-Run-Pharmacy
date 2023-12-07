@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 const cors = require('cors');
 //const {createPatientP,getPatientsP, deletePatientP, addAddress, getAddresses}= require("./controllers/PatientPController")
 const cookieParser = require('cookie-parser');
-const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
+const {createPatientP,getPatientsP,deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines,getOutOfStockMedicines,updateMedQuantity,getMedicinesWithSales}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
@@ -12,6 +12,7 @@ const{login,logout, forgetPassword,resetPassword}=require("./controllers/userCon
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const{createSales,getSales}=require("./controllers/SalesController")
 const{createOrder,cancelOrder,getPatientOrders,getCurrentOrders,getPastOrders}=require("./controllers/orderController")
+const{createMessage,sendMessageAsPatient,sendMessageAsPharmacist,getChatMessages}=require("./controllers/messagesController")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -40,6 +41,10 @@ app.listen(4000,()=>{
 
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
+app.post("/createMessage",createMessage)
+app.get("/getChatMessages/:username/:doctor",getChatMessages)
+app.post("/sendMessageAsPharmacist",sendMessageAsPharmacist)
+app.post("/sendMessageAsPatient",sendMessageAsPatient)
 app.get("/getMedicines",getMedicines)
 app.get("/getAlternativeMedicines",getAlternativeMedicines)
 app.get("/getMedicines2",getMedicines2)
