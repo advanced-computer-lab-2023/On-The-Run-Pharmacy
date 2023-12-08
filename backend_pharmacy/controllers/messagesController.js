@@ -42,17 +42,16 @@ const createMessage = async (req, res) => {
   }
 };
 const getChatMessages = async (req, res) => {
-  const { sender, receiver } = req.params;
+  const { username, doctor } = req.params;
 
   try {
     // Fetch messages based on sender and receiver
     const messages = await Message.find({
       $or: [
-        { sender, receiver },
-        { sender: receiver, receiver: sender },
+        { patient: username, pharmacist: doctor },
+        { patient: doctor, pharmacist: username },
       ],
     }).sort({ createdAt: 1 });
-    
     // Extract only the necessary fields from patientMessages and pharmacistMessages
     const formattedMessages = messages.map((message) => ({
       patientMessages: message.patientMessages.map((patientMsg) => ({
