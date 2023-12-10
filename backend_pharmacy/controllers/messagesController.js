@@ -2,6 +2,7 @@
 const Message = require('../models/messagesModel');
 const PatientP = require('../models/PatientPModel');
 const Pharmacist = require('../models/PharmacistModel');
+const Doctor = require('../models/DoctorModel');
 
 const createMessage = async (req, res) => {
   const { patientUsername, pharmacistUsername } = req.body;
@@ -150,6 +151,11 @@ const sendMessageAsPharmacist = async (req, res) => {
         { new: true }
       );
       await PatientP.findOneAndUpdate(
+        { username: receiver },
+        { $push: { messages: existingMessage._id } },
+        { new: true }
+      );
+      await Doctor.findOneAndUpdate(
         { username: receiver },
         { $push: { messages: existingMessage._id } },
         { new: true }
