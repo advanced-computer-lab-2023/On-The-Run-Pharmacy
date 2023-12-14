@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const PatientPSchema = new mongoose.Schema({
+  messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+  
   username: {
     type: String,
     required: true,

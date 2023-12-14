@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 const cors = require('cors');
 //const {createPatientP,getPatientsP, deletePatientP, addAddress, getAddresses}= require("./controllers/PatientPController")
 const cookieParser = require('cookie-parser');
-const {createPatientP,getPatientsP, deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
+const {createPatientP,getPatientsP,deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines,getOutOfStockMedicines,updateMedQuantity,getMedicinesWithSales}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdmins,getAdminByUsername,deleteAdmin, updatePasswordAdmin}=require("./controllers/adminController")
@@ -11,7 +11,9 @@ const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getP
 const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const{createSales,getSales}=require("./controllers/SalesController")
+const{getNotifications}=require("./controllers/PNotificationController")
 const{createOrder,cancelOrder,getPatientOrders,getCurrentOrders,getPastOrders}=require("./controllers/orderController")
+const{createMessage,sendMessageAsPatient,sendMessageAsPharmacist,getChatMessages}=require("./controllers/messagesController")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -40,9 +42,14 @@ app.listen(4000,()=>{
 
 app.post('/register/patient',createPatientP)
 app.post("/createRequest",createRequest)
+app.post("/createMessage",createMessage)
+app.get("/getChatMessages/:username/:doctor",getChatMessages)
+app.post("/sendMessageAsPharmacist",sendMessageAsPharmacist)
+app.post("/sendMessageAsPatient",sendMessageAsPatient)
 app.get("/getMedicines",getMedicines)
 app.get("/getAlternativeMedicines",getAlternativeMedicines)
 app.get("/getMedicines2",getMedicines2)
+app.get("/getNotifications",getNotifications)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id/:medicalUse/:description/:price/:available_quantity",updateMedicine)
@@ -64,7 +71,7 @@ app.put("/addAddress/:username/:address",requireAuthPatient,addAddress);
 app.get("/getAddresses/:username",requireAuthPatient,getAddresses);
 app.post('/login', login)
 app.get('/logout', logout);
-app.get('/getOutOfStockMedicines', requireAuthPharmacist, getOutOfStockMedicines);
+app.get('/getOutOfStockMedicines', getOutOfStockMedicines);
 app.get("/getPatientCart/:username",requireAuthPatient,getPatientCart)
 app.delete("/deleteFromCart/:username/:medicineId",requireAuthPatient,deleteFromCart)
 app.put("/updateCart/:username/:medicineId/:newAmount",requireAuthPatient,updateCart)
