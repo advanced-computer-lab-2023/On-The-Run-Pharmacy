@@ -32,6 +32,7 @@ import SalesReport from './pages/SalesReport';
 import PastOrders from './pages/PastOrders';
 import CurrentOrders from './pages/CurrentOrders';
 import AlternativeMedicinesPage from './pages/AlternativeMedicinesPage';
+import AdminSettings from './components/AdminSettings';
 import PatientChatPage from './pages/PatientChatPage';
 import PharmacistChatPage from './pages/PharmacistChatPage';
 import NotificationsPage from './pages/NotificationsPage';
@@ -128,6 +129,11 @@ function App() {
           path="/patientOrders/:username"
           element={user && user.role === 'patient' ? <PatientOrders /> : <Navigate to="/login" />}
         />
+
+<Route
+            path="/adminSettings/:username"
+            element={user && user.role === 'admin' ? <AdminSettings /> : <Navigate to="/login" />}
+          />
         
         <Route path="/pastOrders/:username" element={user && user.role === 'patient' ? <PastOrders /> : <Navigate to="/login" />  } />
         <Route path="/currentOrders/:username" element={user && user.role === 'patient' ? <CurrentOrders /> : <Navigate to="/login" /> } />

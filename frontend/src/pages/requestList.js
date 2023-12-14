@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import BeatLoader from "react-spinners/BeatLoader";
+import { faEye} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import RequestModal from '../components/RequestModal';
 
 import './MedicineList.css'; // Import your CSS file for styling
 
 const RequestsListPage = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [request, setRequest] = useState("");
+  const [activeRequestId, setActiveRequestId] = useState(null);
+
+  
   const navigate = useNavigate();
   
  
@@ -70,60 +79,99 @@ const RequestsListPage = () => {
     fetchRequests();
   }, []);
 
-  return (
-    <div className="medicine-list-container">
-      <h1>All Requests</h1>
-      
+
+return (
+  <div className="container">
+    <div className="patients-list">
+      <h2>All Requests</h2>
+
+
       {loading ? (
-        <p>Loading...</p>
-      ) : requests.length > 0 ? (
-        <ul className="medicine-list">
+        <div className="spinner-container">
+          <BeatLoader color="#14967f" size={15} />
+        </div>
+      ) : requests.length === 0 ? (
+        <p>No Requests found</p>
+      ) : (
+        <ul className="patients-list">
           {requests.map((m) => (
-            <li key={m._id} className="medicine-item">
-              <div className="medicine-details">
-              <strong>Request ID:</strong> {m._id}<br />
-                <strong>Name:</strong> {m.name}<br />
-                <strong>Username:</strong> {m.username}<br />
-                <strong>email:</strong> {m.email}<br />
-                <strong>Educational Background:</strong> {m.educational_background}<br />
-                <strong>Afilliation:</strong> {m.affiliation}<br />
-                <strong>Status:</strong> {m.statuss}<br />
-                
-                <div className="request-files">
-                <strong>Working License:</strong>
-                <a href={`http://localhost:4000/uploads/${m.workingLicense}`} target="_blank" rel="noopener noreferrer">
-                  View Working License
-                </a>
-                <br />
+            <li key={m._id}>
+              <div className="patients-header">
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                  <strong>Username: </strong>{m.username}
+                </div>
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                  <strong>Request ID: </strong>{m._id}
+                </div>
+                <div style={{ flex: 1, textAlign: 'right', marginRight: '10px' }}>
+                  {m.statuss === 'Pending' && (
+                    <>
+                      <button
+                       disabled={isProcessing}
+                        style={{
+                          backgroundColor: '#4CAF50', /* Green */
+                          border: 'none',
+                          color: 'white',
+                          padding: '10px 20px', // Reduced padding
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          display: 'inline-block',
+                          fontSize: '14px', // Reduced font size
+                          margin: '4px 2px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleAccept( m._id,m.username,m.password,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}
+                      >
+                        Accept
+                      </button>
+                      <button
+                       disabled={isProcessing}
+                        style={{
+                          backgroundColor: '#f44336', /* Red */
+                          border: 'none',
+                          color: 'white',
+                          padding: '10px 20px', // Reduced padding
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          display: 'inline-block',
+                          fontSize: '14px', // Reduced font size
+                          margin: '4px 2px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleReject(m._id)}
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+                  <FontAwesomeIcon
+                    className="view-icon"
+                    icon={faEye}
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => {
+                      setModalOpen(true);
+                      setRequest(m);
+                      setActiveRequestId(m._id)
+                      
+                    }}
+                  />
 
-                <strong>Pharmacist Degree:</strong>
-                <a href={`http://localhost:4000/uploads/${m.pharmacistDegree}`} target="_blank" rel="noopener noreferrer">
-                  View Pharmacist Degree
-                </a>
-                <br />
-
-                <strong>Pharmacist ID:</strong>
-                <a href={`http://localhost:4000/uploads/${m.pharmacistId}`} target="_blank" rel="noopener noreferrer">
-                  View Pharmacist ID
-                </a>
-                <br />
+                </div>
               </div>
-                {(m.statuss !== 'rejected' && m.statuss !== 'accepted') && (
-              <>
-                <button onClick={() => handleAccept(m._id,m.username,m.password,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}>Accept</button>
-                <button onClick={() => handleReject(m._id)}>Reject</button>
-              </>
-            )}
-          </div>
-              
             </li>
+
           ))}
         </ul>
-      ) : (
-        <p>No Requests found.</p>
       )}
     </div>
-  );
+    {modalOpen && request &&
+      <RequestModal
+        setOpenModal={setModalOpen}
+        request={request}
+      />
+    }
+  </div >
+);
 };
 
 export default RequestsListPage;

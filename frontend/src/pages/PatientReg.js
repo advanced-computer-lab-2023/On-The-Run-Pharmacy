@@ -1,6 +1,7 @@
 import React,{ useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Form, Button, Card, Spinner, Container, Row, Col } from 'react-bootstrap';
 
 const PatientRegistration = () => {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ const [emergency_contact, setEmergencyContact] = useState({
   });
 
   const [error, setError] = useState(null);
-  const [isPatientRegistered, setIsPatientRegistered] = useState(false);
+  const [isRequestPending, setIsRequestPending] = useState(false);
 
   
 
@@ -42,197 +43,133 @@ const [emergency_contact, setEmergencyContact] = useState({
             setDateOfBirth('');
             setGender('Male');
             setMobileNumber('');
-            setEmergencyContact({ fullName: '', mobileNumber: '' });
+            setEmergencyContact({ full_name: '', mobile_number: '' });
             setError(null);
-            setIsPatientRegistered(true);
             navigate(`/login`);
            
           }
+          else {
+            console.error('Registration failed:', response.data);
+            setError('Registration failed. Please check your data and try again.');
+          }
         } catch (error) {
-          // Handle errors, e.g., display an error message to the user
-          console.error('Error registering patient:', error);
+          console.error('Registration failed:', error);
+          setError('Registration failed. Please try again later.');
         }
       };
 
-
   return (
-    <div className="container">
-      <div className="row justify-content-center mt-5">
-        <div className="col-lg-6">
-          <div className="card">
-            <div className="card-body">
-              <h1 className="card-title">Patient Registration</h1>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    onChange={(e)=>setUsername(e.target.value)}
-            value={username}
-                    placeholder="Enter your username"
-                  />
-                </div>
+    <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '87vh', flexDirection: 'column' }}>
+      <Card style={{ height: '85vh' }}>
+        <Card.Body>
+          <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#343a40', marginBottom: '5px' }}>Register as Patient</h4>
+          {error && <p>{error}</p>}
+          {isRequestPending ? (
+            <p>Registration request is pending. Please wait for approval.</p>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <Row>
+                <Col>
+                  <Form.Group controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="dateOfBirth">
+                    <Form.Label>Date of Birth</Form.Label>
+                    <Form.Control type="date" value={date_of_birth} onChange={(e) => setDateOfBirth(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
 
-                <div className="form-group">
-                  <label htmlFor="name">Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    value={name}
-            onChange={(e)=>setName(e.target.value)}
-                    placeholder="Enter your name"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    value={password}
-            onChange={(e)=>setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="dob">Date of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={date_of_birth}
-            onChange={(e) => {
-              
-              setDateOfBirth(e.target.value);
-            }}
-                    id="dob"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Gender</label>
-                  <div className="form-check">
-                    <input
+                  <Form.Group controlId="gender">
+                    <Form.Label>Gender</Form.Label>
+                    <Form.Check
                       type="radio"
-                      className="form-check-input"
-                      id="male"
+                      label="Male"
                       name="gender"
-                      value={gender}
-            onChange={(e) => setGender("male")}
+                      value="Male"
+                      checked={gender === 'Male'}
+                      onChange={(e) => setGender(e.target.value)}
+                      required
                     />
-                    <label className="form-check-label" htmlFor="male">
-                      Male
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
+                    <Form.Check
                       type="radio"
-                      className="form-check-input"
-                      id="female"
-                      value={gender}
-            onChange={(e) => setGender("female")}
+                      label="Female"
                       name="gender"
+                      value="Female"
+                      checked={gender === 'Female'}
+                      onChange={(e) => setGender(e.target.value)}
+                      required
                     />
-                    <label className="form-check-label" htmlFor="female">
-                      Female
-                    </label>
-                  </div>
-                </div>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="mobileNumber">
+                    <Form.Label>Mobile Number</Form.Label>
+                    <Form.Control type="tel" value={mobile_number} onChange={(e) => setMobileNumber(e.target.value)}   required />
+                  </Form.Group>
+                </Col>
 
-                <div className="form-group">
-                  <label htmlFor="mobile">Mobile Number</label>
-                  <input
-                    type="tel"
-                    className="form-control"
-                    id="mobile"
-                    value={mobile_number}
-            onChange={(e) => setMobileNumber(e.target.value)}
-                    placeholder="Enter your mobile number"
-                  />
-                </div>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="emergencyContact.fullName">
+                    <Form.Label>Emergency Contact Name</Form.Label>
+                    <Form.Control type="text" value={emergency_contact.full_name} onChange={(e) => setEmergencyContact({ ...emergency_contact, full_name: e.target.value })} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="emergencyContact.mobileNumber">
+                    <Form.Label>Emergency Contact Mobile</Form.Label>
+                    <Form.Control type="tel" value={emergency_contact.mobile_number} onChange={(e) => setEmergencyContact({ ...emergency_contact, mobile_number: e.target.value })} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="emergencyContact.relationToPatient">
+                    <Form.Label>Emergency Contact Relation</Form.Label>
+                    <Form.Control type="text" value={emergency_contact.relation_to_patient} onChange={(e) => setEmergencyContact({ ...emergency_contact, relation_to_patient: e.target.value })} required />
+                  </Form.Group>
+                </Col>
 
-                <div className="form-group">
-                  <label htmlFor="emergencyContactName">Emergency Contact Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="emergencyContactName"
-                    value={emergency_contact.full_name}
-            onChange={(e) =>
-              setEmergencyContact({
-                ...emergency_contact,
-                full_name: e.target.value,
-              })
-            }
-                    placeholder="Enter emergency contact's name"
-                  />
-                </div>
+              </Row>
 
-                <div className="form-group">
-                  <label htmlFor="emergencyContactMobile">Emergency Contact Mobile</label>
-                  <input
-                    type="tel"
-                    className="form-control"
-                    id="emergencyContactMobile"
-                    value={emergency_contact.mobile_number}
-            onChange={(e) =>
-              setEmergencyContact({
-                ...emergency_contact,
-                mobile_number: e.target.value,
-              })
-            }
-                    placeholder="Enter emergency contact's mobile number"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="relationToPatient">Relation to Patient</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="relationToPatient"
-                    value={emergency_contact.relation_to_patient}
-            onChange={(e) =>
-              setEmergencyContact({
-                ...emergency_contact,
-                relation_to_patient: e.target.value,
-              })
-            }
-                    placeholder="Enter relation to the patient"
-                  />
-                </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Register
-                </button>
-              </form>
-
-              <div className="mt-3">
-                <Link to="/" className="btn btn-secondary">
-                  Back to Role Selection
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              <Button variant="primary" type="submit" disabled={isRequestPending} style={{ marginTop: '10px' }}>
+                {isRequestPending ? <Spinner animation="border" size="sm" /> : 'Register'}
+              </Button>
+            </Form>
+          )}
+        </Card.Body>
+      </Card>
+      <p style={{ color: '#8a90a2', fontSize: '15px', fontWeight: '400' }}>Back to <Link to="/login" style={{ color: '#0055ff', fontSize: '15px', fontWeight: '600' }}>Log In</Link></p>
+    </Container>
   );
 };
 
