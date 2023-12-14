@@ -10,26 +10,27 @@ const createMessage = async (req, res) => {
   try {
     // Check if a message object already exists
     const existingMessage = await Message.findOne({
-      patient: patientUsername, // Assuming user is authenticated and the patient's ID is in req.user._id
-      pharmacist: pharmacistUsername, // Replace this with the pharmacist's ID or username
+      patient: patientUsername,
+      pharmacist: pharmacistUsername,
     });
+
     if (!existingMessage) {
       // Create a new message object if none exists
       const newMessage = new Message({
         patient: patientUsername,
-        pharmacist: pharmacistUsername, // Replace this with the pharmacist's ID or username
+        pharmacist: pharmacistUsername,
       });
 
       await newMessage.save();
-      
+
       // Link the new message with patient and pharmacist
       await PatientP.findOneAndUpdate(
-        { _id: req.user._id },
+        { username: patientUsername },
         { $push: { messages: newMessage._id } },
         { new: true }
       );
       await Pharmacist.findOneAndUpdate(
-        { username: pharmacistUsername }, // Replace this with the pharmacist's ID or username
+        { username: pharmacistUsername },
         { $push: { messages: newMessage._id } },
         { new: true }
       );
@@ -42,36 +43,35 @@ const createMessage = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating the message object' });
   }
 };
+
 const getChatMessages = async (req, res) => {
   const { username, doctor } = req.params;
 
   try {
     // Fetch messages based on sender and receiver
-    const messages = await Message.find({
+    const msgs = await Message.find({
       $or: [
         { patient: username, pharmacist: doctor },
         { patient: doctor, pharmacist: username },
       ],
-    }).sort({ createdAt: 1 });
-    // Extract only the necessary fields from patientMessages and pharmacistMessages
-    const formattedMessages = messages.map((message) => ({
-      patientMessages: message.patientMessages.map((patientMsg) => ({
-        sender: patientMsg.sender,
-        content: patientMsg.content,
-      })),
-      pharmacistMessages: message.pharmacistMessages.map((pharmacistMsg) => ({
-        sender: pharmacistMsg.sender,
-        content: pharmacistMsg.content,
+    }).sort({ timestamp: 1 });
+    console.log(msgs.map((message) => message.messages));
+
+    const formattedMessages = msgs.map((message) => ({
+      messages: message.messages.map((msg) => ({
+        sender: msg.sender,
+        content: msg.content,
+        timestamp: msg.timestamp,
       })),
     }));
-
+    
+    console.log(formattedMessages) ; 
     res.status(200).json(formattedMessages);
   } catch (error) {
     console.error('Error fetching chat messages:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 const sendMessageAsPatient = async (req, res) => {
   const { sender, receiver, message } = req.body;
@@ -80,8 +80,8 @@ const sendMessageAsPatient = async (req, res) => {
     // Find or create the existing message
     let existingMessage = await Message.findOne({
       $or: [
-        { sender, receiver },
         { patient: sender, pharmacist: receiver },
+        { patient: receiver, pharmacist: sender },
       ],
     });
 
@@ -91,24 +91,11 @@ const sendMessageAsPatient = async (req, res) => {
         patient: sender,
         pharmacist: receiver,
       });
-
-      await existingMessage.save();
-
-      // Link the new message with patient and pharmacist
-      await PatientP.findOneAndUpdate(
-        { username: sender },
-        { $push: { messages: existingMessage._id } },
-        { new: true }
-      );
-      await Pharmacist.findOneAndUpdate(
-        { username: receiver },
-        { $push: { messages: existingMessage._id } },
-        { new: true }
-      );
     }
 
     // Update the existing message by pushing the new message details
-    existingMessage.patientMessages.push({
+    existingMessage.messages.push({
+      sender: 'patient',
       content: message,
       timestamp: Date.now(),
     });
@@ -130,8 +117,8 @@ const sendMessageAsPharmacist = async (req, res) => {
     // Find or create the existing message
     let existingMessage = await Message.findOne({
       $or: [
-        { sender, receiver },
         { pharmacist: sender, patient: receiver },
+        { pharmacist: receiver, patient: sender },
       ],
     });
 
@@ -141,29 +128,11 @@ const sendMessageAsPharmacist = async (req, res) => {
         pharmacist: sender,
         patient: receiver,
       });
-
-      await existingMessage.save();
-
-      // Link the new message with pharmacist and patient
-      await Pharmacist.findOneAndUpdate(
-        { username: sender },
-        { $push: { messages: existingMessage._id } },
-        { new: true }
-      );
-      await PatientP.findOneAndUpdate(
-        { username: receiver },
-        { $push: { messages: existingMessage._id } },
-        { new: true }
-      );
-      await Doctor.findOneAndUpdate(
-        { username: receiver },
-        { $push: { messages: existingMessage._id } },
-        { new: true }
-      );
     }
 
     // Update the existing message by pushing the new message details
-    existingMessage.pharmacistMessages.push({
+    existingMessage.messages.push({
+      sender: 'pharmacist',
       content: message,
       timestamp: Date.now(),
     });
@@ -177,4 +146,5 @@ const sendMessageAsPharmacist = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-module.exports = { createMessage,getChatMessages,sendMessageAsPatient,sendMessageAsPharmacist };
+
+module.exports = { createMessage, getChatMessages, sendMessageAsPatient, sendMessageAsPharmacist };

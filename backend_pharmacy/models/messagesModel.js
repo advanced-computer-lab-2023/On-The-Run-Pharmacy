@@ -1,6 +1,4 @@
-// models/messagesModel.js
 const mongoose = require('mongoose');
-const Pharmacist = require('../models/PharmacistModel');
 
 const messageSchema = new mongoose.Schema({
   patient: {
@@ -11,19 +9,9 @@ const messageSchema = new mongoose.Schema({
     type: String,
     ref: 'Pharmacist',
   },
-  patientMessages: [
+  messages: [
     {
-      sender: String, // 'patient'
-      content: String,
-      timestamp: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
-  pharmacistMessages: [
-    {
-      sender: String, // 'pharmacist'
+      sender: String, // 'patient' or 'pharmacist'
       content: String,
       timestamp: {
         type: Date,
