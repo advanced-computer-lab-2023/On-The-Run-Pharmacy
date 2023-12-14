@@ -25,9 +25,22 @@ const PatientChatPage = () => {
       console.error('Error fetching chat messages:', error);
     }
   };
-
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevents a newline character from being added
+      handleSendMessage();
+    }
+  };
   useEffect(() => {
-    fetchMessages();
+    fetchMessages(); // Fetch messages when the component mounts
+
+    // Set up polling to fetch messages every 5 seconds (adjust as needed)
+    const intervalId = setInterval(() => {
+      fetchMessages();
+    }, 500);
+
+    // Clear the interval when the component is unmounted
+    return () => clearInterval(intervalId);
   }, [username, doctor]);
   useEffect(() => {
     // Scroll to the bottom of the chat container after messages are loaded or new message is sent
@@ -81,6 +94,7 @@ const PatientChatPage = () => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           style={inputStyle}
           placeholder="Type your message..."
         />
