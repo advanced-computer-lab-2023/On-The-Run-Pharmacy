@@ -126,7 +126,9 @@ const MedicineListPagep = () => {
         <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
 
        <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
+       <Link to={`/Notifications`}>Notifications</Link>
        <Link to={`/sales`}>View Sales Report</Link>
+       
       <h1>All Medicines</h1>
 
      

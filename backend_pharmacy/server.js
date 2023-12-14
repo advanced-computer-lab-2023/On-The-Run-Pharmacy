@@ -11,6 +11,7 @@ const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getP
 const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const{createSales,getSales}=require("./controllers/SalesController")
+const{getNotifications}=require("./controllers/PNotificationController")
 const{createOrder,cancelOrder,getPatientOrders,getCurrentOrders,getPastOrders}=require("./controllers/orderController")
 const{createMessage,sendMessageAsPatient,sendMessageAsPharmacist,getChatMessages}=require("./controllers/messagesController")
 const app = express()
@@ -48,6 +49,7 @@ app.post("/sendMessageAsPatient",sendMessageAsPatient)
 app.get("/getMedicines",getMedicines)
 app.get("/getAlternativeMedicines",getAlternativeMedicines)
 app.get("/getMedicines2",getMedicines2)
+app.get("/getNotifications",getNotifications)
 app.post("/addMedicine",addMedicine)
 app.get("/getMed/:id",getMedicine)
 app.put("/updateMed/:id/:medicalUse/:description/:price/:available_quantity",updateMedicine)
@@ -69,7 +71,7 @@ app.put("/addAddress/:username/:address",requireAuthPatient,addAddress);
 app.get("/getAddresses/:username",requireAuthPatient,getAddresses);
 app.post('/login', login)
 app.get('/logout', logout);
-app.get('/getOutOfStockMedicines', requireAuthPharmacist, getOutOfStockMedicines);
+app.get('/getOutOfStockMedicines', getOutOfStockMedicines);
 app.get("/getPatientCart/:username",requireAuthPatient,getPatientCart)
 app.delete("/deleteFromCart/:username/:medicineId",requireAuthPatient,deleteFromCart)
 app.put("/updateCart/:username/:medicineId/:newAmount",requireAuthPatient,updateCart)

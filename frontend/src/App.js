@@ -34,6 +34,7 @@ import CurrentOrders from './pages/CurrentOrders';
 import AlternativeMedicinesPage from './pages/AlternativeMedicinesPage';
 import PatientChatPage from './pages/PatientChatPage';
 import PharmacistChatPage from './pages/PharmacistChatPage';
+import NotificationsPage from './pages/NotificationsPage';
 
 
 function App() {
@@ -67,6 +68,10 @@ function App() {
            <Route
             path="/viewPatients"
             element={user && user.role === 'admin' ? <PatientListPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/Notifications"
+            element={user && user.role === 'pharmacist' ? <NotificationsPage /> : <Navigate to="/login" />}
           />
            <Route
             path="/viewPharmacists"

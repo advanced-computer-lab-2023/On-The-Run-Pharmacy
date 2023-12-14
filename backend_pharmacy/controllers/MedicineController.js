@@ -6,6 +6,41 @@ const multer = require('multer');
 const Sales = require('../models/SalesModel');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const nodemailer = require('nodemailer');
+const Pharmacist = require('../models/PharmacistModel');
+const Notification = require('../models/PNotificationModel');
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'ontherunpharmacy@gmail.com', // Replace with your email
+    pass: 'mohd1963', // Replace with your email password or an app-specific password
+  },
+});
+
+const sendEmailNotification = async (subject, text) => {
+  try {
+    const pharmacists = await Pharmacist.find({}, 'email');
+
+    if (pharmacists.length === 0) {
+      console.warn('No pharmacists found to send email notification.');
+      return;
+    }
+
+    const emailAddresses = pharmacists.map((pharmacist) => pharmacist.email);
+
+    const mailOptions = {
+      from: 'ontherunpharmacy@gmail.com', // Replace with your email
+      to: emailAddresses.join(', '),
+      subject,
+      text,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('Email notification sent to pharmacists.');
+  } catch (error) {
+    console.error('Error sending email notification:', error);
+  }
+};
 
 const addMedicine = async (req, res) => {
   try {
@@ -148,6 +183,18 @@ const updateMedQuantity = async (req, res) => {
     if (medicine.available_quantity >= amountNumber) {
       medicine.available_quantity -= amountNumber;
       medicine.sales += amountNumber;
+        if(medicine.available_quantity==0){
+          const notification = new Notification({
+            medicineId: id,
+            medicineName: medicine.name,
+          });
+    
+          await notification.save();}
+           // Send email notification to pharmacists
+        const subject = 'Medicine Out of Stock Notification';
+        const text = `The medicine ${medicine.name} is out of stock. Please update the inventory.`;
+
+        await sendEmailNotification(subject, text);
       try {
         const newSales = new Sales({
           medicineId: id,
@@ -255,10 +302,31 @@ const getAlternativeMedicines = async (req, res) => {
 const getOutOfStockMedicines = async (req, res) => {
   try {
     const outOfStockMedicines = await Medicine.find({ available_quantity: 0 });
-    res.status(200).json(outOfStockMedicines);
+
+    if (outOfStockMedicines.length === 0) {
+      return res.status(200).json({ message: 'No out-of-stock medicines found' });
+    }
+
+    // Iterate through outOfStockMedicines and send email notifications to pharmacists
+    for (const medicine of outOfStockMedicines) {
+      const notification = new Notification({
+        medicineId: medicine._id,
+        medicineName: medicine.name,
+      });
+
+      await notification.save();
+
+      // Send email notification to pharmacists
+      const subject = 'Medicine Out of Stock Notification';
+      const text = `The medicine ${medicine.name} is out of stock. Please update the inventory.`;
+
+      await sendEmailNotification(subject, text);
+    }
+
+    res.status(200).json({ message: 'Out-of-stock medicines processed successfully' });
   } catch (error) {
-    console.error('Error fetching out-of-stock medicines:', error);
-    res.status(500).json({ error: 'An error occurred while fetching out-of-stock medicines' });
+    console.error('Error fetching and processing out-of-stock medicines:', error);
+    res.status(500).json({ error: 'An error occurred while processing out-of-stock medicines' });
   }
 };
 
