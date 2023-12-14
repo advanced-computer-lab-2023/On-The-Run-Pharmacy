@@ -33,6 +33,14 @@ const PharmacistChatPage = () => {
     fetchMessages();
   }, [username, doctor]);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat container after messages are loaded or new message is sent
+    const messageContainer = document.getElementById('messageContainer');
+    if (messageContainer) {
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+  }, [messages]);
+
   const handleSendMessage = async () => {
     try {
       const response = await axios.post(
@@ -61,7 +69,7 @@ const PharmacistChatPage = () => {
       <div style={chatHeaderStyle}>
         <h1>Chat with {doctor}</h1>
       </div>
-      <div style={messageContainerStyle}>
+      <div id="messageContainer" style={messageContainerStyle}>
       {messages[0] && messages[0].messages && messages[0].messages.map((message, index) => (
   <div key={`message-${index}`} style={messageStyle(message.sender === 'pharmacist')}>
     <span style={messageSenderStyle}>
