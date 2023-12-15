@@ -129,24 +129,23 @@ const MedicineListPagep = () => {
        <Link to={`/Notifications`}>Notifications</Link>
        <Link to={`/sales`}>View Sales Report</Link>
        
-      <h1>All Medicines</h1>
+       <h1>All Medicines</h1>
 
-     
-      <div className="filter-container">
-        <input
-          type="text"
-          placeholder="Enter medicine's name"
-          value={searchName}
-          onChange={handleSearchNameChange}
-        />
-        <input
-          type="text"
-          placeholder="Filter by medical use"
-          value={medicalUseFilter}
-          onChange={handleMedicalUseFilterChange}
-        />
-        <button onClick={resetFilters}>Reset Filters</button>
-      </div>
+<div className="filter-container">
+  <input
+    type="text"
+    placeholder="Enter medicine's name"
+    value={searchName}
+    onChange={handleSearchNameChange}
+  />
+  <input
+    type="text"
+    placeholder="Filter by medical use"
+    value={medicalUseFilter}
+    onChange={handleMedicalUseFilterChange}
+  />
+  <button onClick={resetFilters}>Reset Filters</button>
+</div>
 
       {loading ? (
         <p>Loading...</p>
