@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link,useParams } from 'react-router-dom';
+import { Link,useParams,useNavigate } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
 
@@ -13,6 +13,7 @@ const MedicineListPagep = () => {
   const { username } = useParams();
   const [wallet, setWallet]= useState(null);
   const [doctorUsername, setDoctorUsername] = useState('');
+  const navigate=useNavigate();
   const fetchMedicines = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/getMedicines`,{
@@ -123,7 +124,7 @@ const MedicineListPagep = () => {
         </label>
 
         {/* Update the Link to include patient and doctor usernames */}
-        <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
+       <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
 
        <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
        <Link to={`/Notifications`}>Notifications</Link>
@@ -145,40 +146,41 @@ const MedicineListPagep = () => {
           value={medicalUseFilter}
           onChange={handleMedicalUseFilterChange}
         />
-        <button onClick={resetFilters}>Reset Filters</button>
+        <button button style={{ backgroundColor: '#14967f', color: 'white' }}  onClick={resetFilters}>Reset Filters</button>
       </div>
 
       {loading ? (
-        <p>Loading...</p>
-      ) : medicines.length > 0 ? (
-        <ul className="medicine-list">
-          {medicines.map((m) => (
-            <li key={m._id} className="medicine-item">
-              <div className="medicine-details">
-                <strong>Name:</strong> {m.name}<br />
-                <strong>Price:</strong> {m.price}<br />
-                <strong>Description:</strong> {m.description}<br />
-                <strong>Medical Use:</strong> {m.medicalUse}<br />
-                <strong>Quantity:</strong> {m.available_quantity}<br />
-                <strong>Sales:</strong> {m.sales}<br />
-                <strong>Status:</strong> {m.statuss}<br />
-                <div>
-                <strong>Image: </strong>
-                <img src={m.pictureUrl} alt={m.name} />
+  <p>Loading...</p>
+) : medicines.length > 0 ? (
+  <div className="row">
+    {medicines.map((m, index) => (
+      <div key={m._id} className="col-lg-3 col-md-6 mb-4">
+        <div className="card h-100 medicine-card">
+          <img src={m.pictureUrl} className="card-img-top medicine-img" alt={m.name} />
+          <div className="card-body">
+            <h5 className="card-title"><strong>{m.name}</strong></h5>
+            <p className="card-text">
+            <div style={{ textAlign: 'left' }}>
+              <strong>Price:$</strong> {m.price}<br />
+              <strong>Description:</strong> {m.description}<br />
+              <strong>Quantity:</strong> {m.available_quantity}<br />
+              <strong>Sales:</strong> {m.sales}<br />
+              <strong>Status:</strong> {m.statuss}<br />
               </div>
-                <Link to={`/edit/${m._id}`}>Edit</Link>
-                <button onClick={() => handleArchive(m._id)}>Archive</button>
-                <button onClick={() => handleUnarchive(m._id)}>Unarchive</button>
-              </div>
-              <div className="medicine-image">
-                <img src={m.picture} alt={m.name} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No Medicines found.</p>
-      )}
+            </p>
+            <div className="medicine-add-to-cart">
+              <Link to={`/edit/${m._id}`}><p className="custom-text-color">Edit</p></Link>
+              <button button style={{ backgroundColor: '#14967f', color: 'white',width: '100px', height: '40px',fontSize: '13px' }}  onClick={() => handleArchive(m._id)}>Archive</button>
+              <button button style={{ backgroundColor: '#14967f', color: 'white',width: '100px', height: '40px',fontSize: '13px' }}  onClick={() => handleUnarchive(m._id)}>Unarchive</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <p>No Medicines found.</p>
+)}
       <Link to="/addMed">Add a new Medicine</Link>
       </div>
 

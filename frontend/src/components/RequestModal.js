@@ -1,35 +1,9 @@
-
-
-import { Document, Page } from 'react-pdf';
-
-import React, { useState, useEffect } from 'react';
-
-
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RequestModal = ({ setOpenModal, request }) => {
-    const [numPages, setNumPages] = useState(null);
-    const [pdfUrl, setPdfUrl] = useState(null);
-    function binaryToBlob(binary, contentType) {
-        const len = binary.length;
-        const buffer = new ArrayBuffer(len);
-        const view = new Uint8Array(buffer);
-        for (let i = 0; i < len; i++) {
-          view[i] = binary.charCodeAt(i);
-        }
-        return new Blob([view], { type: contentType });
-      }
-      
-      useEffect(() => {
-        if (request.workingLicense && request.workingLicense.data) {
-          const blob = binaryToBlob(request.workingLicense.data, request.workingLicense.contentType);
-          const url = URL.createObjectURL(blob);
-          setPdfUrl(url);
-        }
-      }, [request]);
-    function onDocumentLoadSuccess({ numPages }) {
-        setNumPages(numPages);
-    }
 
+    const navigate = useNavigate();
     return (
         <div className="modalBackground">
             <div className="modalContainer">
@@ -59,24 +33,6 @@ const RequestModal = ({ setOpenModal, request }) => {
                             <tr><td><strong>status:</strong></td><td>{request.statuss}</td></tr>
                         </tbody>
                     </table>
-                    {pdfUrl && (
-                        <div>
-                            <Document
-                                file={pdfUrl}
-                                onLoadSuccess={onDocumentLoadSuccess}
-                            >
-                                {Array.from(
-                                    new Array(numPages),
-                                    (el, index) => (
-                                        <Page
-                                            key={`page_${index + 1}`}
-                                            pageNumber={index + 1}
-                                        />
-                                    ),
-                                )}
-                            </Document>
-                        </div>
-                    )}
                 </div>
             </div>
         </div>

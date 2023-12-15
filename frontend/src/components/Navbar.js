@@ -52,9 +52,9 @@ return (
               <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
             </Link>
           )}
-          <Link to={`/notifications/${user.user}`} className="notification-icon">
-            <FaBell />
-          </Link>
+          <Link to={user.role === 'admin' ? `/sales` : `/notifications/${user.user}`} className="notification-icon">
+              <FaBell />
+            </Link>
           <button onClick={handleClick}>Log out</button>
         </div>
       )}

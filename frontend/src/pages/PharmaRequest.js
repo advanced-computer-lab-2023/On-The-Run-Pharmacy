@@ -6,6 +6,7 @@ import { Form, Button, Card, Spinner, Container, Row, Col } from 'react-bootstra
 
 const PharmaRegistration = () => {
   const navigate = useNavigate();
+
   const [successMessage, setSuccessMessage] = useState(null);
 
   const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ const PharmaRegistration = () => {
   const [workingLicense, setWorkingLicense] = useState(null);
   const [pharmacistDegree, setPharmacistDegree] = useState(null);
   const [pharmacistId, setPharmacistId] = useState(null);
-
+ 
   const [error, setError] = useState(null);
   const [isPharmacistRegistered] = useState(false);
   const [isRequestPending, setIsRequestPending] = useState(false);
@@ -201,6 +202,7 @@ const PharmaRegistration = () => {
         </Card.Body>
       </Card>
       <p style={{ color: '#8a90a2', fontSize: '15px', fontWeight: '400' }}>Back to <Link to="/login" style={{ color: '#0055ff', fontSize: '15px', fontWeight: '600' }}>Log In</Link></p>
+     
     </Container>
 
   );

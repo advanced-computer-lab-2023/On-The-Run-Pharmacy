@@ -5,6 +5,7 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import PharmacistDetailsModal from '../components/PharmacistDetailsModal';
+import { useNavigate } from 'react-router-dom';
 
 import './MedicineList.css'; // Import your CSS file for styling
 
@@ -16,7 +17,7 @@ const PharmacistListPage = () => {
   const [activeDoctorId, setActiveDoctorId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
- 
+  const navigate=useNavigate();
 
   const fetchPharmacists = async () => {
     try {
@@ -54,6 +55,8 @@ const PharmacistListPage = () => {
 
 return (
   <div className="container">
+     <div className="form1-group">
+      <button type="submit" onClick={() => navigate(-1)}>Back</button>                </div>  
     <div className="patients-list">
     <h2 style={{ textAlign: 'left' }}>All Pharmacists</h2>
 

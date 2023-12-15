@@ -141,45 +141,41 @@ const MedicineListPage = () => {
           value={medicalUseFilter}
           onChange={handleMedicalUseFilterChange}
         />
-        <button onClick={resetFilters}>Reset Filters</button>
-      </div>
+<button style={{ backgroundColor: '#14967f', color: 'white' }} onClick={resetFilters}>Reset Filters</button>          </div>
 
       {loading ? (
-        <p>Loading...</p>
-      ) : medicines.length > 0 ? (
-        <ul className="medicine-list">
-          {medicines.map((m) => (
-            <li key={m._id} className="medicine-item">
-              <div className="medicine-details">
-                <strong>Name:</strong> {m.name}
-                <br />
-                <strong>Price:</strong> {m.price}
-                <br />
-                <strong>Description:</strong> {m.description}
-                <br />
-                <strong>Medical Use:</strong> {m.medicalUse}
-                <br />
-              </div>
-              <div>
-                <strong>Image: </strong>
-                <img src={m.pictureUrl} alt={m.name} />
-              </div>
-              <div className="medicine-add-to-cart">
-                <input type="number" min="1" defaultValue="1" id={`amount-${m._id}`} />
-                <button onClick={() => addToCart(m._id, document.getElementById(`amount-${m._id}`).value)}>
-                  Add to cart
-                </button>
-                {/* Alternative Medicines button */}
-                <Link to={`/alternativeMedicines/${m._id}`}>Alternative Medicines</Link>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No Medicines found.</p>
-      )}
-    </div>
-  );
+  <p>Loading...</p>
+) : medicines.length > 0 ? (
+  <div className="row">
+    {medicines.map((m, index) => (
+      <div key={m._id} className="col-lg-3 col-md-6 mb-4">
+        <div className="card h-100 medicine-card custom-card-height">
+          <img src={m.pictureUrl} className="card-img-top medicine-img" alt={m.name} />
+          <div className="card-body">
+            <h5 className="card-title">{m.name}</h5>
+            <p className="card-text">
+              <strong>Price: $</strong> {m.price}<br />
+              <strong>Description:</strong> {m.description}<br />
+              <strong>Medical Use:</strong> {m.medicalUse}<br />
+            </p>
+            <div className="medicine-add-to-cart">
+              <input type="number" min="1" defaultValue="1" id={`amount-${m._id}`}className="amount-input"  />
+              <button style={{ backgroundColor: '#14967f', color: 'white' }}  onClick={() => addToCart(m._id, document.getElementById(`amount-${m._id}`).value)}>
+                Add to cart
+              </button>
+              {/* Alternative Medicines button */}
+              <Link to={`/alternativeMedicines/${m._id}`}><p className="custom-text-color">Alternative Medicines</p></Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <p>No Medicines found.</p>
+)}
+</div>
+);
 };
 
 export default MedicineListPage;
