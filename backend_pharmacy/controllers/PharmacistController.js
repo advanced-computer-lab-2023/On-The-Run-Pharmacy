@@ -94,6 +94,16 @@ const getPharmacists = async (req, res) => {
   }
 };
 
+const getPharmacists2 = async (req, res) => {
+  try {
+    const pharmacists = await Pharmacist.find({}).lean().exec();
+
+    res.status(200).json(pharmacists);
+  } catch (error) {
+    console.error('Error fetching pharmacists:', error);
+    res.status(500).json({ error: 'An error occurred while retrieving the Pharmacists' });
+  }
+};
 
 
   //const updatepharmacist = async (req, res) => {
@@ -202,4 +212,4 @@ const getPharmaWallet = async (req, res) => {
   }
 };
 
-module.exports = { createPharmacist, getPharmacists, deletepharmacist, createPharmacist1,getPharmacistByUsername,updatePasswordPharmacist,getPharmaWallet };
+module.exports = { createPharmacist, getPharmacists,getPharmacists2, deletepharmacist, createPharmacist1,getPharmacistByUsername,updatePasswordPharmacist,getPharmaWallet };

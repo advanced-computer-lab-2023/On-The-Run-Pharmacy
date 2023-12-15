@@ -107,24 +107,8 @@ const MedicineListPage = () => {
   return (
     <div className="medicine-list-container">
       <div style={{ padding: '20px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 0, right: 0 }}>
-          <h2>Wallet: {wallet}</h2>
+        <div style={{ position: 'absolute', top: 0, right: 0 }}>     
         </div>
-
-        {/* Include a textbox for the doctor's username */}
-        <label>
-          Pharmacist's Username:
-          <input type="text" value={doctorUsername} onChange={(e) => setDoctorUsername(e.target.value)} />
-        </label>
-
-        {/* Update the Link to include patient and doctor usernames */}
-        <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
-
-        <Link to={`/changePatientPassword/${username}`}>Change Password </Link>
-        <Link to={`/cart/${username}`}>
-          <FaShoppingCart />
-        </Link>
-        <Link to={`/PatientOrders/${username}`}> MyOrders</Link>
       </div>
 
       <h1>All Medicines</h1>
