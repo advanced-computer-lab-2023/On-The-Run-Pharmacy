@@ -6,6 +6,7 @@ import { FaBell } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple } from '@fortawesome/free-solid-svg-icons';
 
 
 const Navbar = () => {
@@ -52,9 +53,16 @@ return (
               <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
             </Link>
           )}
-          <Link to={user.role === 'admin' ? `/sales` : `/notifications/${user.user}`} className="notification-icon">
-              <FaBell />
-            </Link>
+          { (user.role === 'pharmacist' || user.role === 'patient') && 
+  <Link to={`/notifications/${user.user}`} className="notification-icon">
+    <FaBell />
+  </Link>
+}
+{(user.role === 'admin'|| user.role ==='pharmacist') && (
+  <Link to="/sales"> <FontAwesomeIcon icon={faChartSimple} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+  </Link>
+)}
+
           <button onClick={handleClick}>Log out</button>
         </div>
       )}
