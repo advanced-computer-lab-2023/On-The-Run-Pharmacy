@@ -16,10 +16,7 @@ const PatientChatPage = () => {
 
       if (response.status === 200) {
         const fetchedMessages = response.data;
-        console.log(fetchedMessages[0]); 
-
         setMessages(fetchedMessages || []);
-        console.log("ME");
       }
     } catch (error) {
       console.error('Error fetching chat messages:', error);

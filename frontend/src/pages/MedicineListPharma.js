@@ -14,6 +14,7 @@ const MedicineListPagep = () => {
   const [wallet, setWallet]= useState(null);
   const [doctorUsername, setDoctorUsername] = useState('');
   const navigate=useNavigate();
+  const [doctor2Username, setDoctor2Username] = useState(''); // New state for the doctor's username
   const fetchMedicines = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/getMedicines`,{
@@ -124,8 +125,14 @@ const MedicineListPagep = () => {
         </label>
 
         {/* Update the Link to include patient and doctor usernames */}
-       <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
+        <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
+        <label>
+          Doctor's Username:
+          <input type="text" value={doctor2Username} onChange={(e) => setDoctor2Username(e.target.value)} />
+        </label>
 
+        {/* Update the Link to include both patient and doctor usernames */}
+        <Link to={`/chat/${username}/${doctor2Username}`}>Start Chat</Link>
        <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
        <Link to={`/Notifications`}>Notifications</Link>
        <Link to={`/sales`}>View Sales Report</Link>

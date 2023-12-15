@@ -7,6 +7,7 @@ const PharmacistChatPage = () => {
   const { username, doctor } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isFetchingCrossMessages, setIsFetchingCrossMessages] = useState(false); // New state variable
 
   const fetchMessages = async () => {
     try {
@@ -16,16 +17,34 @@ const PharmacistChatPage = () => {
 
       if (response.status === 200) {
         const fetchedMessages = response.data;
-        console.log(fetchedMessages[0]) ; 
-
-    
-        setMessages(fetchedMessages || []); 
-        console.log("ME");
-
         
+        if (fetchedMessages.length === 0) {
+          // If getChatMessages returns nothing, call getCrossOverChatMessages
+          console.log('No messages found. Fetching crossover messages...');
+          setIsFetchingCrossMessages(true); // Set the flag to true
+          await getCrossOverChatMessages();
+        } else {
+          setMessages(fetchedMessages || []);
+        }
       }
     } catch (error) {
       console.error('Error fetching chat messages:', error);
+    }
+  };
+
+  // Add a new function to fetch crossover messages
+  const getCrossOverChatMessages = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/getCrossChatMessages/${username}/${doctor}`, {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        const fetchedMessages = response.data;
+        setMessages(fetchedMessages || []);
+      }
+    } catch (error) {
+      console.error('Error fetching crossover chat messages:', error);
     }
   };
 
@@ -57,18 +76,35 @@ const PharmacistChatPage = () => {
   }, [messages]);
 
   const handleSendMessage = async () => {
+    let response; // Declare the response variable
     try {
-      const response = await axios.post(
-        'http://localhost:4000/sendMessageAsPharmacist',
-        {
-          sender: username,
-          receiver: doctor,
-          message: newMessage,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      if (isFetchingCrossMessages) {
+        // If fetching crossover messages, call sendCrossMessageAsDoctor
+        response = await axios.post(
+          'http://localhost:4000/sendCrossMessageAsPharmacist',
+          {
+            sender: username,
+            receiver: doctor,
+            message: newMessage,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      } else {
+        // Otherwise, call sendMessageAsDoctor
+        response = await axios.post(
+          'http://localhost:4000/sendMessageAsPharmacist',
+          {
+            sender: username,
+            receiver: doctor,
+            message: newMessage,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      }
 
       if (response.status === 200) {
         setNewMessage('');
