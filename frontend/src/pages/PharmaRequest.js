@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Form, Button, Card, Spinner, Container, Row, Col } from 'react-bootstrap';
+
 
 const PharmaRegistration = () => {
   const navigate = useNavigate();
@@ -10,16 +12,18 @@ const PharmaRegistration = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [date_of_birth, setDateOfBirth] = useState('');
   const [hourly_rate, setHourly_rate] = useState('');
   const [affiliation, setAffiliation] = useState('');
   const [educational_background, setEducational_background] = useState('');
-  const [date_of_birth, setDateOfBirth] = useState('');
   const [workingLicense, setWorkingLicense] = useState(null);
   const [pharmacistDegree, setPharmacistDegree] = useState(null);
   const [pharmacistId, setPharmacistId] = useState(null);
 
   const [error, setError] = useState(null);
   const [isPharmacistRegistered] = useState(false);
+  const [isRequestPending, setIsRequestPending] = useState(false);
+
 
   const handleWorkingLicenseChange = (e) => {
     setWorkingLicense(e.target.files[0]);
@@ -80,176 +84,129 @@ const PharmaRegistration = () => {
     }
   };
 
-
-
   return (
-    <div className="container">
-       {successMessage && <p>{successMessage}</p>}
-      <div className="row justify-content-center mt-5">
-        <div className="col-lg-6">
-          <div className="card">
-            <div className="card-body">
-              <h1 className="card-title">Pharmacist Registration</h1>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    onChange={(e)=>setUsername(e.target.value)}
-            value={username}
-                    placeholder="Enter your username"
-                  />
-                </div>
+    <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '87vh', flexDirection: 'column' }}>
+      <Card style={{height:'85vh'}}>
+        <Card.Body>
+        <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#343a40', marginBottom: '5px' }}>Register as Pharmacist</h4>
+          {error && <p>{error}</p>}
+          {isRequestPending ? (
+            <p>Registration request is pending. Please wait for approval.</p>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <Row>
+                <Col>
+                  <Form.Group controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="dateOfBirth">
+                    <Form.Label>Date of Birth</Form.Label>
+                    <Form.Control type="date" value={date_of_birth} onChange={(e) => setDateOfBirth(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
 
-                <div className="form-group">
-                  <label htmlFor="name">Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    value={name}
-            onChange={(e)=>setName(e.target.value)}
-                    placeholder="Enter your name"
-                  />
-                </div>
+                  <Form.Group controlId="hourlyRate">
+                    <Form.Label>Hourly Rate</Form.Label>
+                    <Form.Control type="number" value={hourly_rate} onChange={(e) => setHourly_rate(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="Affiliation">
+                    <Form.Label>Affiliation</Form.Label>
+                    <Form.Control type="text" value={affiliation} onChange={(e) => setAffiliation(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="educational_background">
+                    <Form.Label>Educational Background</Form.Label>
+                    <Form.Control type="text" value={educational_background} onChange={(e) => setEducational_background(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="workingLicense">
+                    <Form.Label>Medical License</Form.Label>
+                    <div className="custom-file">
+                      <input type="file" className="custom-file-input" id="workingLicense" accept=".pdf" onChange={handleWorkingLicenseChange} />
+                      <label className="custom-file-label" htmlFor="workingLicense">
+                        Choose file...
+                      </label>
+                    </div>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
 
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    value={password}
-            onChange={(e)=>setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                  />
-                </div>
-
-               
-
-                
-
-                <div className="form-group">
-                  <label htmlFor="hourlyRate">Hourly Rate</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="hourlyRate"
-                    value={hourly_rate}
-            onChange={(e) => setHourly_rate(e.target.value)}
-                    placeholder="Enter your hourly rate"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="aff">Affiliation</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="emergencyContactName"
-                    value={affiliation}
-            onChange={(e) =>
-             setAffiliation(e.target.value)
-            }
-                    placeholder="Enter you Affiliation"
-                  />
-                </div>
-
-                
-
-                <div className="form-group">
-                  <label htmlFor="educational_background">Educational Background</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="educational_background"
-                    value={educational_background}
-            onChange={(e) =>
-              setEducational_background(e.target.value)
-            }
-                    placeholder="Enter your Educational Background"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="dob">Date of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={date_of_birth}
-            onChange={(e) => {
-              
-              setDateOfBirth(e.target.value);
-            }}
-                    id="dob"
-                  />
-                </div>
+                  {/* Pharmacist Degree PDF */}
+                  <Form.Group controlId="pharmacistDegree">
+                    <Form.Label>Medical Degree</Form.Label>
+                    <div className="custom-file">
+                      <input type="file" className="custom-file-input" id="pharmacistDegree" accept=".pdf" onChange={handlePharmacistDegreeChange} />
+                      <label className="custom-file-label" htmlFor="pharmacistDegree">
+                        Choose file...
+                      </label>
+                    </div>
+                  </Form.Group>
+                </Col>
+                <Col>
 
 
-                {/* Working License PDF */}
-                <div className="form-group">
-                  <label htmlFor="workingLicense">Working License PDF</label>
-                  <input
-                    type="file"
-                    id="workingLicense"
-                    accept=".pdf"
-                    onChange={handleWorkingLicenseChange}
-                  />
-                </div>
+                  {/* Pharmacist ID PDF */}
+                  <Form.Group controlId="pharmacistId">
+                    <Form.Label>Pharmacist ID</Form.Label>
+                    <div className="custom-file">
+                      <input type="file" className="custom-file-input" id="pharmacistId" accept=".pdf" onChange={handlePharmacistIdChange} />
+                      <label className="custom-file-label" htmlFor="pharmacistId">
+                        Choose file...
+                      </label>
+                    </div>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Button variant="primary" type="submit" disabled={isRequestPending} style={{ marginTop: '10px' }}>
+                {isRequestPending ? <Spinner animation="border" size="sm" /> : 'Register'}
+              </Button>
+            </Form>
+          )}
+        </Card.Body>
+      </Card>
+      <p style={{ color: '#8a90a2', fontSize: '15px', fontWeight: '400' }}>Back to <Link to="/login" style={{ color: '#0055ff', fontSize: '15px', fontWeight: '600' }}>Log In</Link></p>
+    </Container>
 
-                
-                  
-                 {/* Pharmacist Degree PDF */}
-                 <div className="form-group">
-                  <label htmlFor="pharmacistDegree">Pharmacist Degree PDF</label>
-                  <input
-                    type="file"
-                    id="pharmacistDegree"
-                    accept=".pdf"
-                    onChange={handlePharmacistDegreeChange}
-                  />
-                </div>
-               {/* Pharmacist ID PDF */}
-               <div className="form-group">
-                  <label htmlFor="pharmacistId">Pharmacist ID PDF</label>
-                  <input
-                    type="file"
-                    id="pharmacistId"
-                    accept=".pdf"
-                    onChange={handlePharmacistIdChange}
-                  />
-                </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Register
-                </button>
-              </form>
-
-              <div className="mt-3">
-                <Link to="/" className="btn btn-secondary">
-                  Back to Role Selection
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
+
+
+
 };
 
 export default PharmaRegistration;

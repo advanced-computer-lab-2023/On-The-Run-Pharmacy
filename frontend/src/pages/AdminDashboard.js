@@ -31,7 +31,7 @@ const AdminDashboard = () => {
         <li>
         <Link to="/addAdmin" className="menu-link">
             <i className="fas fa-user-plus"></i>
-            Add Another Admin
+            Manage Admins
             </Link>
         </li>
         <li>
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
         <li>
         <Link to={`/viewPharmacists`} className="menu-link">
             <i className="fas fa-edit"></i>
-           view Pharmacists
+           Manage Pharmacists
           </Link>
         </li>
         <li>

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+const Doctor = require('../models/DoctorModel');
 
 const messageSchema = new mongoose.Schema({
-  patient: {
+  doctor: {
     type: String,
-    ref: 'PatientP',
+    ref: 'Doctor',
   },
   pharmacist: {
     type: String,
@@ -11,7 +12,7 @@ const messageSchema = new mongoose.Schema({
   },
   messages: [
     {
-      sender: String, // 'patient' or 'pharmacist'
+      sender: String, // 'doctor' or 'pharmacist'
       content: String,
       timestamp: {
         type: Date,
@@ -21,6 +22,6 @@ const messageSchema = new mongoose.Schema({
   ],
 });
 
-const Message = mongoose.model('Message', messageSchema);
+const Message = mongoose.model('MessageCross', messageSchema);
 
 module.exports = Message;

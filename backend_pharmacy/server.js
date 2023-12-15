@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const {createPatientP,getPatientsP,deletePatientP,addToCart,getPatientCart,deleteFromCart,updateCart,updateWallet,getWallet,getPatientByUsername,updatePasswordPatient, addAddress, getAddresses}= require("./controllers/PatientPController")
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines,getOutOfStockMedicines,updateMedQuantity,getMedicinesWithSales}=require("./controllers/MedicineController")
-const{createAdmin,getAdmin,getAdminByUsername, updatePasswordAdmin}=require("./controllers/adminController")
+const{createAdmin,getAdmin,getAdmins,getAdminByUsername,deleteAdmin, updatePasswordAdmin}=require("./controllers/adminController")
 const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist,getPharmaWallet }=require("./controllers/PharmacistController")
 const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
@@ -14,6 +14,7 @@ const{createSales,getSales}=require("./controllers/SalesController")
 const{getNotifications}=require("./controllers/PNotificationController")
 const{createOrder,cancelOrder,getPatientOrders,getCurrentOrders,getPastOrders}=require("./controllers/orderController")
 const{createMessage,sendMessageAsPatient,sendMessageAsPharmacist,getChatMessages}=require("./controllers/messagesController")
+const{createCrossMessage,sendCrossMessageAsPharmacist,getCrossChatMessages}=require("./controllers/crossOverMessagesController")
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -46,6 +47,9 @@ app.post("/createMessage",createMessage)
 app.get("/getChatMessages/:username/:doctor",getChatMessages)
 app.post("/sendMessageAsPharmacist",sendMessageAsPharmacist)
 app.post("/sendMessageAsPatient",sendMessageAsPatient)
+app.post("/createCrossMessage",createCrossMessage)
+app.get("/getCrossChatMessages/:username/:doctor",getCrossChatMessages)
+app.post("/sendCrossMessageAsPharmacist",sendCrossMessageAsPharmacist)
 app.get("/getMedicines",getMedicines)
 app.get("/getAlternativeMedicines",getAlternativeMedicines)
 app.get("/getMedicines2",getMedicines2)
@@ -95,3 +99,6 @@ app.post("/updateMedQuantity/:id/:amount",updateMedQuantity);
 app.get("/getMedicinesWithSales",getMedicinesWithSales);
 app.post("/createsales/:medicine_id/:amount",createSales);
 app.get("/getSales",getSales);
+app.get("/getAdmins",requireAuthAdmin,getAdmins)
+app.delete("/deleteAdmin/:id",requireAuthAdmin,deleteAdmin);
+
