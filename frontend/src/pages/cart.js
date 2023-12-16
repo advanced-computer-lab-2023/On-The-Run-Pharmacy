@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams,useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 const CartPage = () => {
   const { username } = useParams();
@@ -63,31 +68,81 @@ const CartPage = () => {
   
 
   return (
-    <div>
-      <h1>Cart</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : items.length > 0 ? (
-        <ul>
-          {items.map((item) => (
-            
-            <li key={item.medicine_id}>
-            <p>Name: {item.medicineName}</p>
-              <p>Amount: {item.quantity}</p>
-              <p>Price: {item.price}</p>
-              <button onClick={() => updateAmount(item.medicine_id, item.quantity + 1)}>Increment</button>
-            <button onClick={() => updateAmount(item.medicine_id, item.quantity - 1)}>Decrement</button>
-              <button onClick={() => deleteFromCart(item.medicine_id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No Items.</p>
-      )}
-     <button onClick={() => navigate(`/checkout/${username}`)}>Checkout</button>
-    <button onClick={() => navigate(-1)}>Back</button>
+    <div style={{ maxWidth: '60%', margin: '0 auto' }}>
+  <h1>Cart</h1>
+  {loading ? (
+    <p>Loading...</p>
+  ) : items.length > 0 ? (
+    <div className="row">
+      {items.map((item) => (
+        <div key={item.medicine_id} className="col-12 mb-3">
+          <div className="card">
+            <div className="card-body">
+              <div className="d-flex justify-content-between">
+                <div style={{ textAlign: 'left' }}>
+                  <p><strong>Name:</strong> {item.medicineName}</p>
+                  <p><strong>Amount:</strong> {item.quantity}</p>
+                  <p><strong>Price:</strong> {item.price}</p>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <button 
+  className="btn btn-primary mb-1" 
+  style={{ backgroundColor: '#14967f', borderColor: '#14967f',transition: 'none' }} 
+  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onClick={() => updateAmount(item.medicine_id, item.quantity + 1)}
+>
+  <FontAwesomeIcon icon={faPlus} />
+</button>
+<button 
+  className="btn btn-primary mb-1" 
+  style={{ backgroundColor: '#14967f', borderColor: '#14967f',transition: 'none' }} 
+  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onClick={() => updateAmount(item.medicine_id, item.quantity - 1)}
+>
+  <FontAwesomeIcon icon={faMinus} />
+</button> 
+
+<button 
+  className="btn btn-primary mb-1" 
+  style={{ backgroundColor: '#14967f', borderColor: '#14967f',transition: 'none' }} 
+  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onClick={() => deleteFromCart(item.medicine_id)}
+>
+  <FontAwesomeIcon icon={faTrash} />
+</button> 
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
-  );
+  ) : (
+    <p>No Items.</p>
+  )}
+  <button 
+  className="btn btn-primary mb-1" 
+  style={{ backgroundColor: '#14967f', borderColor: '#14967f',transition: 'none' ,marginRight: '10px'}} 
+  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onClick={() => navigate(`/checkout/${username}`)}
+>
+Checkout
+</button> 
+
+<button 
+  className="btn btn-primary mb-1" 
+  style={{ backgroundColor: '#14967f', borderColor: '#14967f',transition: 'none' }} 
+  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onClick={() => navigate(-1)}
+>
+Back
+</button> 
+</div>);
 };
 
 export default CartPage;

@@ -194,75 +194,69 @@ const handleCreditCardPayment = async () => {
 
 
 
-  return (
-    
-    <div style={{ padding: '20px', position: 'relative' }}>
-    <div style={{ position: 'absolute', top: 0, right: 0 }}>
-      <h2>Wallet: ${wallet}</h2>
-    </div>
-
-{walletError && <p>{walletError}</p>}
-      <h1 style={{ textAlign: 'center' }}>Your Cart</h1>
-      {items.map((item, index) => (
-        <p key={index}>{item.medicineName} - ${item.price} - Quantity: {item.quantity}</p>
-        
-      ))}
-      <h2>Total Price: ${totalprice1}</h2>
-  
-      <h1 style={{ marginTop: '20px' }}>Choose Address</h1>
-      {addresses.map((address, index) => (
-        <button key={index} style={{ margin: '5px' }} onClick={() => setSelectedAddress(address)}>
-          {address}
-        </button>
-      ))}
-      {selectedAddress && <p>Selected Address: {selectedAddress}</p>}
-  
-      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-        <label>
-          Address:
-          <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-        </label>
-        <button type="submit">Add Address</button>
-        {error && <p>{error}</p>}
-        {success && <p>{success}</p>}
-      </form>
-  
-      <h2 style={{ marginTop: '20px' }}>Choose Payment Method</h2>
-      <label>
-  <input type="radio" value="Wallet" checked={paymentmethod1 === 'Wallet'} onChange={(e) => setpaymentmethod1(e.target.value)} />
-  Wallet
-</label>
-<label>
-  <input type="radio" value="Credit Card" checked={paymentmethod1 === 'Credit Card'} onChange={(e) => setpaymentmethod1(e.target.value)} />
-  Credit Card
-</label>
-<label>
-  <input type="radio" value="Cash on Delivery" checked={paymentmethod1 === 'Cash on Delivery'} onChange={(e) => setpaymentmethod1(e.target.value)} />
-  Cash on Delivery
-</label>
-      <div style={{ marginTop: '20px' }}>
-      <button onClick={() => handlePayment()}>Submit Order</button>
+return (
+  <div className="container">
+    <div className="row">
+      <div className="col-md-6">
+        <div className="card" style={{ width: '120%', height: '90%' }}>
+          <div className="card-body">
+            <h1 className="card-title">Your Cart</h1>
+            {items.map((item, index) => (
+              <p key={index} className="card-text">{item.medicineName} - ${item.price} - Quantity: {item.quantity}</p>
+            ))}
+            <h2 className="card-text">Total Price: ${totalprice1}</h2>
+          </div>
+        </div>
       </div>
-    
-      {paymentmethod1 === 'Credit Card' && (
- <div>
- <h2>Payment Information</h2>
- <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-   <div style={{ flex: 1 }}>
-     <Elements stripe={stripePromise}>
-       <div className="stripe-container">
-         <PaymentForm />
-       </div>
-     </Elements>
-   </div>
-   <div style={{ flex: 1 }}>
-     {/* Add the Wallet form or content here */}
-   </div>
- </div>
-</div>
-)}
+      <div className="col-md-6">
+        <div className="card">
+          <div className="card-body">
+            <h1 className="card-title">Choose Address</h1>
+            {addresses.map((address, index) => (
+              <button key={index} className="btn btn-primary mb-1" onClick={() => setSelectedAddress(address)}>
+                {address}
+              </button>
+            ))}
+            {selectedAddress && <p className="card-text">Selected Address: {selectedAddress}</p>}
+            <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+              <label>
+                Address:
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+              </label>
+              <button type="submit" className="btn btn-primary">Add Address</button>
+              {error && <p>{error}</p>}
+              {success && <p>{success}</p>}
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-  );
-};
-
+    <div className="row">
+      <div className="col-12">
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title">Choose Payment Method</h2>
+            <label>
+              <input type="radio" value="Wallet" checked={paymentmethod1 === 'Wallet'} onChange={(e) => setpaymentmethod1(e.target.value)} />
+              Wallet
+            </label>
+            <label>
+              <input type="radio" value="Credit Card" checked={paymentmethod1 === 'Credit Card'} onChange={(e) => setpaymentmethod1(e.target.value)} />
+              Credit Card
+            </label>
+            <label>
+              <input type="radio" value="Cash on Delivery" checked={paymentmethod1 === 'Cash on Delivery'} onChange={(e) => setpaymentmethod1(e.target.value)} />
+              Cash on Delivery
+            </label>
+            <div style={{ marginTop: '20px' }}>
+              <button className="btn btn-primary" onClick={() => handlePayment()}>Submit Order</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {/* rest of your code */}
+  </div>
+);};
 export default Checkout;
+
