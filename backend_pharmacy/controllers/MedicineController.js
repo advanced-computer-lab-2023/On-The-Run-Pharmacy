@@ -13,7 +13,8 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'ontherunpharmacy@gmail.com', // Replace with your email
-    pass: 'mohd1963', // Replace with your email password or an app-specific password
+    pass:'uqor aqrq wscq raph',
+    //pass: 'mohd1963', // Replace with your email password or an app-specific password
   },
 });
 
@@ -28,14 +29,16 @@ const sendEmailNotification = async (subject, text) => {
 
     const emailAddresses = pharmacists.map((pharmacist) => pharmacist.email);
 
-    const mailOptions = {
-      from: 'ontherunpharmacy@gmail.com', // Replace with your email
-      to: emailAddresses.join(', '),
-      subject,
-      text,
-    };
-
-    await transporter.sendMail(mailOptions);
+    for (const email of emailAddresses) {
+      const mailOptions = {
+        from: 'ontherunpharmacy@hotmail.com',
+        to: email, // Set the current pharmacist's email address
+        subject: subject,
+        text: text,
+      };
+      await transporter.sendMail(mailOptions);
+    }
+   
     console.log('Email notification sent to pharmacists.');
   } catch (error) {
     console.error('Error sending email notification:', error);
@@ -183,40 +186,88 @@ const updateMedQuantity = async (req, res) => {
     if (medicine.available_quantity >= amountNumber) {
       medicine.available_quantity -= amountNumber;
       medicine.sales += amountNumber;
-        if(medicine.available_quantity==0){
-          const notification = new Notification({
-            medicineId: id,
-            medicineName: medicine.name,
-          });
-    
-          await notification.save();}
-           // Send email notification to pharmacists
+
+      // Check if the medicine is out of stock
+      if (medicine.available_quantity === 0) {
+        const notification = new Notification({
+          medicineId: id,
+          medicineName: medicine.name,
+        });
+
+        await notification.save();
+
+        // Send email notification to pharmacists
         const subject = 'Medicine Out of Stock Notification';
         const text = `The medicine ${medicine.name} is out of stock. Please update the inventory.`;
 
-        await sendEmailNotification(subject, text);
+        try {
+          const pharmacists = await Pharmacist.find({}, 'email');
+
+          if (pharmacists.length === 0) {
+            console.warn('No pharmacists found to send email notification.');
+            return res.status(200).json({
+              message: 'Sales registered and medicine quantity updated successfully, but no pharmacists found to notify',
+            });
+          }
+
+          const emailAddresses = pharmacists.map((pharmacist) => pharmacist.email);
+
+          for (const email of emailAddresses) {
+            const mailOptions = {
+              from: 'ontherunpharmacy@gmail.com',
+              to: email,
+              subject: subject,
+              text: text,
+            };
+
+            try {
+              // Ensure you log the email sending step to identify any issues
+              console.log(`Sending email to ${email}`);
+              await transporter.sendMail(mailOptions);
+              console.log(`Email sent successfully to ${email}`);
+            } catch (error) {
+              console.error(`Error sending email to ${email}:`, error);
+            }
+          }
+
+          console.log('Email notification sent to pharmacists.');
+        } catch (error) {
+          console.error('Error fetching pharmacists:', error);
+          // Handle error fetching pharmacists
+        }
+      }
+
+      // Save changes to the database
       try {
         const newSales = new Sales({
           medicineId: id,
           amount,
         });
-    
+
         await newSales.save();
         await medicine.save();
-    
-        res.status(200).json({ message: 'Sales registered and medicine quantity updated successfully' });
+
+        res.status(200).json({
+          message: 'Sales registered and medicine quantity updated successfully',
+        });
       } catch (error) {
-        console.error(error);
+        console.error('Error saving changes to the database:', error);
         res
           .status(500)
           .json({ error: 'An error occurred while registering the Sales' });
       }
     } else {
-      res.status(500).json({ error: 'Medicine not available in this quantity' });
+      res.status(500).json({
+        error: 'Medicine not available in this quantity',
+      });
     }
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while getting the medicine quantity', details: error.message });
-    }
+    console.error('Error fetching the medicine from the database:', error);
+    res.status(500).json({
+      error: 'An error occurred while getting the medicine quantity',
+      details: error.message,
+    });
+  }
 };
 const archiveMedicine = async (req, res) => {
   try {
@@ -307,6 +358,15 @@ const getOutOfStockMedicines = async (req, res) => {
       return res.status(200).json({ message: 'No out-of-stock medicines found' });
     }
 
+    const pharmacists = await Pharmacist.find({}, 'email');
+
+    if (pharmacists.length === 0) {
+      console.warn('No pharmacists found to send email notification.');
+      return res.status(200).json({ message: 'No pharmacists found to notify' });
+    }
+
+    const emailAddresses = pharmacists.map((pharmacist) => pharmacist.email);
+    
     // Iterate through outOfStockMedicines and send email notifications to pharmacists
     for (const medicine of outOfStockMedicines) {
       const notification = new Notification({
@@ -320,7 +380,22 @@ const getOutOfStockMedicines = async (req, res) => {
       const subject = 'Medicine Out of Stock Notification';
       const text = `The medicine ${medicine.name} is out of stock. Please update the inventory.`;
 
-      await sendEmailNotification(subject, text);
+      try {
+        for (const email of emailAddresses) {
+          const mailOptions = {
+            from: 'ontherunpharmacy@hotmail.com',
+            to: email, // Set the current pharmacist's email address
+            subject: subject,
+            text: text,
+          };
+
+          await transporter.sendMail(mailOptions);
+        }
+      } catch (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).json({ error: 'An error occurred while sending email' });
+      }
+      //await sendEmailNotification(subject, text);
     }
 
     res.status(200).json({ message: 'Out-of-stock medicines processed successfully' });
