@@ -117,10 +117,7 @@ const MedicineListPagep = () => {
       <div style={{ padding: '20px', position: 'relative' }}>
       <div style={{ position: 'absolute', top: 0, right: 0 }}>
         <h2>Wallet: {wallet}</h2>
-      </div>
-       <Link to={`/Notifications`}>Notifications</Link>
-       <Link to={`/sales`}>View Sales Report</Link>
-       
+      </div>       
        <h1>All Medicines</h1>
 
      

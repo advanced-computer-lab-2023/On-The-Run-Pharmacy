@@ -191,9 +191,6 @@ const handleCreditCardPayment = async () => {
 };
 
 
-
-
-
 return (
   <div className="container">
     <div className="row">
