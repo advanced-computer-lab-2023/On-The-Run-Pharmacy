@@ -1,5 +1,3 @@
-// PastOrders.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -7,7 +5,51 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import './CurrentOrders';
+import './CurrentOrders.css';
+
+const OrderCard = ({ order, openModal }) => (
+  <div className="card order-card" key={order._id}>
+    <div className="card-body">
+      <div className="order-details d-flex justify-content-between">
+        <div>
+          <strong>Order ID:</strong> {order._id}
+        </div>
+        <div>
+          <strong>Status:</strong> {order.statuss}
+        </div>
+        <div className="icons3">
+          <FontAwesomeIcon
+            className="eye-icon3"
+            icon={faEye}
+            onClick={() => openModal(order._id)}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const Modal = ({ isOpen, closeModal, order }) => {
+  const modalClassName = isOpen ? 'modal modal-open3' : 'modal3';
+
+  return isOpen ? (
+    <div className={modalClassName}>
+      <div className="modal-content3">
+        <span className="close3" onClick={closeModal}>
+          &times;
+        </span>
+        <h2>Order Details</h2>
+
+        {/* Render order details dynamically */}
+        {Object.entries(order).map(([key, value]) => (
+          <p key={key}>
+            <strong>{key}:</strong> {value}
+          </p>
+        ))}
+      </div>
+    </div>
+  ) : null;
+};
 
 const PastOrders = () => {
   const [pastOrders, setPastOrders] = useState([]);
@@ -57,8 +99,8 @@ const PastOrders = () => {
   }, [username]);
 
   return (
-    <div className="container-fluid">
-      <div className="header">
+    <div className="container3" style={{ marginTop: '20px' }}>
+      <div className="header3">
         <button
           className="btn btn-primary mb-1"
           style={{
@@ -73,55 +115,31 @@ const PastOrders = () => {
         >
           Back
         </button>
-        <h2>My Past Orders </h2>
-      </div>
+        <h2 style={{ textAlign: 'center' }}>My Past Orders &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+        </div>
 
-      <div className="row">
+      <div className="past-orders-list">
         {loading ? (
-          <div className="spinner-container">
+          <div className="spinner-container3">
             <BeatLoader color="#14967f" size={15} />
           </div>
         ) : pastOrders.length === 0 ? (
           <p>No past orders found</p>
         ) : (
-          pastOrders.map((order) => (
-            // Change this line in the map function
-<div className="col-md-12" key={order._id}>
-
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">Order ID: {order._id}</h5>
-                  <p className="card-text">Status: {order.statuss}</p>
-                  <FontAwesomeIcon
-                    className="eye-icon"
-                    icon={faEye}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => openModal(order._id)}
-                  />
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* Modal */}
-      {selectedOrder && (
-        <div className={isModalOpen ? 'modal modal-open' : 'modal'}>
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-            <h2>Order Details</h2>
-
-            {Object.entries(selectedOrder).map(([key, value]) => (
-              <p key={key}>
-                <strong>{key}:</strong> {value}
-              </p>
+          <div className="card-container3">
+            {pastOrders.map((order) => (
+              <OrderCard
+                key={order._id}
+                order={order}
+                openModal={openModal}
+              />
             ))}
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Modal */}
+        <Modal isOpen={isModalOpen} closeModal={closeModal} order={selectedOrder} />
+      </div>
     </div>
   );
 };

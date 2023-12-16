@@ -5,41 +5,42 @@ body, html {
     padding: 0;
   }
   
-  .container {
-    width: 100%;
+  .container3 {
+    width: 80%;
     height: 100%;
     background-color: #f4f4f4;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    margin: 0 auto; /* Add this line */
   }
   
-  .header {
+  .header3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
   }
   
-  .buttons {
+  .buttons3 {
     display: flex;
   }
   
-  .current-orders-list {
+  .current-orders-list3 {
     text-align: center;
   }
   
-  .spinner-container {
+  .spinner-container3 {
     margin: 20px 0;
   }
   
-  .orders-list {
+  .orders-list3 {
     list-style: none;
     padding: 0;
   }
   
-  .order-item {
+  .order-item3 {
     background-color: #fff;
     margin-bottom: 10px;
     padding: 10px;
@@ -47,30 +48,30 @@ body, html {
     border-radius: 4px;
   }
   
-  .order-details {
+  .order-details3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   
-  .icons {
+  .icons3 {
     display: flex;
   }
   
-  .eye-icon,
-  .cancel-icon {
+  .eye-icon3,
+  .cancel-icon3 {
     margin-left: 10px;
     cursor: pointer;
     color: #3498db;
     transition: color 0.3s;
   }
   
-  .eye-icon:hover,
-  .cancel-icon:hover {
+  .eye-icon3:hover,
+  .cancel-icon3:hover {
     color: #2980b9;
   }
   
-  .btn {
+  .btn3 {
     padding: 8px 16px;
     margin-right: 10px;
     border: none;
@@ -79,21 +80,21 @@ body, html {
     font-size: 14px;
   }
   
-  .btn-primary {
+  .btn-primary3 {
     background-color: #14967f;
     color: #fff;
   }
   
-  .btn-secondary {
+  .btn-secondary3 {
     background-color: #333;
     color: #fff;
   }
   
-  .btn-secondary:hover {
+  .btn-secondary3:hover {
     background-color: #555;
   }
   
-  .modal {
+  .modal3 {
     display: none;
     position: fixed;
     z-index: 1;
@@ -106,11 +107,11 @@ body, html {
     background-color: rgba(0, 0, 0, 0.4);
   }
   
-  .modal-open {
+  .modal-open3 {
     display: block;
   }
   
-  .modal-content {
+  .modal-content3 {
     background-color: #fff;
     margin: 10% auto;
     padding: 20px;
@@ -120,15 +121,15 @@ body, html {
     max-width: 600px;
   }
   
-  .close {
+  .close3 {
     color: #555;
     float: right;
     font-size: 20px;
     font-weight: bold;
   }
   
-  .close:hover,
-  .close:focus {
+  .close3:hover,
+  .close3:focus {
     color: #333;
     text-decoration: none;
     cursor: pointer;
@@ -141,7 +142,7 @@ body, html {
   strong {
     color: #333;
   }
-  .header h2 {
+  .header3 h2 {
     text-align: center;
     margin: 0; /* Remove default margin */
 }
@@ -151,7 +152,7 @@ body, html {
     color: #555;
   }
   
-  .btn-secondary {
+  .btn-secondary3 {
     background-color: #14967f;
     color: #fff;
     border: none;
@@ -162,6 +163,6 @@ body, html {
     transition: background-color 0.3s;
   }
   
-  .btn-secondary:hover {
+  .btn-secondary3:hover {
     background-color: #117163;
   }

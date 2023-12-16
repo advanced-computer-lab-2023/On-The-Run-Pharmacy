@@ -17,14 +17,14 @@ const OrderCard = ({ order, openModal, cancelOrder }) => (
         <div>
           <strong>Status:</strong> {order.statuss}
         </div>
-        <div className="icons">
+        <div className="icons3">
           <FontAwesomeIcon
-            className="eye-icon"
+            className="eye-icon3"
             icon={faEye}
             onClick={() => openModal(order._id)}
           />
           <FontAwesomeIcon
-            className="cancel-icon"
+            className="cancel-icon3"
             icon={faTimes}
             onClick={() => cancelOrder(order._id)}
           />
@@ -35,12 +35,12 @@ const OrderCard = ({ order, openModal, cancelOrder }) => (
 );
 
 const Modal = ({ isOpen, closeModal, order, cancelOrder }) => {
-  const modalClassName = isOpen ? 'modal modal-open' : 'modal';
+  const modalClassName = isOpen ? 'modal modal-open3' : 'modal3';
 
   return isOpen ? (
     <div className={modalClassName}>
-      <div className="modal-content">
-        <span className="close" onClick={closeModal}>
+      <div className="modal-content3">
+        <span className="close3" onClick={closeModal}>
           &times;
         </span>
         <h2>Order Details</h2>
@@ -54,7 +54,7 @@ const Modal = ({ isOpen, closeModal, order, cancelOrder }) => {
 
         {/* Add more order details as needed */}
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary3"
           onClick={() => {
             cancelOrder(order._id);
             closeModal(); // Close the modal after canceling the order
@@ -132,7 +132,7 @@ const CurrentOrders = () => {
   }, [username]);
 
   return (
-    <div className="container">
+    <div className="container3" style={{ marginTop: '20px' }}>
       <div
         className="form-group"
         style={{
@@ -173,13 +173,13 @@ const CurrentOrders = () => {
 
       <div className="current-orders-list" style={{ textAlign: 'center' }}>
         {loading ? (
-          <div className="spinner-container">
+          <div className="spinner-container3">
             <BeatLoader color="#14967f" size={15} />
           </div>
         ) : currentOrders.length === 0 ? (
           <p>No current orders found</p>
         ) : (
-          <div className="card-container">
+          <div className="card-container3">
             {currentOrders.map((order) => (
               <OrderCard
                 key={order._id}
