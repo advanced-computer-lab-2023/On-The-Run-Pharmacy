@@ -37,8 +37,7 @@ const SalesReport = () => {
     setTotalSales(filteredSales.reduce((total, sale) => total + (sale.medicineId.price * sale.amount), 0));
   }, [filteredSales]);
 
-  const medicineNames = [...new Set(sales.map(sale => sale.medicineId.name))];
-
+  const medicineNames = [...new Set(sales.map(sale => sale.medicineId ? sale.medicineId.name : ''))];
   return (
 <div className="container">
 <div className="form1-group">
@@ -71,7 +70,7 @@ const SalesReport = () => {
             <li key={sale._id}>
               <div className="prescription1-card">
                 <div className="prescription-header">
-                  <span style={{ textAlign: 'left' }}><strong>Medicine Name: </strong> {sale.medicineId.name}</span>
+                <span style={{ textAlign: 'left' }}><strong>Medicine Name: </strong> {sale.medicineId ? sale.medicineId.name : ''}</span>
                   <span style={{ textAlign: 'left' }}><strong>Price: </strong> {sale.medicineId.price}</span>
                   <span style={{ textAlign: 'left' }}><strong>Amount: </strong> {sale.amount}</span>
                   <span style={{ textAlign: 'left' }}><strong>Date: </strong> {sale.date}</span>
