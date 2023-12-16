@@ -4,7 +4,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { faTimes, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import './CurrentOrders.css';
 
 const OrderCard = ({ order, openModal, cancelOrder }) => (
