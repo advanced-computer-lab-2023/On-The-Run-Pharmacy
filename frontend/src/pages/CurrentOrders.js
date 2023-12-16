@@ -5,7 +5,6 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { faTimes, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import './CurrentOrders.css';
 
 const OrderCard = ({ order, openModal, cancelOrder }) => (
   <div className="card order-card" key={order._id}>
