@@ -37,6 +37,7 @@ import PharmacistSettings from './components/PharmacistSettings';
 import PatientChatPage from './pages/PatientChatPage';
 import PharmacistChatPage from './pages/PharmacistChatPage';
 import NotificationsPage from './pages/NotificationsPage';
+import PatientSettings from './pages/PatientSettings';
 
 
 function App() {
@@ -132,6 +133,12 @@ function App() {
         />
 
           <Route
+            path="/patientSettings/:username"
+            element={user && user.role === 'patient' ? <PatientSettings /> : <Navigate to="/login" />}
+          />
+
+
+<Route
             path="/adminSettings/:username"
             element={user && user.role === 'admin' ? <AdminSettings /> : <Navigate to="/login" />}
             />
@@ -148,7 +155,7 @@ function App() {
 
 
 
-          <Route path="/" element={<UserSelection />} />
+          <Route path="/" element={<Login/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register/patient" element={<PatientRegistration />} />
           <Route path="/register/pharmacist" element={<PharmaRegistration />} />

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import AdminForm from '../components/AdminForm';
 import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
 
 const AdminRegistrationForm = () => {
 
@@ -12,7 +13,7 @@ const AdminRegistrationForm = () => {
   const [activeAdminId, setActiveAdminId] = useState(null);
   const [admin, setAdmin] = useState("");
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   const fetchAdmins = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/getAdmins`, {
@@ -51,7 +52,11 @@ const AdminRegistrationForm = () => {
   };
 
   return (
+    
+    
     <div className="container">
+      <div className="form1-group">
+      <button type="submit" onClick={() => navigate(-1)}>Back</button>                </div>
       <div className="prescriptions-list">
         <h2 style={{ textAlign: 'left' }}>
           Admins
@@ -127,6 +132,7 @@ const AdminRegistrationForm = () => {
       </Modal>
 
     </div>
+    
 
   )
 }

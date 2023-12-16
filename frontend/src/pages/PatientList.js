@@ -6,13 +6,14 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import PatientDetailsModal from '../components/PatientDetailsModal'
+import { useNavigate } from 'react-router-dom';
 
 //import './MedicineList.css'; // Import your CSS file for styling
 
 const PatientListPage = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const navigate=useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [patient, setPatient] = useState("");
   const [activePatinetId, setActivePatientId] = useState(null);
@@ -54,6 +55,8 @@ const PatientListPage = () => {
 
   return (
     <div className="container">
+     <div className="form1-group">
+      <button type="submit" onClick={() => navigate(-1)}>Back</button>                </div>  
       <div className="patients-list">
       <h2 style={{ textAlign: 'left' }}>All Patients</h2>
 

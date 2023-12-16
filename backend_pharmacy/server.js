@@ -7,7 +7,7 @@ const {createPatientP,getPatientsP,deletePatientP,addToCart,getPatientCart,delet
 const {createRequest,getRequests,rejectrequest,acceptrequest}=require("./controllers/requestsController")
 const{ addMedicine, getMedicine, deleteMedicine, updateMedicine ,getMedicines,getMedicines2,archiveMedicine,unarchiveMedicine,getAlternativeMedicines,getOutOfStockMedicines,updateMedQuantity,getMedicinesWithSales}=require("./controllers/MedicineController")
 const{createAdmin,getAdmin,getAdmins,getAdminByUsername,deleteAdmin, updatePasswordAdmin}=require("./controllers/adminController")
-const{ createPharmacist, getPharmacists, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist,getPharmaWallet }=require("./controllers/PharmacistController")
+const{ createPharmacist, getPharmacists,getPharmacists2, deletepharmacist,createPharmacist1,getPharmacistByUsername, updatePasswordPharmacist,getPharmaWallet }=require("./controllers/PharmacistController")
 const{login,logout, forgetPassword,resetPassword}=require("./controllers/userController")
 const{requireAuthPharmacist,requireAuthPatient,requireAuthAdmin}=require("./Middleware/authMiddleware")
 const{createSales,getSales}=require("./controllers/SalesController")
@@ -64,6 +64,7 @@ app.get("/getPatients",requireAuthAdmin,getPatientsP)
 app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
 
 app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
+app.get("/getPharmacists2",getPharmacists2)
 app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
 app.post("/addToCart",requireAuthPatient,addToCart)
 
