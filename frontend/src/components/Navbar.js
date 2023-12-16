@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { FaShoppingCart } from 'react-icons/fa';
@@ -11,7 +12,16 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 const Navbar = () => {
   const { logout } = useLogout()
   const { user } = useAuthContext()
-
+  const [patientUsername, setPatientUsername] = useState('');
+  const [doctorUsername, setDoctorUsername] = useState('');
+  
+  const handlePatientInputChange = (e) => {
+    setPatientUsername(e.target.value);
+  };
+  
+  const handleDoctorInputChange = (e) => {
+    setDoctorUsername(e.target.value);
+  };
 
   const handleClick = () => {
     logout()
@@ -30,48 +40,83 @@ return (
         </svg>
         <h1 style={{ fontSize: '25px', fontWeight: '600', color: 'White', marginBottom: '10px' }}>On-The-Run</h1>
       </Link>
+      {user && (
+          <div className="chat-container">
+            <label style={{ marginBottom: '10px' }}>
+              Patient's Username:
+              <input
+                type="text"
+                value={patientUsername}
+                onChange={handlePatientInputChange}
+                style={{ width: '100px' }}
+              />
+            </label>
+            <button
+              style={{ marginLeft: '10px', marginBottom: '10px', padding: '5px 10px' }}
+              onClick={() => console.log(`Start chat with ${patientUsername}`)}
+            >
+              Start Chat with Patient
+            </button>
+
+            <label style={{ marginBottom: '10px' }}>
+              Doctor's Username:
+              <input
+                type="text"
+                value={doctorUsername}
+                onChange={handleDoctorInputChange}
+                style={{ width: '100px' }}
+              />
+            </label>
+            <button
+              style={{ marginLeft: '10px', padding: '5px 10px' }}
+              onClick={() => console.log(`Start chat with ${doctorUsername}`)}
+            >
+              Start Chat with Doctor
+            </button>
+          </div>
+        )}
 
     </div>
     <div className="right-container">
-      {user && (
-        <div>
-          <FontAwesomeIcon icon={faUser} style={{ color: 'White', stroke: 'white', strokeWidth: '2' }} />
-          <h3> {user.user}</h3>
-          {user.role === 'pharmacist' && (
-            <Link to={`/doctorSettings/${user.user}`}>
-              <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+        {user && (
+          <div>
+            <FontAwesomeIcon icon={faUser} style={{ color: 'White', stroke: 'white', strokeWidth: '2' }} />
+            <h3> {user.user}</h3>
+            {user.role === 'pharmacist' && (
+              <Link to={`/PharmacistSettings/${user.user}`}>
+                <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+              </Link>
+            )}
+            {user.role === 'patient' && (
+              <Link to={`/patientSettings/${user.user}`}>
+                <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+              </Link>
+            )}
+            {user.role === 'admin' && (
+              <Link to={`/adminSettings/${user.user}`}>
+                <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+              </Link>
+            )}
+            <Link to={`/notifications/${user.user}`} className="notification-icon">
+              <FaBell />
             </Link>
-          )}
-          {user.role === 'patient' && (
-            <Link to={`/patientSettings/${user.user}`}>
-              <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+            <button onClick={handleClick}>Log out</button>
+          </div>
+        )}
+        {!user && (
+          <div>
+            <Link to="/register/pharmacist" className="signup-link">
+              Signup as Pharmacist
             </Link>
-          )}
-           {user.role === 'admin' && (
-            <Link to={`/adminSettings/${user.user}`}>
-              <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+            <Link to="/register/patient" className="signup-link">
+              Signup as Patient
             </Link>
-          )}
-          <Link to={`/notifications/${user.user}`} className="notification-icon">
-            <FaBell />
-          </Link>
-          <button onClick={handleClick}>Log out</button>
-        </div>
-      )}
-      {!user && (
-        <div>
-          <Link to="/register/pharmacist" className="signup-link">
-            Signup as Pharmacist
-          </Link>
-          <Link to="/register/patient" className="signup-link">
-            Signup as Patient
-          </Link>
-        </div>
-      )}
-    </div>
-
-  </header>
-);
+          </div>
+        )}
+ 
+      </div>
+    </header>
+  );
 };
 
-export default Navbar
+export default Navbar 

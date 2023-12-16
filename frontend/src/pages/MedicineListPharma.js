@@ -117,22 +117,6 @@ const MedicineListPagep = () => {
       <div style={{ position: 'absolute', top: 0, right: 0 }}>
         <h2>Wallet: {wallet}</h2>
       </div>
-       {/* Include a textbox for the doctor's username */}
-       <label>
-          Patient's Username:
-          <input type="text" value={doctorUsername} onChange={(e) => setDoctorUsername(e.target.value)} />
-        </label>
-
-        {/* Update the Link to include patient and doctor usernames */}
-        <Link to={`/chat/${username}/${doctorUsername}`}>Start Chat</Link>
-        <label>
-          Doctor's Username:
-          <input type="text" value={doctor2Username} onChange={(e) => setDoctor2Username(e.target.value)} />
-        </label>
-
-        {/* Update the Link to include both patient and doctor usernames */}
-        <Link to={`/chat/${username}/${doctor2Username}`}>Start Chat</Link>
-       <Link to={`/changePharmacistPassword/${username}`}>Change My password</Link>
        <Link to={`/Notifications`}>Notifications</Link>
        <Link to={`/sales`}>View Sales Report</Link>
        
