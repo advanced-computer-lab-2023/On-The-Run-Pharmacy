@@ -116,5 +116,21 @@ const cancelOrder = async (req, res) => {
       return res.status(500).json({ error: 'An error occurred while getting current orders' });
     }
   };
+  const getOrderDetails = async (req, res) => {
+    const { orderId } = req.params;
+  
+    try {
+      const orderDetails = await Order.findById(orderId);
+  
+      if (!orderDetails) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+  
+      res.status(200).json(orderDetails);
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
 
-module.exports = {createOrder,cancelOrder,getPatientOrders,getPastOrders,getCurrentOrders};
+module.exports = {createOrder,cancelOrder,getPatientOrders,getPastOrders,getOrderDetails,getCurrentOrders};

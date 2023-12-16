@@ -1,12 +1,13 @@
 // PatientChatPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const PatientChatPage = () => {
   const { username, doctor } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const navigate = useNavigate(); // Add the useNavigate hook
 
   const fetchMessages = async () => {
     try {
@@ -70,34 +71,48 @@ const PatientChatPage = () => {
     }
   };
 
+  
   return (
-    <div style={chatContainerStyle}>
-      <div style={chatHeaderStyle}>
-        <h1>Chat with {doctor}</h1>
-      </div>
-      <div id="messageContainer" style={messageContainerStyle}>
-        {messages[0] && messages[0].messages && messages[0].messages.map((message, index) => (
-          <div key={`message-${index}`} style={messageStyle(message.sender === 'patient')}>
-            <span style={messageSenderStyle}>
-              {message.sender === 'patient' ? 'You' : doctor}
-            </span>
-            <span style={messageContentStyle}>{message.content}</span>
-            <span style={timestampStyle}>{formatTimestamp(message.timestamp)}</span>
-          </div>
-        ))}
-      </div>
-      <div style={inputContainerStyle}>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={inputStyle}
-          placeholder="Type your message..."
-        />
-        <button onClick={handleSendMessage} style={buttonStyle}>
-          Send
-        </button>
+    <div style={{ display: 'block' }}>
+    {/* Back button on the left */}
+    <button 
+  className="btn btn-primary mb-1" 
+  style={{ backgroundColor: '#14967f', borderColor: '#14967f',transition: 'none' }} 
+  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#14967f'} 
+  onClick={() => navigate(-1)}
+>
+Back
+</button> 
+
+      <div style={chatContainerStyle}>
+        <div style={chatHeaderStyle}>
+          <h1>Chat with {doctor}</h1>
+        </div>
+        <div id="messageContainer" style={messageContainerStyle}>
+          {messages[0] && messages[0].messages && messages[0].messages.map((message, index) => (
+            <div key={`message-${index}`} style={messageStyle(message.sender === 'patient')}>
+              <span style={messageSenderStyle}>
+                {message.sender === 'patient' ? 'You' : doctor}
+              </span>
+              <span style={messageContentStyle}>{message.content}</span>
+              <span style={timestampStyle}>{formatTimestamp(message.timestamp)}</span>
+            </div>
+          ))}
+        </div>
+        <div style={inputContainerStyle}>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={inputStyle}
+            placeholder="Type your message..."
+          />
+          <button onClick={handleSendMessage} style={buttonStyle}>
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
