@@ -25,6 +25,7 @@ const MedicineModalPatient = ({ setOpenModal, medicineId }) => {
         
               if (response.status === 200) {
                 console.log('Medicine added to cart successfully');
+                alert("Medicine added to cart successfully");
               }
             } catch (error) {
               console.error('Error adding medicine to cart:', error);
