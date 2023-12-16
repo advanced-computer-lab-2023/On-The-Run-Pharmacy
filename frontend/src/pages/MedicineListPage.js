@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faArchive, faEye, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+import MedicineModalPatient from '../components/MedicineModalPatient';
+
+
 
 import './MedicineList.css'; // Import your CSS file for styling
 
@@ -13,6 +18,10 @@ const MedicineListPage = () => {
   const { username } = useParams();
   const [wallet, setWallet] = useState(null);
   const [doctorUsername, setDoctorUsername] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const [currentMedicineId, setCurrentMedicineId] = useState(null);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+
 
   const fetchMedicines = async () => {
     try {
@@ -81,37 +90,28 @@ const MedicineListPage = () => {
     fetchMedicines();
   };
 
-  const addToCart = async (medicineId, amount) => {
-    try {
-      amount = parseInt(amount, 10);
-      const response = await axios.post(
-        `http://localhost:4000/addToCart`,
-        {
-          username,
-          medicineId,
-          amount,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (response.status === 200) {
-        console.log('Medicine added to cart successfully');
-      }
-    } catch (error) {
-      console.error('Error adding medicine to cart:', error);
-    }
+  const openMedicineModal = (medicineId) => {
+    console.log(medicineId);
+    setCurrentMedicineId(medicineId);
+    setOpenModal(true);
   };
+
 
   return (
     <div className="medicine-list-container">
       <div style={{ padding: '20px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 0, right: 0 }}>     
+        <div style={{ position: 'absolute', top: 0, right: 0 }}>  
+        <FontAwesomeIcon
+            className="filter-icon"
+            icon={faFilter}
+            onClick={() => setIsFilterVisible(!isFilterVisible)}
+            style={{ color: '#14967f', marginRight: '50px', cursor: 'pointer' , fontSize:"30px" , marginLeft:"-460px" , marginTop:"50px"}}
+          />   
         </div>
       </div>
 
-      <h1>All Medicines</h1>
+      <h1 style={{fontSize:"35px"}}>All Medicines</h1>
+      {isFilterVisible && (
       <div className="filter-container">
         <input
           type="text"
@@ -125,7 +125,9 @@ const MedicineListPage = () => {
           value={medicalUseFilter}
           onChange={handleMedicalUseFilterChange}
         />
-<button style={{ backgroundColor: '#14967f', color: 'white' }} onClick={resetFilters}>Reset Filters</button>          </div>
+<button style={{ backgroundColor: '#14967f', color: 'white' }} onClick={resetFilters}>Reset Filters</button>        
+  </div>
+  )}
 
       {loading ? (
   <p>Loading...</p>
@@ -134,26 +136,45 @@ const MedicineListPage = () => {
     {medicines.map((m, index) => (
       <div key={m._id} className="col-lg-3 col-md-6 mb-4">
         <div className="card h-100 medicine-card custom-card-height">
-          <img src={m.pictureUrl} className="card-img-top medicine-img" alt={m.name} />
           <div className="card-body">
-            <h5 className="card-title">{m.name}</h5>
+          <FontAwesomeIcon
+                  className="View-icon"
+                  icon={faEye}
+                  style={{
+                    color: '#14967f',
+                    cursor: 'pointer',
+                    position: 'relative',
+                    top: '-2px',
+                    right: '-65px',
+                    fontSize : "20px", // Adjust the spacing
+                  }}
+                  onClick={() => openMedicineModal(m._id)}
+                />
+            <h5 className="card-title" style={{fontSize:"20px" , fontWeight:"bold"}}>{m.name}</h5>
             <p className="card-text">
+              
               <strong>Price: $</strong> {m.price}<br />
-              <strong>Description:</strong> {m.description}<br />
               <strong>Medical Use:</strong> {m.medicalUse}<br />
-            </p>
-            <div className="medicine-add-to-cart">
-              <input type="number" min="1" defaultValue="1" id={`amount-${m._id}`}className="amount-input"  />
-              <button style={{ backgroundColor: '#14967f', color: 'white' }}  onClick={() => addToCart(m._id, document.getElementById(`amount-${m._id}`).value)}>
-                Add to cart
-              </button>
-              {/* Alternative Medicines button */}
-              <Link to={`/alternativeMedicines/${m._id}`}><p className="custom-text-color">Alternative Medicines</p></Link>
-            </div>
+
+
+              </p>
+
+                <img
+                            src={m.pictureUrl}
+                            alt={m.name}
+                            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                        />
           </div>
         </div>
       </div>
     ))}
+      {/* Medicine Details Modal */}
+      {openModal && (
+        <MedicineModalPatient
+          setOpenModal={setOpenModal}
+          medicineId={currentMedicineId}
+        />
+      )}
   </div>
 ) : (
   <p>No Medicines found.</p>

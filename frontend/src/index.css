@@ -631,51 +631,34 @@ h4 {
 .filter-bar .time-filter {
   flex: 1;
 }
-
-.prescription1-card {
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  border-radius: 5px;
-  width: 120%;
+.Container {
+  position: relative;
+  /* Other styles */
 }
 
-.prescriptions1-list, .prescription-form {
-  width: 90%;
-}
-
-.prescriptions1-list ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.prescriptions1-list li {
-  margin-bottom: 20px;
-}
-.form1-group {
+.next-button {
   position: absolute;
-  top: 2;
-  left: 0;
-}
-.form1-group button {
-  background-color: #14967f;
-}
-
-.medicine-card {
-  height: 180px; /* Adjust as needed */
-}
-
-.medicine-img {
-  height: 120px; /* Adjust as needed */
-  object-fit: cover; /* This will ensure the image covers the available space without stretching */
-}
-.amount-input {
-  width: 50px; /* Adjust as needed */
-}
-.custom-card-height {
-  width: 110%; /* Adjust as needed */
-  height: 250px; /* Adjust as needed */
-}
-.custom-text-color {
+  right: 20px;
+  bottom: 20px;
+  background-color: white;
   color: #14967f;
+}
+.back-button {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  background-color: white;
+  color: blue;
+}
+.back-button:hover {
+  background-color: white;
+  color: blue;
+}
+.next-button:hover{
+  background-color: #14967f;
+  color: white;
+}
+.delete-icon:hover{
+color:crimson;
+cursor: pointer;
 }

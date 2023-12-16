@@ -75,11 +75,12 @@ const EditMedicinePage = () => {
             value={formData.description}
             onChange={handleChange}
             required
+            style={{ width: '300px', height: '30px', padding: '8px', fontSize: '14px' }}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="price">Price:</label>
+          <label htmlFor="price">Priceee:</label>
           <input
             type="number"
             id="price"

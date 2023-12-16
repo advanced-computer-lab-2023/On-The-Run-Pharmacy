@@ -2,15 +2,13 @@ import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { FaShoppingCart } from 'react-icons/fa';
-import { FaBell } from 'react-icons/fa';
+import { FaBell ,FaTimes} from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { faChartSimple } from '@fortawesome/free-solid-svg-icons';
 
-
-//aaaaa
-import { FaComments } from 'react-icons/fa';
+import { FaComments ,FaUser,FaUserMd,FaList} from 'react-icons/fa';
 import { FaWallet } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';  // Import axio
@@ -23,6 +21,7 @@ const Navbar = () => {
   const { user } = useAuthContext()
   const navigate = useNavigate();
   const [wallet, setWallet] = useState(null);
+  const [walletPharma, setWalletPharma] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showPatientModal, setShowPatientModal] = useState(false);
   const [showDoctorModal, setShowDoctorModal] = useState(false);
@@ -32,7 +31,18 @@ const Navbar = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [pharmacists, setPharmacists] = useState([]);
   const [selectedPharmacist, setSelectedPharmacist] = useState(null);
-  
+  const [showOrdersTooltip, setShowOrdersTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [showChatTooltip, setShowChatTooltip] = useState(false);
+  const [chatTooltipPosition, setChatTooltipPosition] = useState({ x: 0, y: 0 });
+  const [showChatTooltipP, setShowChatTooltipP] = useState(false);
+  const [chatTooltipPositionP, setChatTooltipPositionP] = useState({ x: 0, y: 0 });
+  const [showChatTooltipD, setShowChatTooltipD] = useState(false);
+  const [chatTooltipPositionD, setChatTooltipPositionD] = useState({ x: 0, y: 0 });
+  const [showSales, setShowSales] = useState(false);
+  const [SalesPosition, setSalesPosition] = useState({ x: 0, y: 0 });
+
+
   const handleOpenModal = async () => {
     // Fetch pharmacists here using your getPharmacists function
     try {
@@ -103,6 +113,73 @@ const Navbar = () => {
     logout()
     
   }
+
+  const handleHoverOrders = (e) => {
+    const tooltipX = e.clientX + 10; // Adjust the values as needed
+    const tooltipY = e.clientY - 20; // Adjust the values as needed
+    setTooltipPosition({ x: tooltipX, y: tooltipY });
+    setShowOrdersTooltip(true);
+  };
+
+  const handleLeaveOrders = () => {
+    setShowOrdersTooltip(false);
+  };
+
+  const handleHoverChat = (e) => {
+    const tooltipX = e.clientX + 10; // Adjust the values as needed
+    const tooltipY = e.clientY - 20; // Adjust the values as needed
+    setChatTooltipPosition({ x: tooltipX, y: tooltipY });
+    setShowChatTooltip(true);
+  };
+
+  const handleLeaveChat = () => {
+    setShowChatTooltip(false);
+  };
+
+  const handleHoverChatP = (e) => {
+    const tooltipX = e.clientX + 10; // Adjust the values as needed
+    const tooltipY = e.clientY - 20; // Adjust the values as needed
+    setChatTooltipPositionP({ x: tooltipX, y: tooltipY });
+    setShowChatTooltipP(true);
+  };
+
+  const handleLeaveChatP = () => {
+    setShowChatTooltipP(false);
+  };
+  const handleHoverChatD = (e) => {
+    const tooltipX = e.clientX + 10; // Adjust the values as needed
+    const tooltipY = e.clientY - 20; // Adjust the values as needed
+    setChatTooltipPositionD({ x: tooltipX, y: tooltipY });
+    setShowChatTooltipD(true);
+  };
+
+  const handleLeaveChatD = () => {
+    setShowChatTooltipD(false);
+  };
+
+  const handleSales = (e) => {
+    const tooltipX = e.clientX + 10; // Adjust the values as needed
+    const tooltipY = e.clientY - 20; // Adjust the values as needed
+    setSalesPosition({ x: tooltipX, y: tooltipY });
+    setShowSales(true);
+  };
+
+  const handleLeaveSales = () => {
+    setShowSales(false);
+  };
+
+  const fetchWalletpharma = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/getPharmaWallet/${user.user}`,{
+        withCredentials: true
+      });
+      setWalletPharma(response.data);
+      console.log("pharmawallet",response.data);
+    } catch (error) {
+      console.error('Error fetching wallet:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchWallet = async () => {
       try {
@@ -118,12 +195,15 @@ const Navbar = () => {
     if (user && user.role === 'patient') {
       fetchWallet();  // Fetch wallet only for patient users
     }
-  }, [user]); 
+    else if(user && user.role ==='pharmacist') {
+      fetchWalletpharma();
+    }
+  },[user]); 
 return (
   <header>
     <div className="left-container">
       <Link to="/" style={{ display: 'flex', alignItems: 'flex-end' }}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style={{ height: '50px', marginRight: '5px', marginBottom: '10px' }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style={{ height: '50px', marginRight: '0px', marginBottom: '10px' }}>
           <title>doctor</title>
           <g id="doctor">
             <path fill="#FFFFFF" d="M21.14,14A6.45,6.45,0,0,0,23,9.5V4.43A2.43,2.43,0,0,0,20.57,2H12.43A2.43,2.43,0,0,0,10,4.43V9.5A6.49,6.49,0,0,0,11.82,14h-.09A8.73,8.73,0,0,0,3,22.73v3.74A3.53,3.53,0,0,0,6.53,30H25.47A3.53,3.53,0,0,0,29,26.47V22.73A8.74,8.74,0,0,0,21.14,14ZM12.43,4h8.14a.43.43,0,0,1,.43.43V8H12V4.43A.43.43,0,0,1,12.43,4Zm-.38,6H21a4.48,4.48,0,0,1-8.9,0ZM11,21a1,1,0,1,1-1,1A1,1,0,0,1,11,21Zm16,5.47A1.54,1.54,0,0,1,25.47,28H6.53A1.54,1.54,0,0,1,5,26.47V22.73a6.75,6.75,0,0,1,5-6.5v2.95a3,3,0,1,0,2,0V16h8v3.18A3,3,0,0,0,18,22v2a1,1,0,0,0,2,0V22a1,1,0,0,1,2,0v2a1,1,0,0,0,2,0V22a3,3,0,0,0-2-2.82V16.23a6.75,6.75,0,0,1,5,6.5ZM14,6a1,1,0,0,1,1-1h3a1,1,0,0,1,0,2H15A1,1,0,0,1,14,6Z" />
@@ -133,63 +213,99 @@ return (
       </Link>
 
     </div>
-    <div className="right-container">
+    <div className="right-container" >
 
-    {user.role === 'pharmacist' && (
- <div>
+    {user && user.role === 'pharmacist' && (
+ <div style={{width:"520px", marginRight:"-30px"}}>
    {/* Button to start chat with a doctor */}
-   <button onClick={handleOpenDoctorModal}>
-                  Start Chat with Doctor
+   <button onClick={handleOpenDoctorModal}
+   style={{ width: '90px', height: '50px', display: 'flex', justifyContent: 'space-between' }} onMouseEnter={handleHoverChatD} onMouseLeave={handleLeaveChatD}>
+   <FaComments style={{ fontSize: '2rem' }} /><FaUserMd style={{ fontSize: '1.5rem', marginTop: '10px' , marginLeft : "1.5px" }} />
+   {showChatTooltipD && (
+            <div style={{ position: 'absolute', top: chatTooltipPositionD.y, left: chatTooltipPositionD.x, background: 'rgba(0, 0, 0, 0.8)', color: 'white', padding: '5px', borderRadius: '5px' }}>
+              Chat with a Doctor
+            </div>
+          )}
                 </button>
                 {/* Button to start chat with a patient */}
-                <button onClick={handleOpenPatientModal}>
-                  Start Chat with Patient
+                <button onClick={handleOpenPatientModal} 
+                style={{ width: '90px', height: '50px', display: 'flex', justifyContent: 'space-between' }} onMouseEnter={handleHoverChatP} onMouseLeave={handleLeaveChatP}>
+                <FaComments style={{ fontSize: '2rem' }} />
+                <FaUser style={{ fontSize: '1.5rem', marginTop: '10px' , marginLeft : "1.5px" }} />
+                {showChatTooltipP && (
+            <div style={{ position: 'absolute', top: chatTooltipPositionP.y, left: chatTooltipPositionP.x, background: 'rgba(0, 0, 0, 0.8)', color: 'white', padding: '5px', borderRadius: '5px' }}>
+              Chat with a Patient
+            </div>
+          )}
                 </button>
-              </div>
+                  </div>
           )}
 
       {user && (
         <div>
-          <FontAwesomeIcon icon={faUser} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft:"20px" }} />
-          <h3> {user.user}</h3>
+ {/* Wallet icon with the wallet amount */}
+
           {user.role === 'pharmacist' && (
-            <Link to={`/doctorSettings/${user.user}`}>
-              <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+            <div>
+            
+            <FaWallet style={{ color: 'White', marginLeft: '10px', marginRight:'-55px'}} />
+
+            {/* Display the wallet amount (replace '100' with the actual wallet amount) */}
+            <span style={{ color: 'White', marginLeft: '-5px'  , marginRight:"10px"}}>${walletPharma}</span>
+      
+      
+          <FontAwesomeIcon icon={faUser} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft:"20px" }} />
+                <h3> {user.user}</h3>
+
+            <Link to={`/PharmacistSettings/${user.user}`}>
+              <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '0px' }} />
             </Link>
+            </div>
           )}
         {user.role === 'patient' && (
   <div>
   <div style={{ display: 'flex', alignItems: 'center' }}>
-    <button onClick={handleOpenModal}>
+    <button onClick={handleOpenModal} onMouseEnter={handleHoverChat} onMouseLeave={handleLeaveChat}>
       {/* Chat icon */}
-      <FaComments style={{ color: 'White', marginLeft: '0' }} />
+      <FaComments style={{ color: 'White', marginLeft: '0' , fontSize:"20px" }} />
+      {showChatTooltip && (
+            <div style={{ position: 'absolute', top: chatTooltipPosition.y, left: chatTooltipPosition.x, background: 'rgba(0, 0, 0, 0.8)', color: 'white', padding: '5px', borderRadius: '5px' }}>
+              Chat with a Pharmacist
+            </div>
+          )}
     </button>
   </div>
     
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Link to={`/CurrentOrders/${user.user}`}>
-        {/* Button for Orders page */}
-        <button style={{ marginLeft: '0', border: 'none', background: 'none' }}>My Orders</button>
-      </Link>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , marginRight:"325px" , marginLeft:"-10px" }}>
+    <Link to={`/CurrentOrders/${user.user}`} onMouseEnter={handleHoverOrders} onMouseLeave={handleLeaveOrders}>
+    {/* Icon for Orders page */}
+    <FaList style={{ color: 'White', fontSize: '3.0rem', marginRight: '5px' , marginLeft:"10px"}} />
+    {showOrdersTooltip && (
+            <div style={{ position: 'absolute', top: tooltipPosition.y, left: tooltipPosition.x, background: 'rgba(0, 0, 0, 0.8)', color: 'white', padding: '5px', borderRadius: '5px' }}>
+              My Orders
+            </div>
+          )}
+  </Link>
     </div>
 
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Link to="/wallet"> {/* Update the route accordingly */}
-        {/* Wallet icon with the wallet amount */}
-        <FaWallet style={{ color: 'White', marginLeft: '10px' }} />
-        {/* Display the wallet amount (replace '100' with the actual wallet amount) */}
-        <span style={{ color: 'White', marginLeft: '5px' }}>${wallet}</span>
-      </Link>
-    </div>
+  {/* Wallet icon with the wallet amount */}
+  <FaWallet style={{ color: 'White', marginLeft: '10px', marginRight:'-55px'}} />
 
-    <Link to={`/cart/${user.user}`}>
-      {/* Icon for Cart */}
-      <FaShoppingCart style={{ color: 'White', marginLeft: '10px' }} />
-    </Link>
+      {/* Display the wallet amount (replace '100' with the actual wallet amount) */}
+      <span style={{ color: 'White', marginLeft: '-5px'  , marginRight:"10px"}}>${wallet}</span>
+
+
+    <FontAwesomeIcon icon={faUser} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft:"20px" }} />
+          <h3> {user.user}</h3>
 
     <Link to={`/patientSettings/${user.user}`}>
       {/* Settings icon for patient */}
       <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+    </Link>
+    
+    <Link to={`/cart/${user.user}`}>
+      {/* Icon for Cart */}
+      <FaShoppingCart style={{ color: 'White', marginLeft: '10px' }} />
     </Link>
   </div>
 )}
@@ -198,14 +314,22 @@ return (
               <FontAwesomeIcon icon={faCog} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
             </Link>
           )}
-          { (user.role === 'pharmacist' || user.role === 'patient') && 
+          { (user.role === 'pharmacist') && 
+
   <Link to={`/Notifications`} className="notification-icon">
     <FaBell />
   </Link>
+
+  
 }
 
 {(user.role === 'admin'|| user.role ==='pharmacist') && (
-  <Link to="/sales"> <FontAwesomeIcon icon={faChartSimple} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+  <Link to="/sales"> <FontAwesomeIcon onMouseEnter={handleSales}  onMouseLeave={handleLeaveSales}  icon={faChartSimple} style={{ color: 'White', stroke: 'white', strokeWidth: '2', marginLeft: '10px' }} />
+    {showSales && (
+            <div style={{ position: 'absolute', top: SalesPosition.y, left: SalesPosition.x, background: 'rgba(0, 0, 0, 0.8)', color: 'white', padding: '5px', borderRadius: '5px' }}>
+              Show Sales Report
+            </div>
+          )}
   </Link>
 )}
 
@@ -225,7 +349,7 @@ return (
     </div>
 {/* ... (modal code) */}
 <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Choose a Pharmacist</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -253,7 +377,7 @@ return (
 
 {/* ... (patient modal code) */}
 <Modal show={showPatientModal} onHide={handleClosePatientModal}>
-  <Modal.Header closeButton>
+  <Modal.Header>
     <Modal.Title>Choose a Patient</Modal.Title>
   </Modal.Header>
   <Modal.Body>
@@ -281,7 +405,7 @@ return (
 
 {/* ... (doctor modal code) */}
 <Modal show={showDoctorModal} onHide={handleCloseDoctorModal}>
-  <Modal.Header closeButton>
+  <Modal.Header>
     <Modal.Title>Choose a Doctor</Modal.Title>
   </Modal.Header>
   <Modal.Body>
@@ -299,7 +423,7 @@ return (
   </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCloseDoctorModal}>
-      Close
+    <FaTimes style={{ marginRight: '5px' }} /> Close
     </Button>
     <Button variant="primary" onClick={() => { handleStartChatWithDoctor(); handleCloseDoctorModal(); }} disabled={!selectedDoctor}>
       Start Chat
