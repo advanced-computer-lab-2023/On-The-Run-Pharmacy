@@ -95,8 +95,8 @@ Here are some screenshots that showcase how On-The-Run-Pharmacy looks and works:
 ![Screenshot 4](pharmacistreg.png)
 *Pharmacist registeration page*
 
-![Screenshot 5](screenshots/chat.png)
-*Chatting with patients*
+![Screenshot 5](viewmeds.png)
+*patient viewing medicines*
 
 ![Screenshot 6](screenshots/patientPres.png)
 *Patient viewing his prescription*
