@@ -83,10 +83,10 @@ If you're contributing to the project, please follow these conventions to mainta
 
 Here are some screenshots that showcase how On-The-Run-Pharmacy looks and works:
 
-![Screenshot 1](screenshots/AdminDashboard.png)
-*Admin Dashboard*
+![Screenshot 1](addadmin.png)
+*Add Admin page*
 
-![Screenshot 2](screenshots/deletePatient.png)
+![Screenshot 2](checkout.png)
 *Admin viewing and deleting patients page*
 
 ![Screenshot 3](screenshots/requests.png)
