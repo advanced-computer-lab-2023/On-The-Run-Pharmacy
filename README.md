@@ -98,8 +98,8 @@ Here are some screenshots that showcase how On-The-Run-Pharmacy looks and works:
 ![Screenshot 5](viewmeds.png)
 *patient viewing medicines*
 
-![Screenshot 6](screenshots/patientPres.png)
-*Patient viewing his prescription*
+![Screenshot 6](viewreq.png)
+*Admin viewing pharmacists requests*
 
 
 ## Tech/Framework Used
