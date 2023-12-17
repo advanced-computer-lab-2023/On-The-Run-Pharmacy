@@ -87,10 +87,10 @@ Here are some screenshots that showcase how On-The-Run-Pharmacy looks and works:
 *Add Admin page*
 
 ![Screenshot 2](checkout.png)
-*Admin viewing and deleting patients page*
+*patient viewing the checkout page*
 
-![Screenshot 3](screenshots/requests.png)
-*Admin viewing doctor requests*
+![Screenshot 3](currentorders.png)
+*patient viewing his current orders*
 
 ![Screenshot 4](screenshots/DoctorPatients.png)
 *Doctor viewing his patients and can videoCall them and chat*
