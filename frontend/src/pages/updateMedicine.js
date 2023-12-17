@@ -92,7 +92,27 @@ const handleSubmit = async (event) => {
                            fontSize: '14px',
                            margin: '4px 2px',
                            cursor: 'pointer'}}>Update Medicine</button>
+
+<button
+        className="btn btn-primary mb-1"
+        style={{
+          backgroundColor: '#14967f',
+          borderColor: '#14967f',
+          transition: 'none',
+          cursor: 'pointer',
+          position: 'absolute',
+          top: '420px', // Adjust this value based on your navbar height
+          left: '724px',
+          marginTop: '10px', // Added margin-top
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </button>
         </form>
+
       </div>
     );
   };
