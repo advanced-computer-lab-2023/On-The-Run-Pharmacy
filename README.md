@@ -83,23 +83,23 @@ If you're contributing to the project, please follow these conventions to mainta
 
 Here are some screenshots that showcase how On-The-Run-Pharmacy looks and works:
 
-![Screenshot 1](screenshots/AdminDashboard.png)
-*Admin Dashboard*
+![Screenshot 1](addadmin.png)
+*Add Admin page*
 
-![Screenshot 2](screenshots/deletePatient.png)
-*Admin viewing and deleting patients page*
+![Screenshot 2](checkout.png)
+*patient viewing the checkout page*
 
-![Screenshot 3](screenshots/requests.png)
-*Admin viewing doctor requests*
+![Screenshot 3](currentorders.png)
+*patient viewing his current orders*
 
-![Screenshot 4](screenshots/DoctorPatients.png)
-*Doctor viewing his patients and can videoCall them and chat*
+![Screenshot 4](pharmacistreg.png)
+*Pharmacist registeration page*
 
-![Screenshot 5](screenshots/chat.png)
-*Chatting with patients*
+![Screenshot 5](viewmeds.png)
+*patient viewing medicines*
 
-![Screenshot 6](screenshots/patientPres.png)
-*Patient viewing his prescription*
+![Screenshot 6](viewreq.png)
+*Admin viewing pharmacists requests*
 
 
 ## Tech/Framework Used

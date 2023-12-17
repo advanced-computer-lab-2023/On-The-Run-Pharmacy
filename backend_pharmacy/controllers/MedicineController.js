@@ -283,22 +283,26 @@ const getAlternativeMedicines = async (req, res) => {
       return res.status(404).json({ message: 'Medicine not found' });
     }
 
-    // Get the active ingredient of the current medicine
-    const activeIngredient = medicine.activeIngredient;
+    // Get the medical use of the current medicine
+    const medicalUse = medicine.medicalUse;
 
-    // Find alternative medicines with the same active ingredient
+    // Find alternative medicines with the same medical use
     const alternativeMedicines = await Medicine.find({
       _id: { $ne: id }, // Exclude the current medicine from the results
-      activeIngredient,
-      statuss: {$ne:'Archived'}, // You may want to consider the status of medicines
+      medicalUse,
+      statuss: { $ne: 'Archived' }, // You may want to consider the status of medicines
     });
 
-    res.status(200).json({ alternativeMedicines });
+    // Wrap the alternativeMedicines array in square brackets before sending the response
+    res.status(200).json({ alternativeMedicines: [ ...alternativeMedicines ] });
+    
   } catch (error) {
     console.error('Error fetching alternative medicines:', error);
     res.status(500).json({ error: 'An error occurred while fetching alternative medicines' });
   }
 };
+
+
 const getOutOfStockMedicines = async (req, res) => {
   try {
     const outOfStockMedicines = await Medicine.find({ available_quantity: 0 });
