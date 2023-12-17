@@ -81,7 +81,7 @@ If you're contributing to the project, please follow these conventions to mainta
 
 ## Screenshots
 
-Here are some screenshots that showcase how On-The-Run-Clinic looks and works:
+Here are some screenshots that showcase how On-The-Run-Pharmacy looks and works:
 
 ![Screenshot 1](screenshots/AdminDashboard.png)
 *Admin Dashboard*
@@ -125,342 +125,371 @@ The On-The-Run-Pharmacy project is built using the following technologies and fr
 
 ## Code Examples
 
-### Admin adding, deleting, and updating a health package
-Adding a health package involves sending a POST request to the server with necessary package details.
+### viewing, accepting and rejecting pharmacists requests to join the pharmacy
+Accepting or rejecting a health package involves sending a post request, viewing requests involves making a get request
 
 ```javascript
-//admin viewing,deleting and updating the health packages
-const ManageHealthPackages = () => {
+//admin viewing,accepting,rejecting pharmacists requests to join the pharmacy
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import BeatLoader from "react-spinners/BeatLoader";
+import { faEye} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import RequestModal from '../components/RequestModal';
 
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [packages, setPackages] = useState([]);
-  const [packagee, setPackagee] = useState("");
-  const [activeId, setActiveId] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+import './MedicineList.css'; // Import your CSS file for styling
+
+const RequestsListPage = () => {
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [request, setRequest] = useState("");
+  const [activeRequestId, setActiveRequestId] = useState(null);
+
+  
+  const navigate = useNavigate();
+  
+ 
+
+  const fetchRequests = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/getRequests`,{
+        withCredentials: true
+      });
+
+      if (response.status === 200) {
+        setRequests(response.data);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching requests:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Fetch the list of health packages from the server
-    axios.get('http://localhost:4000/getPackages', {
-      withCredentials: true
-    })
-      .then((response) => {
-        setPackages(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching health packages:', error);
+    fetchRequests();
+  }, []);
+  const handleAccept = async (reqid,username,password,name,email,hourly_rate,affiliation,educational_background,Working_license,Pharmacy_degree) => {
+    try {
+      const response = await axios.post(`http://localhost:4000/acceptPRequest/${username}/${password}/${name}/${email}/${hourly_rate}/${affiliation}/${educational_background}/${Working_license}/${Pharmacy_degree}`,{},{
+        withCredentials: true
       });
+      await axios.put(`http://localhost:4000/acceptPRequest/${reqid}`,{},{
+        withCredentials: true
+      });
+      if (response.status === 200) {
+        setRequests(requests.filter((r) => r._id !== reqid));
+      }
+      fetchRequests();
+    } catch (error) {
+      console.error('Error accepting request:', error);
+    }
+  };
+
+  
+  
+  const handleReject = async (reqid) => {
+    try {
+      // Make a DELETE request to the backend to delete the patient
+      await axios.put(`http://localhost:4000/rejectPRequest/${reqid}`,{},{
+        withCredentials: true
+      });
+
+      // After successful deletion, refresh the patient list by re-fetching
+      fetchRequests();
+    } catch (error) {
+      console.error('Error rejecting doctor request:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequests();
   }, []);
 
-  const handlePackagesFetched = (isLinked) => {
-    if (isLinked) {
-      axios.get('http://localhost:4000/getPackages', {
-        withCredentials: true
-      })
-        .then((response) => {
-          setPackages(response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching health packages:', error);
-        });
-      setIsFormVisible(false);
-    }
-  };
-  const handleDelete = (packageId) => {
-    // Send a DELETE request to delete the selected package
-    axios.delete(`http://localhost:4000/deletePackage?id=${packageId}`, {
-      withCredentials: true
-    })
-      .then((response) => {
-        console.log('Package deleted successfully:', response.data);
-        // Fetch the updated list of health packages after deletion
-        axios.get('http://localhost:4000/getPackages', {
-          withCredentials: true
-        })
-          .then((response) => {
-            setPackages(response.data);
-          })
-          .catch((error) => {
-            console.error('Error fetching health packages:', error);
-          });
-      })
-      .catch((error) => {
-        console.error('Error deleting health package:', error);
-      });
-  };
+
+return (
+  <div className="container">
+    <div className="patients-list">
+      <h2>All Requests</h2>
 
 
-  return (
-    <div className="container">
-      <div className="prescriptions-list">
-        <h2>
-          Health Packages
-          <FontAwesomeIcon
-            className="add-icon"
-            icon={faPlus}
-            onClick={() => setIsFormVisible(true)}
-            style={{ color: '#14967f' }}
-          />
-        </h2>
-        <ul>
-          {packages.map((p) => (
-            <li key={p._id}>
-              <div className="prescription-card">
-                <div className="prescription-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span><strong>Name: </strong>  {p.name}</span>
-                  <div>
-                    <FontAwesomeIcon
-                      className="view-icon"
-                      icon={faEye}
-                      style={{marginRight:'10px'}}
-                      onClick={() => {
-                        setActiveId(p._id)
-                        setPackagee(p);
-                        setIsModalOpen(true);
-                      }}
-                    />
-                    <FontAwesomeIcon
-                      className="delete-icon"
-                      icon={faTrash}
-                      onClick={() => handleDelete(p._id)}
-                    />
-                  </div>
+      {loading ? (
+        <div className="spinner-container">
+          <BeatLoader color="#14967f" size={15} />
+        </div>
+      ) : requests.length === 0 ? (
+        <p>No Requests found</p>
+      ) : (
+        <ul className="patients-list">
+          {requests.map((m) => (
+            <li key={m._id}>
+              <div className="patients-header">
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                  <strong>Username: </strong>{m.username}
                 </div>
-                  <div><strong>Package ID: </strong> {p._id}</div>
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                  <strong>Request ID: </strong>{m._id}
                 </div>
+                <div style={{ flex: 1, textAlign: 'right', marginRight: '10px' }}>
+                  {m.statuss === 'Pending' && (
+                    <>
+                      <button
+                       disabled={isProcessing}
+                        style={{
+                          backgroundColor: '#4CAF50', /* Green */
+                          border: 'none',
+                          color: 'white',
+                          padding: '10px 20px', // Reduced padding
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          display: 'inline-block',
+                          fontSize: '14px', // Reduced font size
+                          margin: '4px 2px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleAccept( m._id,m.username,m.password,m.name,m.email,m.hourly_rate,m.affiliation,m.educational_background,m.Working_license,m.Pharmacy_degree)}
+                      >
+                        Accept
+                      </button>
+                      <button
+                       disabled={isProcessing}
+                        style={{
+                          backgroundColor: '#f44336', /* Red */
+                          border: 'none',
+                          color: 'white',
+                          padding: '10px 20px', // Reduced padding
+                          textAlign: 'center',
+                          textDecoration: 'none',
+                          display: 'inline-block',
+                          fontSize: '14px', // Reduced font size
+                          margin: '4px 2px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleReject(m._id)}
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+                  <FontAwesomeIcon
+                    className="view-icon"
+                    icon={faEye}
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => {
+                      setModalOpen(true);
+                      setRequest(m);
+                      setActiveRequestId(m._id)
+                      
+                    }}
+                  />
+
+                </div>
+              </div>
             </li>
+
           ))}
         </ul>
-      </div>
-      <div className="prescription-form">
-        {isFormVisible && <HealthPackagesForm onPackagesFetched={handlePackagesFetched} />}
-      </div>
-      {isModalOpen && packagee &&
-        <PackageDetailsModal
-          setOpenModal={setIsModalOpen}
-          packagee={packagee}
-          onSuccess={handlePackagesFetched}
-        />
-      }
-
+      )}
     </div>
-
-  )
-}
-export default ManageHealthPackages
-```
-
-### User Login and Logout
-Logging in and out involves sending a POST request to the server with the necessary user details.
-A token is being created when logging in and it is being deleted when logging out.
-```javascript
-
-// create json web token
-const maxAge = 3 * 24 * 60 * 60;
-const createToken = (username,role) => {
-    return jwt.sign({ user:username,role }, 'supersecret', {
-        expiresIn: maxAge
-    });
+    {modalOpen && request &&
+      <RequestModal
+        setOpenModal={setModalOpen}
+        request={request}
+      />
+    }
+  </div >
+);
 };
 
+export default RequestsListPage;
+```
 
-const login = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-      let user = await Patient.findOne({ username });
-      let role="patient"
-      if(!user){
-          user = await Doctor.findOne({ username });
-          role="doctor"
-      }
-      if(!user){
-          user = await Admin.findOne({ username });
-          role="admin"
-      }
-      if(!user){
-        user = await Pending.findOne({ username });
-        role="pending"
-    }
+### Patient Registeration 
+The registeration of a patient involves sending a POST request to the server with the necessary patient details.
+```javascript
 
-      if(!user){
-          return res.status(404).json({ error: "Username doesn't exist" });
-      }
-      let auth=false;
-      if(role==="pending"){
-        auth=(password===user.password)
-      }
-      else{
-        auth = await bcrypt.compare(password, user.password);
-      }
+import React,{ useState } from 'react';
+import { Link,useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Form, Button, Card, Spinner, Container, Row, Col } from 'react-bootstrap';
 
-    
+const PatientRegistration = () => {
+    const navigate = useNavigate();
 
-     
-      if (auth) {
-        const token = createToken(user.username,role);
-        console.log(token);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000, secure: false });
-        res.status(200).json({ user: user.username, role: role, token: token });
-    } else {
-        res.status(401).json({ error: 'Incorrect password' });
-    }
-  } catch (error) {
-      res.status(500).json({ error: error.message });
-  }
-}
-
-const logout = async (req, res) => {
-    res.cookie('jwt', '', { maxAge: 1 });
-    res.status(200).json({ message: 'User logged out' });
-}
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail', // Example: 'Gmail'
-    auth: {
-      user: 'ontherunclinic@gmail.com',
-      pass: 'wkdy hbkz loda mebe',
-    },
+    const[username,setUsername]=useState('')
+const[name,setName]=useState('')
+const[email,setEmail]=useState('')
+const[password,setPassword]=useState('')
+const[date_of_birth,setDateOfBirth]=useState('')
+const[gender,setGender]=useState('')
+const[mobile_number,setMobileNumber]=useState('')
+const [emergency_contact, setEmergencyContact] = useState({
+    full_name: '',
+    mobile_number: '',
+    relation_to_patient:''
   });
+
+  const [error, setError] = useState(null);
+  const [isRequestPending, setIsRequestPending] = useState(false);
+
   
-  // Generate and store OTP
-  const generateOTP = () => {
-    return crypto.randomInt(1000, 9999).toString();
-  };
-  
-  // Send OTP via email
-  const sendOTPByEmail = async (email, otp) => {
-    try {
-      const mailOptions = {
-        from: 'ontherunclinic@hotmail.com',
-        to: email,
-        subject: 'Password Reset OTP',
-        text: `Your OTP for password reset is: ${otp}`,
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const p={username,name,email,password,date_of_birth,gender,mobile_number,emergency_contact}
+        try {
+          // Make a POST request to your backend API endpoint
+          const response = await axios.post('http://localhost:4000/register/patient', p,{
+            withCredentials: true
+          });
+      
+          if (response.status === 201) {
+            console.log('Registration successful:', response.data);
+            setUsername('');
+            setName('');
+            setEmail('');
+            setPassword('');
+            setDateOfBirth('');
+            setGender('Male');
+            setMobileNumber('');
+            setEmergencyContact({ full_name: '', mobile_number: '' });
+            setError(null);
+            navigate(`/login`);
+           
+          }
+          else {
+            console.error('Registration failed:', response.data);
+            setError('Registration failed. Please check your data and try again.');
+          }
+        } catch (error) {
+          console.error('Registration failed:', error);
+          setError('Registration failed. Please try again later.');
+        }
       };
-      await transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending OTP email:', error);
-    }
-  };
-  
-  // Route to initiate password reset
-  const forgetPassword= async (req, res) => {
-    const { username,email } = req.body;
- 
-    try {
-      let user = await Patient.findOne({ username });
-      if (!user) {
-         user = await Doctor.findOne({ username });
-      }
-      if (!user) {
-         user = await Admin.findOne({ username });
-      }
-      if (!user) {
-        return res.status(404).json({ message: "Username doesn't exist" });
-      }
-     
-  
-      // Generate and store OTP
-      const otp = generateOTP();
-      
-      user.passwordReset = otp;
-  
-      // Save user with OTP
-      await user.save();
-  
-      // Send OTP via email
-      await sendOTPByEmail(email, otp);
-  
-      return res.status(200).json({ message: 'Check your email for the OTP.' });
-    } catch (error) {
-      console.error('Error initiating password reset:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
-  
-  // Route to reset the password
-  const resetPassword= async (req, res) => {
-    const { username } = req.params;
-    const {otp, newPassword } = req.body;
-    try {
-      let user = await Patient.findOne({ username });
-      if (!user) {
-         user = await Doctor.findOne({ username });
-      }
-      if (!user) {
-         user = await Admin.findOne({ username });
-      }
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-  
-      
-  
-  
-      if (user.passwordReset!== otp) {
-        return res.status(400).json({ message: 'Invalid OTP' });
-      }
-  
-      // Update password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(newPassword, salt);
-  
-      if(user = await Patient.findOne({ username })){
-        await Patient.updateOne(
-          {
-            username: username,
-          },
-          {
-            $set: {
-              password: hashedPassword,
-              passwordReset: undefined,
-            },
-          }
-        );
-        await user.save();
-      }
-      if(user = await Doctor.findOne({ username })){
-        await Doctor.updateOne(
-          {
-            username: username,
-          },
-          {
-            $set: {
-              password: hashedPassword,
-              passwordReset: undefined,   // Clear the password reset data
-            },
-          }
-        );
-        await user.save();
-      }
-      if(user = await Admin.findOne({ username })){
-        await Admin.updateOne(
-          {
-            username: username,
-          },
-          {
-            $set: {
-              password: hashedPassword,
-              passwordReset: undefined,   // Clear the password reset data
-            },
-          }
-        );
-        await user.save();
-      }
-  
-      
-  
-      // Save the updated user
-     
-  
-      return res.status(200).json({ message: 'Password reset successfully.' });
-    } catch (error) {
-      console.error('Error resetting password:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
 
+  return (
+    <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '87vh', flexDirection: 'column' }}>
+      <Card style={{ height: '85vh' }}>
+        <Card.Body>
+          <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#343a40', marginBottom: '5px' }}>Register as Patient</h4>
+          {error && <p>{error}</p>}
+          {isRequestPending ? (
+            <p>Registration request is pending. Please wait for approval.</p>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <Row>
+                <Col>
+                  <Form.Group controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="dateOfBirth">
+                    <Form.Label>Date of Birth</Form.Label>
+                    <Form.Control type="date" value={date_of_birth} onChange={(e) => setDateOfBirth(e.target.value)} required />
+                  </Form.Group>
+                </Col>
+                <Col>
 
-module.exports = { logout, login, forgetPassword, resetPassword };
+                  <Form.Group controlId="gender">
+                    <Form.Label>Gender</Form.Label>
+                    <Form.Check
+                      type="radio"
+                      label="Male"
+                      name="gender"
+                      value="Male"
+                      checked={gender === 'Male'}
+                      onChange={(e) => setGender(e.target.value)}
+                      required
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Female"
+                      name="gender"
+                      value="Female"
+                      checked={gender === 'Female'}
+                      onChange={(e) => setGender(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="mobileNumber">
+                    <Form.Label>Mobile Number</Form.Label>
+                    <Form.Control type="tel" value={mobile_number} onChange={(e) => setMobileNumber(e.target.value)}   required />
+                  </Form.Group>
+                </Col>
+
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="emergencyContact.fullName">
+                    <Form.Label>Emergency Contact Name</Form.Label>
+                    <Form.Control type="text" value={emergency_contact.full_name} onChange={(e) => setEmergencyContact({ ...emergency_contact, full_name: e.target.value })} required />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="emergencyContact.mobileNumber">
+                    <Form.Label>Emergency Contact Mobile</Form.Label>
+                    <Form.Control type="tel" value={emergency_contact.mobile_number} onChange={(e) => setEmergencyContact({ ...emergency_contact, mobile_number: e.target.value })} required />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="emergencyContact.relationToPatient">
+                    <Form.Label>Emergency Contact Relation</Form.Label>
+                    <Form.Control type="text" value={emergency_contact.relation_to_patient} onChange={(e) => setEmergencyContact({ ...emergency_contact, relation_to_patient: e.target.value })} required />
+                  </Form.Group>
+                </Col>
+
+              </Row>
+
+              <Button variant="primary" type="submit" disabled={isRequestPending} style={{ marginTop: '10px' }}>
+                {isRequestPending ? <Spinner animation="border" size="sm" /> : 'Register'}
+              </Button>
+            </Form>
+          )}
+        </Card.Body>
+      </Card>
+      <p style={{ color: '#8a90a2', fontSize: '15px', fontWeight: '400' }}>Back to <Link to="/login" style={{ color: '#0055ff', fontSize: '15px', fontWeight: '600' }}>Log In</Link></p>
+    </Container>
+  );
+};
+
+export default PatientRegistration;
+
 ```
 ## Installation
  ### prerequisites
@@ -478,7 +507,7 @@ module.exports = { logout, login, forgetPassword, resetPassword };
 ```
 #### To run the backend:
 ```bash
-cd backend
+cd backend_pharmacy
 npm run dev
 ```
 #### To run the frontend:
@@ -488,46 +517,68 @@ npm start
 ```
 ## API Reference
 ```javascript
-app.post("/createCrossMessage",createCrossMessage)
-app.get("/getCrossChatMessages/:username/:doctor",getCrossChatMessages)
-app.post("/sendCrossMessageAsDoctor",sendCrossMessageAsDoctor)
+app.post('/register/patient',createPatientP)
+app.post("/createRequest",createRequest)
 app.post("/createMessage",createMessage)
 app.get("/getChatMessages/:username/:doctor",getChatMessages)
-app.post("/sendMessageAsDoctor",sendMessageAsDoctor)
+app.post("/sendMessageAsPharmacist",sendMessageAsPharmacist)
 app.post("/sendMessageAsPatient",sendMessageAsPatient)
-app.post("/createAdmin",requireAuthAdmin,createAdmin);
-app.post("/register/doctor",requireAuthPending,createDoctor);
-app.put("/updateDoctor",requireAuthDoctor,updateDoctor);
-app.post("/register/patient",createPatient);
-app.get("/getDocPatients/:username",requireAuth, getDocPatients);
-app.get("/getDoctors",getDoctors);//removed
-app.get("/getPatients",getPatients);//removed
+app.post("/createCrossMessage",createCrossMessage)
+app.get("/getCrossChatMessages/:username/:doctor",getCrossChatMessages)
+app.post("/sendCrossMessageAsPharmacist",sendCrossMessageAsPharmacist)
+app.get("/getMedicines",getMedicines)
+app.get("/getAlternativeMedicines",getAlternativeMedicines)
+app.get("/getMedicines2",getMedicines2)
+app.get("/getNotifications",getNotifications)
+app.post("/addMedicine",addMedicine)
+app.get("/getMed/:id",getMedicine)
+app.put("/updateMed/:id/:medicalUse/:description/:price/:available_quantity",updateMedicine)
+app.put("/archiveMedicine/:id",archiveMedicine)
+app.put("/unarchiveMedicine/:id",unarchiveMedicine)
+app.post("/addAdmin",requireAuthAdmin,createAdmin)
+app.get("/getPatients",requireAuthAdmin,getPatientsP)
+app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
+
+app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
+app.get("/getOrderDetails/:orderId",getOrderDetails)
+app.get("/getPharmacists2",getPharmacists2)
+app.delete("/deletePharmacist/:id",requireAuthAdmin,deletepharmacist)
+app.post("/addToCart",requireAuthPatient,addToCart)
+
+app.get("/getRequests",requireAuthAdmin ,getRequests)
+app.put("/acceptPRequest/:id",requireAuthAdmin,acceptrequest);
+app.put("/rejectPRequest/:id",requireAuthAdmin,rejectrequest);
+app.post("/acceptPRequest/:username/:password/:name/:email/:hourly_rate/:affiliation/:educational_background/:Working_license/:Pharmacy_degree",requireAuthAdmin,createPharmacist1)
+app.put("/addAddress/:username/:address",requireAuthPatient,addAddress);
+app.get("/getAddresses/:username",requireAuthPatient,getAddresses);
+app.post('/login', login)
+app.get('/logout', logout);
+app.get('/getOutOfStockMedicines', getOutOfStockMedicines);
+app.get("/getPatientCart/:username",requireAuthPatient,getPatientCart)
+app.delete("/deleteFromCart/:username/:medicineId",requireAuthPatient,deleteFromCart)
+app.put("/updateCart/:username/:medicineId/:newAmount",requireAuthPatient,updateCart)
+app.get("/getPatientByUsername/:username",getPatientByUsername);
+app.put("/updatePassPatient",updatePasswordPatient);
+app.get("/getPharamcistByUsername/:username",getPharmacistByUsername);
+app.put("/updatePassPharmacist",updatePasswordPharmacist);
+app.get("/getAdminByUsername/:username",getAdminByUsername);
+app.put("/updatePassAdmin",updatePasswordAdmin);
+app.post("/createOrder/:username/:statuss/:shippingAddress/:paymentMethod/:totalprice",requireAuthPatient,createOrder);
+app.put("/cancelOrder/:orderId",requireAuthPatient,cancelOrder);
+app.put ("/updateWallet/:username/:amount",updateWallet);
+app.get ("/getWallet/:username",getWallet);
+app.get("/getPatientOrders/:username",requireAuthPatient,getPatientOrders);
+app.get("/getPastOrders/:username",requireAuthPatient,getPastOrders);
+app.get("/getCurrentOrders/:username",requireAuthPatient,getCurrentOrders);
+app.post("/forgetPassword",forgetPassword);
+app.post("/resetPassword/:username",resetPassword);
+app.get("/getPharmaWallet/:username",requireAuthPharmacist,getPharmaWallet)
+app.post("/updateMedQuantity/:id/:amount",updateMedQuantity);
+app.get("/getMedicinesWithSales",getMedicinesWithSales);
+app.post("/createsales/:medicine_id/:amount",createSales);
+app.get("/getSales",getSales);
 app.get("/getAdmins",requireAuthAdmin,getAdmins)
-app.post("/addFamilyMember",requireAuthPatient, createMember);
-app.delete("/deleteDoctor/:id",requireAuthAdmin,deleteDoctor);
-app.patch("/ubdateDoctor",updateDoctor);
-app.get("/getFamilyMem/:username",requireAuth,getFamilyMembers);
-app.get("/searchPatientsByName",requireAuth,searchPatientsByName);
-app.post("/addPatientToDr",requireAuth,addPatientToDr);
-app.post("/addPrescription",createPrescription);
-app.get("/getPrescriptions/:id",requireAuth,getPrescriptionsForPatient);
-app.get("/getMyPrescriptions/:username",requireAuth,getMyPrescriptions);
-app.get("/getMyPrescriptions2/:username/:usernameDoctor",requireAuth,getMyPrescriptions2);
-app.post("/createRequest",createRequest);
-app.post("/createPackage",createHealthPackage);
-app.get("/getPackages",requireAuth,getPackages);
-app.put("/updatePackage",requireAuthAdmin,updateHealthPackage);
-app.delete("/deletePackage",requireAuthAdmin,deleteHealthPackage);
 app.delete("/deleteAdmin/:id",requireAuthAdmin,deleteAdmin);
-app.delete("/deletePatient/:id",requireAuthAdmin,deletePatient);
-app.get("/getDoctor/:username",getDoctorByUsername);//removed
-app.get("/getOneRequest",getOneRequest);
-app.get("/getRequests",requireAuthAdmin,getRequests);
-app.post("/createAppointment",createAppointment);//removed
-app.get("/getAllAppointments",requireAuth,getAllAppointments);
-app.get("/filterAppointments",requireAuth,filter);
-app.get("/search/:username",requireAuth,searchPatientsByUserame);
-app.get("/getDoctorAppointments/:id",requireAuth,getDoctorAppointments);
 ```
 
 ## Tests

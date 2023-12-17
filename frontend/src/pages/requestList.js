@@ -82,6 +82,24 @@ const RequestsListPage = () => {
 
 return (
   <div className="container">
+    <button
+        className="btn btn-primary mb-1"
+        style={{
+          backgroundColor: '#14967f',
+          borderColor: '#14967f',
+          transition: 'none',
+          cursor: 'pointer',
+          position: 'absolute',
+          top: '75px', // Adjust this value based on your navbar height
+          left: '10px',
+          marginTop: '10px', // Added margin-top
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </button>
     <div className="patients-list">
       <h2>All Requests</h2>
 

@@ -50,7 +50,12 @@ const MedicineSchema = new mongoose.Schema({
     type:String,
     enum: ['Unarchived', 'Archived'],
     default: 'Unarchived'
-  }
+  },
+  overTheCounter:{
+    type:Boolean,
+    default:true,
+    required:false
+  },
 });
 
 

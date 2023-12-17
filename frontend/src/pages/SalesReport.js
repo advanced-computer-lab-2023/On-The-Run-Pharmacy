@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Card, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
+
 
 const SalesReport = () => {
   const [sales, setSales] = useState([]);
@@ -40,8 +42,24 @@ const SalesReport = () => {
   const medicineNames = [...new Set(sales.map(sale => sale.medicineId ? sale.medicineId.name : ''))];
   return (
 <div className="container">
-<div className="form1-group">
-      <button type="submit" onClick={() => navigate(-1)}>Back</button>                </div>  
+<button
+        className="btn btn-primary mb-1"
+        style={{
+          backgroundColor: '#14967f',
+          borderColor: '#14967f',
+          transition: 'none',
+          cursor: 'pointer',
+          position: 'absolute',
+          top: '75px', // Adjust this value based on your navbar height
+          left: '10px',
+          marginTop: '10px', // Added margin-top
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </button>
   <div className="prescriptions1-list">
     <h2 style={{ textAlign: 'left' }}>Sales Report</h2>
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -66,18 +84,18 @@ const SalesReport = () => {
       </label>
     </div>
         <ul>
-          {filteredSales.map((sale) => (
-            <li key={sale._id}>
-              <div className="prescription1-card">
-                <div className="prescription-header">
-                <span style={{ textAlign: 'left' }}><strong>Medicine Name: </strong> {sale.medicineId ? sale.medicineId.name : ''}</span>
-                  <span style={{ textAlign: 'left' }}><strong>Price: </strong> {sale.medicineId.price}</span>
-                  <span style={{ textAlign: 'left' }}><strong>Amount: </strong> {sale.amount}</span>
-                  <span style={{ textAlign: 'left' }}><strong>Date: </strong> {sale.date}</span>
-                </div>
-              </div>
-            </li>
-          ))}
+        {filteredSales.map((sale) => (
+          <div className="col-12" key={sale._id}>
+            <Card className="mb-4" style={{ width: '950px', height: '150px' }}>
+  <Card.Body>
+    <Card.Title><strong>Medicine Name: </strong> {sale.medicineId ? sale.medicineId.name : ''}</Card.Title>
+    <Card.Text><strong>Price: </strong> {sale.medicineId.price}</Card.Text>
+    <Card.Text><strong>Amount: </strong> {sale.amount}</Card.Text>
+    <Card.Text><strong>Date: </strong> {sale.date}</Card.Text>
+  </Card.Body>
+</Card>
+          </div>
+        ))}
 <h2 style={{ textAlign: 'left', fontSize: '24px', marginBottom: '20px' }}>
   Total Sales: {totalSales}
 </h2>        </ul>

@@ -15,6 +15,8 @@ const{getNotifications}=require("./controllers/PNotificationController")
 const{createOrder,cancelOrder,getPatientOrders,getCurrentOrders,getOrderDetails,getPastOrders}=require("./controllers/orderController")
 const{createMessage,sendMessageAsPatient,sendMessageAsPharmacist,getChatMessages}=require("./controllers/messagesController")
 const{createCrossMessage,sendCrossMessageAsPharmacist,getCrossChatMessages}=require("./controllers/crossOverMessagesController")
+const{getDoctors} = require("./controllers/doctorController");
+
 const app = express()
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -60,7 +62,10 @@ app.put("/updateMed/:id/:medicalUse/:description/:price/:available_quantity",upd
 app.put("/archiveMedicine/:id",archiveMedicine)
 app.put("/unarchiveMedicine/:id",unarchiveMedicine)
 app.post("/addAdmin",requireAuthAdmin,createAdmin)
-app.get("/getPatients",requireAuthAdmin,getPatientsP)
+
+app.get("/getPatients",requireAuthAdmin,getPatientsP)//TEST
+app.get("/getPatients2",getPatientsP)
+
 app.delete("/deletePatient/:id",requireAuthAdmin,deletePatientP)
 
 app.get("/getPharmacist",requireAuthAdmin,getPharmacists)
@@ -103,4 +108,5 @@ app.post("/createsales/:medicine_id/:amount",createSales);
 app.get("/getSales",getSales);
 app.get("/getAdmins",requireAuthAdmin,getAdmins)
 app.delete("/deleteAdmin/:id",requireAuthAdmin,deleteAdmin);
+app.get("/getDoctors",getDoctors);
 

@@ -40,6 +40,7 @@ const handleSubmit = async (event) => {
               id="medicalUse"
               name="medicalUse"
               value={medicalUse}
+              style={{ width: '400px', height: '30px', padding: '8px', fontSize: '14px' }}
               onChange={(e) => setMedicalUse(e.target.value)}
             />
           </div>
@@ -51,6 +52,7 @@ const handleSubmit = async (event) => {
               id="description"
               name="description"
               value={description}
+              style={{ width: '400px', height: '30px', padding: '8px', fontSize: '14px' }}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
@@ -62,6 +64,7 @@ const handleSubmit = async (event) => {
               id="price"
               name="price"
               value={price}
+              style={{ width: '400px', height: '30px', padding: '8px', fontSize: '14px' }}
               onChange={(e) => setPrice(e.target.value)}
             />
           </div>
@@ -73,11 +76,22 @@ const handleSubmit = async (event) => {
               id="available_quantity"
               name="available_quantity"
               value={available_quantity}
+              style={{ width: '400px', height: '30px', padding: '8px', fontSize: '14px' }}
               onChange={(e) => setavailable_quantity(e.target.value)}
             />
           </div>
   
-          <button type="submit">Update Medicine</button>
+          <button type="submit" style={{ borderRadius: '20px', // Adjust the radius as needed for the desired roundness
+                           backgroundColor: 'transparent', // No background color (transparent)
+                           border: '2px solid #4CAF50', // Green border for Archive
+                           color: '#4CAF50', // Green text color
+                           padding: '10px 20px',
+                           textAlign: 'center',
+                           textDecoration: 'none',
+                           display: 'inline-block',
+                           fontSize: '14px',
+                           margin: '4px 2px',
+                           cursor: 'pointer'}}>Update Medicine</button>
         </form>
       </div>
     );

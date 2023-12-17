@@ -1,13 +1,14 @@
 import { Card, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import ChangePatientPass from './changePatientPass';
+import ChangePharmacistPass from '../pages/changePharmacistPass';
 import { useNavigate } from 'react-router-dom';
 
 
-const PatientSettings = () => {
+
+const PharmacistSettings = () => {
     const { username } = useParams();
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
     return (
         <>
         <Container style={{ padding: '10px' }}>
@@ -49,7 +50,7 @@ const PatientSettings = () => {
             <Col sm={9}>
               <Tab.Content style={{ width: '660px',marginTop: '0px' ,height:'470px' }}>
                 <Tab.Pane eventKey="password" style={{ width: '660px',height:'470px' }}>
-                <ChangePatientPass />
+                <ChangePharmacistPass />
                 </Tab.Pane>
               </Tab.Content>
             </Col>
@@ -62,4 +63,4 @@ const PatientSettings = () => {
 
 
 };
-export default PatientSettings;
+export default PharmacistSettings;

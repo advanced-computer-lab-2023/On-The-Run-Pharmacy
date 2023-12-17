@@ -2,13 +2,34 @@ import { Card, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import ChangeAdminPass from '../pages/changeAdminPass';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const AdminSettings = () => {
     const { username } = useParams();
+    const navigate = useNavigate();
     return (
         <>
         <Container style={{ padding: '10px' }}>
+        <button
+        className="btn btn-primary mb-1"
+        style={{
+          backgroundColor: '#14967f',
+          borderColor: '#14967f',
+          transition: 'none',
+          cursor: 'pointer',
+          position: 'absolute',
+          top: '75px', // Adjust this value based on your navbar height
+          left: '10px',
+          marginTop: '10px', // Added margin-top
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#14967f')}
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </button>
         <Row>
           <Col>
             <h1 style={{ marginBottom: '5px',fontSize: '20px',fontWeight: '600' }}>Account Settings</h1>
